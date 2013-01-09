@@ -1,0 +1,1 @@
+<?php return array('mime' => 'image/png', 'data' => ''); ?>

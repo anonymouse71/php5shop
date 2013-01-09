@@ -1,0 +1,33 @@
+#php_value max_execution_time 300
+
+<ifModule mod_php5.c>
+php_value zlib.output_compression off
+</ifModule>
+
+AddDefaultCharset UTF-8
+
+Options -Indexes
+
+RewriteEngine On
+
+# Installation directory
+RewriteBase /
+
+# Protect hidden files from being viewed
+<Files .*>
+	Order Deny,Allow
+	Deny From All
+</Files>
+# Разрешает доступ к статическим файлам, без перенаправления на точку входа в приложение
+RewriteRule ^images/(.*) images/$1
+RewriteRule ^js/(.*) js/$1
+
+# Protect application and system files from being viewed
+RewriteRule ^(application|modules|system) - [F,L]
+
+# Разрешает доступ к файлам которые существуют и не запрещены ранее
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite all other URLs to index.php/URL
+RewriteRule .* index.php/$0 [PT]

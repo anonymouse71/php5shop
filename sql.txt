@@ -1,0 +1,683 @@
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `antibruteforce`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_antibruteforce` (
+  `ip` bigint(11) unsigned NOT NULL,
+  `try` int(1) DEFAULT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `antibruteforce`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `blogposts`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_blogposts` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `html` text NOT NULL,
+  `html2` text NOT NULL,
+  `date` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `blogposts`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `categories`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent` int(10) unsigned DEFAULT '0',
+  `level` int(10) unsigned DEFAULT '0',
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `categories`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `configBool`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_configBool` (
+  `name` varchar(10) NOT NULL,
+  `value` BOOL DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `configBool`
+--
+
+REPLACE INTO `p5shp_configBool` (`name`, `value`) VALUES
+('bigCart', 1),
+('currency', 1),
+('LastNews', 1),
+('LoginOn', 1),
+('ordJabb', 1),
+('ordMail', 1),
+('refpp', 0),
+('poll', 0),
+('comments', '1'),
+('ShowBlog', 1),
+('regOrder', 0),
+('invite', 0),
+('timeFooter', 1) ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `currency`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_currency` (
+  `name` varchar(3) NOT NULL,
+  `value` float NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `currency`
+--
+
+REPLACE INTO `p5shp_currency` (`name`, `value`) VALUES
+('EUR', 0.7579),
+('GBP', 0.6287),
+('RUB', 29.8312),
+('UAH', 7.8905),
+('USD', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `descriptions`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_descriptions` (
+  `id` int(10) unsigned NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `descriptions`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `groups`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_groups` (
+  `id` int(2) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `pct` float unsigned zerofill DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Дамп данных таблицы `groups`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `groups_users`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_groups_users` (
+  `id` int(10) unsigned NOT NULL,
+  `gid` int(2) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `groups_users`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `html`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_html` (
+  `name` varchar(10) NOT NULL,
+  `code` text DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `html`
+--
+
+REPLACE INTO `p5shp_html` (`name`, `code`) VALUES
+('about', ''),
+('banner1', ''),
+('banner2', ''),
+('banner3', ''),
+('banner4', ''),
+('headerWidg', ''),
+('keywords', 'php shop, магазин, скрипт магазина'),
+('logo', '<img src="/images/logo.jpg" alt="shop logo" width="171" height="73">'),
+('shopName', 'Магазин на движке php5shop');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `htmlpgs`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_htmlpgs` (
+  `id` int(1) NOT NULL AUTO_INCREMENT,
+  `html` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='дополнительные HTML страницы' AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `htmlpgs`
+--
+
+REPLACE INTO `p5shp_htmlpgs` (`id`, `html`) VALUES
+(1, '<p>За годы работы нашими клиентами стали многие известные компании, среди которых:</p>\n<table align="center" border="0" cellpadding="5" cellspacing="3" class="wb" width="540">\n	<tbody>\n		<tr>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/4.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/window.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="66" src="/images/clients/colnce.jpg" width="72"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/12.jpg" width="110"></td>\n		</tr>\n		<tr>\n			<td align="center" class="wb" valign="middle"><img alt="" height="29" src="/images/clients/daewoo.jpg" width="132"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="85" src="/images/clients/6.jpg" width="59"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/8.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/9.jpg" width="110"></td>\n		</tr>\n		<tr>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/11.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/5.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="85" src="/images/clients/7.jpg" width="59"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="85" src="/images/clients/3.jpg" width="59"></td>\n		</tr>\n		<tr>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/1.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/2.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle"><img alt="" height="52" src="/images/clients/10.jpg" width="110"></td>\n			<td align="center" class="wb" valign="middle">\n				<p><img alt="" height="52" src="/images/clients/13.jpg" width="110"></p>\n				<p>&nbsp;</p>\n			</td>\n		</tr>\n	</tbody>\n</table>\n<p align="right"><font size="1">* это демо страница, информация не соответсвует действительности.</font></p>\n'),
+(2, '<h2 align="center">Контакты</h2>\r\n<p>телефон: 09X9X8X477</p>\r\n<p>icq: 912564</p>\r\n<p>jabber: phpdreamer@jabber.ru</p>\r\n<p>Адрес офиса: Галактика, планета Земля, Европа</p>\r\n<p>Как к нам проехать:<br>\r\n<img src="/images/map.png" alt="map">\r\n</p>');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mails`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_mails` (
+  `id` int(1) unsigned NOT NULL AUTO_INCREMENT,
+  `value` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `mails`
+--
+
+REPLACE INTO `p5shp_mails` (`id`, `value`) VALUES
+(1, 'test@test1.ru'),
+(2, 'test@test1.ru'),
+(3, 'test@test1.ru');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `menuitems`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_menuitems` (
+  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `item` BOOL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Дамп данных таблицы `menuitems`
+--
+
+REPLACE INTO `p5shp_menuitems` (`id`, `item`) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+(6, 1),
+(7, 1),
+(8, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `orders`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_orders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user` int(10) unsigned DEFAULT '0',
+  `phone` bigint(12) unsigned NOT NULL,
+  `status` int(1) unsigned DEFAULT '1',
+  `date` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `orders`
+--
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `ordproducts`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_ordproducts` (
+  `id` int(10) unsigned NOT NULL,
+  `product` int(10) unsigned NOT NULL,
+  `count` int(10) unsigned DEFAULT '1',
+  `whs` int(10) NOT NULL,
+  PRIMARY KEY (`id`,`product`,`whs`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `ordproducts`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `products`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_products` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cat` int(10) unsigned DEFAULT NULL,
+  `name` varchar(200) NOT NULL,
+  `price` float unsigned DEFAULT '0',
+  `whs` TINYINT(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+--
+-- Дамп данных таблицы `products`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `roles`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_roles` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(16) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `roles`
+--
+
+REPLACE INTO `p5shp_roles` (`id`, `name`) VALUES
+(1, 'login'),
+(2, 'admin'),
+(3, 'not activated');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `roles_users`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_roles_users` (
+  `user_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`,`role_id`),
+  KEY `fk_role_id` (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `roles_users`
+--
+
+REPLACE INTO `p5shp_roles_users` (`user_id`, `role_id`) VALUES
+(1, 1),
+(1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `saveimages`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_saveimages` (
+  `id` int(10) unsigned NOT NULL,
+  `url` varchar(200) NOT NULL,
+  `n` tinyint(2) unsigned DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `saveimages`
+-- 
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `state_orders`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_state_orders` (
+  `id` int(1) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `state_orders`
+--
+
+REPLACE INTO `p5shp_state_orders` (`id`, `name`) VALUES
+
+(1, 'Клиент ожидает звонка'),
+(2, 'Клиент ожидает доставки'),
+(3, 'Ожидается денежный перевод'),
+(4, 'Ложный заказ'),
+(5, 'Выполнен');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `users`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(127) NOT NULL,
+  `username` varchar(32) NOT NULL DEFAULT '',
+  `password` char(50) NOT NULL,  
+  `last_login` int(10) unsigned DEFAULT NULL,
+  `phone` bigint(12) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`,`username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `users`
+--
+
+REPLACE INTO `p5shp_users` (`id`, `email`, `username`, `password`, `last_login`, `phone`, `address`) VALUES
+(1, 'test@test.com', 'test', 'd884b8009e0d1914f69b52845d203de45a1c73e16659434173', 0, 11111124, '');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user_tokens`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_user_tokens` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `user_agent` varchar(40) NOT NULL,
+  `token` varchar(32) NOT NULL,
+  `created` int(10) unsigned NOT NULL,
+  `expires` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_token` (`token`),
+  KEY `fk_user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+--
+-- Дамп данных таблицы `user_tokens`
+--
+CREATE TABLE IF NOT EXISTS `p5shp_codes` (
+  `service` varchar(15) NOT NULL,
+  `code` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`service`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 
+-- Дамп данных таблицы `codes`
+-- 
+
+REPLACE INTO `p5shp_codes` VALUES ('analytics', '');
+REPLACE INTO `p5shp_codes` VALUES ('sape', '');
+REPLACE INTO `p5shp_codes` VALUES ('disqus', '');
+REPLACE INTO `p5shp_codes` VALUES ('vkcomments', '');
+--
+
+--
+-- Структура таблицы `fields`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_fields` (
+  `id` int(2) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `type` int(1) unsigned NOT NULL,
+  `empty` BOOL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `field_values`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_field_values` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `field` int(2) unsigned NOT NULL,
+  `uid` int(10) unsigned NOT NULL,
+  `value` varchar(400) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `field_types`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_field_types` (
+  `id` int(2) unsigned NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `reg` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `field_types`
+--
+
+REPLACE INTO `p5shp_field_types` VALUES (1, 'число', '/^[0-9]+$/u');
+REPLACE INTO `p5shp_field_types` VALUES (2, 'буквы,числа,пробелы', '/^[\\s_a-zа-яё0-9]+$/uiD');
+REPLACE INTO `p5shp_field_types` VALUES (3, 'числа,пробелы,_.-', '/^[- _.0-9]+$/uiD');
+REPLACE INTO `p5shp_field_types` VALUES (4, 'любые символы', '#.{1,}#');
+REPLACE INTO `p5shp_field_types` VALUES (5, 'чекбокс (флажок)', '/^(on|off)$/');
+REPLACE INTO `p5shp_field_types` VALUES (6, 'текстовое поле', '#.{1,}#usm');
+
+--
+-- Структура таблицы `affiliate`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_affiliate` (
+  `percent` float unsigned zerofill NOT NULL DEFAULT '000000000002',
+  `about` text NOT NULL,
+  PRIMARY KEY (`percent`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `affiliate`
+--
+REPLACE INTO `p5shp_affiliate` VALUES (2, '<p>Вы получите 2% от суммы всех заказов клиентов, которые зарегистрируются после перехода по Вашей реферальной ссылке <code>{{link}}</code></p>\n<p>Получить деньги Вы можете товарами, либо наличными (если сумма достигла 100 у.е.)</p>\n');
+
+--
+-- Структура таблицы `referrals`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_referrals` (
+  `id` int(10) unsigned NOT NULL,
+  `ref` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `send_emails`
+--
+CREATE TABLE IF NOT EXISTS `p5shp_send_emails` (
+  `to` varchar(127) NOT NULL,
+  `id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `send_texts`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_send_texts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `text` text NOT NULL,
+  `title` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+
+--
+-- Структура таблицы `balance_users`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_balance_users` (
+  `id` int(10) unsigned NOT NULL,
+  `balance` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `poll_answers`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_poll_answers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `text` varchar(200) NOT NULL,
+  `count` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `poll_answers`
+--
+
+REPLACE INTO `p5shp_poll_answers` VALUES (1, 'да!', 0);
+REPLACE INTO `p5shp_poll_answers` VALUES (2, 'уже есть, но хочу еще один', 1);
+REPLACE INTO `p5shp_poll_answers` VALUES (3, 'нет, я не знаю что продавать', 0);
+REPLACE INTO `p5shp_poll_answers` VALUES (4, 'еще не знаю', 0);
+
+--
+-- Структура таблицы `poll`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_poll` (
+  `question` varchar(200) NOT NULL,
+  PRIMARY KEY (`question`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `poll`
+--
+
+REPLACE INTO `p5shp_poll` VALUES ('Вы хотите завести свой интернет-магазин?  ');
+
+--
+-- Структура таблицы `tmp_orders`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_tmp_orders` (
+  `id` int(10) unsigned NOT NULL,
+  `session` varchar(32) NOT NULL,
+  `time` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `session` (`session`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `pay_types`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_pay_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `text` text NOT NULL,
+  `active` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `pay_types`
+--
+
+REPLACE INTO `p5shp_pay_types` VALUES (1, 'Оплата из заработка в партнерской программе', '<p>Ваш баланс в партнерской программе {{refpp}}</p>\n<p>* Если суммы на счету не достаточно для заказа, Вы можете доплатить наличными при получении. В этом случае предварительно предупредите менеджера.</p>\n', 1);
+REPLACE INTO `p5shp_pay_types` VALUES (2, 'Оплата наличными при получении', 'Ваш номер заказа {{id}}. <br>\r\nВы можете заказать по телефону (icq, email) доставку (Доставка по Украине 180 грн.) или подъехать к нам в офис и получить заказ по его номеру ({{id}}).', 1);
+REPLACE INTO `p5shp_pay_types` VALUES (3, 'Оплата банковским переводом', 'расчетный счет: 00000000000000000000<br>\r\nИНН: 000000000<br>\r\nКПП: 000000000<br>\r\nбанк получателя: ООО Банк "Банк"<br>\r\nкорреспондентский счет: 00000000000000000000<br>\r\nБИК 000000000<br>\r\nназначение платежа: Заказ номер {{id}}', 1);
+REPLACE INTO `p5shp_pay_types` VALUES (4, 'Оплата через webmoney', '<p>Наши кошельки:</p>\n<p>Z000000000000<br>\n	R000000000000<br>\n	U000000000000</p>\n<p>перевидите указанную сумму на любой из кошельков (по курсу savechange.ru ) с комментарием &quot;Заказ номер <small>{{id}}</small>&quot;</p>\n', 1);
+
+--
+--
+CREATE TABLE IF NOT EXISTS `p5shp_votes` (
+  `id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `rating_users`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_rating_users` (
+  `id` int(10) unsigned NOT NULL,
+  `product` int(10) unsigned NOT NULL,
+  `val` tinyint(1) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `invites`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_invites` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) NOT NULL,
+  `group` int(2) unsigned zerofill NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `rating_values`
+--
+
+CREATE TABLE IF NOT EXISTS `p5shp_rating_values` (
+  `id` int(10) unsigned NOT NULL,
+  `val` tinyint(1) unsigned NOT NULL,
+  `count` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 
+-- Структура таблицы `descr_cats`
+-- 
+
+CREATE TABLE IF NOT EXISTS `p5shp_descr_cats` (
+  `id` int(10) unsigned NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `p5shp_comments` (
+`id` BIGINT NOT NULL AUTO_INCREMENT,
+`object` INT NOT NULL ,
+`user` INT NOT NULL ,
+`text` TEXT NOT NULL ,
+`rate` TINYINT(1) NOT NULL ,
+`is_product` BOOL NOT NULL ,
+`username` VARCHAR( 100 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT = 'Комментарии к товарам и новостям';
