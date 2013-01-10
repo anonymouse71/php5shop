@@ -9,7 +9,7 @@
  * css                                  - стили
  * topBlock1                            - верхний виджет 1 (выбор валюты)
  * topBlock2                            - верхний виджет 2 (корзина)
- * topBlock3                            - верхний виджет 3 (дополнительный)
+ * topBlock3                            - верхний виджет 3 (дополнительный) - сортировка в категории
  * menu[]                               - верхнее меню
  * banner1                              - большой баннер в центре страницы
  * about                                - блок для приветствия посетителя
@@ -51,9 +51,51 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
 <body>
     <div id="header">
         <a href="" class="float"><?php echo $logo;?></a>																																																		<div style="position:absolute;top:1px;left:1px;height:0px;width:0px;overflow:hidden"><h1><a href="http://phpdreamer.ru/" target="_blank">http://phpdreamer.ru/</a></h1><h1><a href="http://php5shop.com">free php shop CMS</a></h1></div>
-        <?php echo @$topBlock1;?>
-        <?php echo $topBlock2;?>
-        <?php echo $topBlock3;?>
+
+
+        <?php echo $loginForm;?>
+
+        <div class="blocks" style="float: right; ">
+            <!-- Блок поиска -->
+            <img src="images/top_bg.gif" alt="" width="218" height="12">
+            <p style="margin-left:20px;"><input type="text" id="inputsearch" onkeydown="if(isEnterKey(this, event)) my_search();"></p>
+            <p>&nbsp;<a href="javascript:void(0);" id="buttonsearch">Поиск</a></p>
+            <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
+            <div style="display:none" id="searchresults"></div>
+            <script type="text/javascript">
+                //<!--
+                function isEnterKey(obj, event)  {
+                    event = event || window.event;
+                    var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : null;
+                    if (keyCode == 13) {
+                        return true;
+                    }
+                    return false;
+                }
+                $('#buttonsearch').click(function(){/*Поиск по продуктам (AJAX)*/
+                    my_search();
+                });
+                function my_search(){
+                    $.post('ajax/search/' + encodeURIComponent($('#inputsearch').val()),'[]',function(data){
+                        var str = '<'+'h2'+'>'+'Результаты поиска:<'+'/h2'+'><'+'br'+'>';
+                        if(data.length == 0)
+                            str += 'Ничего не найдено<'+'br'+'>';
+                        else
+                            for (var k in data)
+                                str += '<'+'a h'+'ref="shop/product' + data[k].id + '">'+data[k].name+ '<'+'/a'+'><'+'br'+'>';
+                        $('#searchresults').html(str);
+                        $('#searchresults').modal();
+                        $('#simplemodal-container').css('width', '400px');
+                        $('#simplemodal-container').css('height', '350px');
+                    },'json');
+                }
+                //-->
+            </script>
+            <!-- /Блок поиска -->
+        </div>
+
+
+
         <!-- Верхнее меню-->
         <ul id="menu">
             <li><img src="images/li.gif" alt="меню" width="19" height="29"></li>
@@ -80,6 +122,7 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
 	}});
     </script>
     <div id="container">
+
         <div id="center" class="column">
             <?php echo $banner1;?>
             <div id="content">
@@ -113,9 +156,11 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
             </div>
 
             <div class="rightblock">
-                <div class="blocks">
-                    <?php echo $loginForm;?>
-                </div>
+
+                <?php echo @$topBlock1;?>
+                <?php echo $topBlock2;?>
+                <?php echo $topBlock3;?>
+
 
                 <?php if(isset($lastNews['title'])):?>
                 <div class="blocks">
@@ -133,44 +178,7 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
                 </div>
                 <?php endif;?>
 
-                <div class="blocks">
-                    <!-- Блок поиска -->
-                    <img src="images/top_bg.gif" alt="" width="218" height="12">
-                    <p style="margin-left:20px;"><input type="text" id="inputsearch" onkeydown="if(isEnterKey(this, event)) my_search();"></p>
-                    <p>&nbsp;<a href="javascript:void(0);" id="buttonsearch">Поиск</a></p>
-                    <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
-                    <div style="display:none" id="searchresults"></div>
-                    <script type="text/javascript">
-                        //<!--
-                        function isEnterKey(obj, event)  {
-                            event = event || window.event;
-                            var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : null;
-                            if (keyCode == 13) {
-                                return true;
-                            }
-                            return false;
-                        }
-                        $('#buttonsearch').click(function(){/*Поиск по продуктам (AJAX)*/
-                            my_search();
-                        });
-                        function my_search(){
-                            $.post('ajax/search/' + encodeURIComponent($('#inputsearch').val()),'[]',function(data){
-                                var str = '<'+'h2'+'>'+'Результаты поиска:<'+'/h2'+'><'+'br'+'>';
-                                if(data.length == 0)
-                                    str += 'Ничего не найдено<'+'br'+'>';
-                                else
-                                    for (var k in data)
-                                        str += '<'+'a h'+'ref="shop/product' + data[k].id + '">'+data[k].name+ '<'+'/a'+'><'+'br'+'>';
-                                $('#searchresults').html(str);
-                                $('#searchresults').modal();
-                                $('#simplemodal-container').css('width', '400px');
-                                $('#simplemodal-container').css('height', '350px');
-                            },'json');
-                        }
-                        //-->
-                    </script>
-                    <!-- /Блок поиска -->
-                </div>
+
             </div><!-- /.rightblock -->
         </div><!-- /#right -->
     </div><!-- /#container -->
