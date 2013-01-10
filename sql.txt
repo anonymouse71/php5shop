@@ -328,8 +328,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_roles` (
 
 REPLACE INTO `p5shp_roles` (`id`, `name`) VALUES
 (1, 'login'),
-(2, 'admin'),
-(3, 'not activated');
+(2, 'admin');
 
 -- --------------------------------------------------------
 
@@ -399,22 +398,21 @@ REPLACE INTO `p5shp_state_orders` (`id`, `name`) VALUES
 
 CREATE TABLE IF NOT EXISTS `p5shp_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(127) NOT NULL,
+
   `username` varchar(32) NOT NULL DEFAULT '',
-  `password` char(50) NOT NULL,  
+  `network` VARCHAR( 50 ) NOT NULL ,
+  `identity` VARCHAR( 150 ) NOT NULL ,
+  `profile` VARCHAR( 150 ) NOT NULL ,
   `last_login` int(10) unsigned DEFAULT NULL,
-  `phone` bigint(12) DEFAULT NULL,
+  `phone` VARCHAR( 13 ) DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`,`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Дамп данных таблицы `users`
---
-
-REPLACE INTO `p5shp_users` (`id`, `email`, `username`, `password`, `last_login`, `phone`, `address`) VALUES
-(1, 'test@test.com', 'test', 'd884b8009e0d1914f69b52845d203de45a1c73e16659434173', 0, 11111124, '');
+ALTER TABLE `p5shp_users` ADD UNIQUE (
+`identity`
+);
 
 -- --------------------------------------------------------
 

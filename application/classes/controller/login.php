@@ -28,10 +28,8 @@ class Controller_Login extends Controller
      */
     public function action_index()
     {
-        //checkLogin проводит проверки на то, включена ли ф-я авторизации и не
-        //авторизован ли уже пользователь, есть ли POST массив
-        $this->checkLogin();
-
+        //авторизован ли пользователь
+        //$this->checkLogin();
 
         /*
         // С версии 1.5 отключена стандартная авторизация
@@ -62,8 +60,24 @@ class Controller_Login extends Controller
             //$user['network'] - соц. сеть, через которую авторизовался пользователь
             //$user['identity'] - уникальная строка определяющая конкретного пользователя соц. сети
             //$user['first_name'] - имя пользователя
-            //$user['last_name'] - фамилия пользователя
 
+            if(isset($user['network'], $user['identity'], $user['first_name'], $user['profile']))
+            {
+                $userOrm = ORM::factory('user')->where('identity', '=', $user['identity'])->find();
+                if(!$userOrm->id) // // новый пользователь
+                {
+                    $userOrm = ORM::factory('user');
+                    $userOrm->username = $user['first_name'];
+                    $userOrm->network = $user['network'];
+                    $userOrm->identity = $user['identity'];
+                    $userOrm->profile = $user['profile'];
+                    $userOrm->phone = $userOrm->address = '';
+                }
+
+                //Осуществляем вход
+                Auth::instance()->force_login($userOrm);
+
+            }
 
         }
 
