@@ -10,6 +10,7 @@
  * topBlock1                            - верхний виджет 1 (выбор валюты)
  * topBlock2                            - верхний виджет 2 (корзина)
  * topBlock3                            - верхний виджет 3 (дополнительный) - сортировка в категории
+ * topTitle                             - заголовок, название магазина (текст-html)
  * menu[]                               - верхнее меню
  * banner1                              - большой баннер в центре страницы
  * about                                - блок для приветствия посетителя
@@ -94,6 +95,7 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
             <!-- /Блок поиска -->
         </div>
 
+        <div id="topTitle"><?php echo $topTitle;?></div>
 
 
         <!-- Верхнее меню-->
@@ -157,8 +159,10 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
 
             <div class="rightblock">
 
-                <?php echo @$topBlock1;?>
                 <?php echo $topBlock2;?>
+
+                <?php echo @$topBlock1;?>
+
                 <?php echo $topBlock3;?>
 
 

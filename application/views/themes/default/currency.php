@@ -13,4 +13,3 @@
         document.location.href = '<?php echo url::base();?>shop/currency/' + $('#currency').val();
     });
 </script>
-<br>

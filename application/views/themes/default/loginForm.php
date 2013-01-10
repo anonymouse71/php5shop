@@ -14,5 +14,5 @@
     <div style="float: left;margin-right: 12px; margin-top: 9px;">Войти:</div>
     <script src="//ulogin.ru/js/ulogin.js"></script>
     <div id="uLogin"
-         data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,google,vkontakte,odnoklassniki,yandex,twitter,mailru;hidden=;redirect_uri=http%3A%2F%2F<?php echo $_SERVER['HTTP_HOST'], urlencode(url::base()); ?>"></div>
+         data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,google,vkontakte,odnoklassniki,yandex,twitter,mailru;hidden=;redirect_uri=http%3A%2F%2F<?php echo $_SERVER['HTTP_HOST'], urlencode(url::base()); ?>login"></div>
 </div>

@@ -350,7 +350,6 @@ class Controller_Ajax extends Controller
         Model::factory('config')->setBool('bigCart',isset($_POST['bigCart'])?1:0);
         Model::factory('config')->setBool('currency',isset($_POST['currency'])?1:0);
         Model::factory('config')->setBool('LastNews',isset($_POST['LastNews'])?1:0);
-        Model::factory('config')->setBool('LoginOn',isset($_POST['LoginOn'])?1:0);
         Model::factory('config')->setBool('ordJabb',isset($_POST['ordJabb'])?1:0);
         Model::factory('config')->setBool('refpp',isset($_POST['refpp'])?1:0);
         Model::factory('config')->setBool('ordMail',isset($_POST['ordMail'])?1:0);

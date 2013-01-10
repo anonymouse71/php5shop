@@ -18,10 +18,7 @@
                         <td><span>Показывать блок с отрывком из последней записи блога</span></td>
                         <td><input type="checkbox" name="LastNews" <?php if($bool['LastNews'])echo 'checked="1"';?>></td>
                     </tr>
-                    <tr>
-                        <td><span>Авторизация пользователей включена</span></td>
-                        <td><input type="checkbox" name="LoginOn" <?php if($bool['LoginOn'])echo 'checked="1"';?>></td>
-                    </tr>
+
                     <tr>
                         <td><span>Оповещать о новых заказах на Jabber </span><input type="text" name="jabber" value="<?php echo $jabber;?>"></td>
                         <td><input type="checkbox" name="ordJabb" <?php if($bool['ordJabb'])echo 'checked="1"';?>></td>

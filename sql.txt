@@ -76,7 +76,6 @@ REPLACE INTO `p5shp_configBool` (`name`, `value`) VALUES
 ('bigCart', 1),
 ('currency', 1),
 ('LastNews', 1),
-('LoginOn', 1),
 ('ordJabb', 1),
 ('ordMail', 1),
 ('refpp', 0),
@@ -185,6 +184,7 @@ REPLACE INTO `p5shp_html` (`name`, `code`) VALUES
 ('headerWidg', ''),
 ('keywords', 'php shop, магазин, скрипт магазина'),
 ('logo', '<img src="/images/logo.jpg" alt="shop logo" width="171" height="73">'),
+('topTitle', '<h2>Магазин на php5shop CMS</h2>'),
 ('shopName', 'Магазин на движке php5shop');
 
 -- --------------------------------------------------------
