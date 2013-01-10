@@ -151,7 +151,7 @@ class Model_BlogPost extends ORM {
             {
                 $posts[$i]['title'] = htmlspecialchars($item->title);
                 $posts[$i]['link'] = 'http://' . $_SERVER['HTTP_HOST'] .
-                                     url::base() . 'shop/blog/' . $item->id;
+                                     url::base() . 'blog/' . $item->id;
                 $posts[$i]['description'] = htmlspecialchars(trim(strip_tags($item->html2)));
 //                if(mb_strlen($posts[$i]['description'], 'utf-8') > 300)
 //                    $posts[$i]['description'] =

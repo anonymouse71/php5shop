@@ -17,220 +17,8 @@
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/
  */
 
-class Controller_Shop extends Controller_Template
+class Controller_Shop extends Controller_Site
 {
-
-    public $theme = 'default'; //тема
-    public $template = 'themes/default/index'; //свойство класса Controller_Template
-    public static $cache; //объект модуля кэширования
-
-    private $currency = DEFAULT_CURRENCY; //валюта
-    private $blogLimit = 5; //записей на 1 странице блога
-    private $productsOnPage = 10; //продуктов на странице
-    private $categoriesObject; //массив с категориями (сохранен после pre() для уменьшения количества запросов к БД)
-    private $user; //объект с данными о пользователе
-    private $apis; //массив данных для интеграции с сторонними сервисами
-
-    /**
-     * Получение настроек, подготовка блоков страницы, инициализация
-     */
-    public function before()
-    {
-        parent::before(); //метод выполняется перед каждым action
-
-        // Список id кэшируемых объектов: menuItem, htmlBlocks, apis, cats, LastProd
-        // их кэш нужно удалять при модификации данных в БД: Cache::instance()->delete($id);         
-        self::$cache = Cache::instance();
-
-        define('TPL', 'themes/' . $this->theme . '/');
-        $tpl =& $this->template; //для сокращения
-
-        //получение списка кнопок меню, которые должны быть показаны по настройкам     
-        $tpl->menu = self::$cache->get('menuItem');
-        if (false === $tpl->__isset('menu'))
-        {
-            $tpl->menu = Model::factory('menuItem')->get();
-            self::$cache->set('menuItem', $tpl->menu);
-        }
-
-        //получение содержимого пользовательских HTML блоков
-        $htmlBlocks = self::$cache->get('htmlBlocks');
-        if (null === $htmlBlocks)
-        {
-            $htmlBlocks = Model::factory('html')->getblocks();
-            self::$cache->set('htmlBlocks', $htmlBlocks);
-        }
-
-        //подключение CSS
-        $tpl->css = new View(TPL . 'css');
-
-        $this->apis = self::$cache->get('apis');
-        if (null === $this->apis)
-        {
-            $this->apis = Model_Apis::get();
-            self::$cache->set('apis', $this->apis);
-        }
-
-        $googleAnalytics = new View('analytics'); //подключение представления для кода google analistics
-        $googleAnalytics->set('account', $this->apis['analytics']); //подстановка кода аккаунта google analistics
-
-        $tpl->css .= $googleAnalytics; //добавление кода между <head> и </head>
-        $tpl->topBlock3 = $htmlBlocks['headerWidg']; //подстановка переменных в шаблон
-        $tpl->keywords = htmlspecialchars($htmlBlocks['keywords']); //переменная с ключевыми словами для SEO оптимизации
-        $tpl->banner1 = $htmlBlocks['banner1']; //HTML код 4 баннеров или пользовательских блоков
-        $tpl->banner2 = $htmlBlocks['banner2'];
-        $tpl->banner3 = $htmlBlocks['banner3'];
-        $tpl->banner4 = $htmlBlocks['banner4']
-            . Model_Sape_client::links($this->apis['sape']); //подключение сервиса Sape.ru
-        $tpl->logo = $htmlBlocks['logo']; //логотип
-        $tpl->about = $htmlBlocks['about']; //HTML код с описанием магазина
-        $tpl->title = htmlspecialchars($htmlBlocks['shopName']); //название магазина
-        $tpl->lastNews = ''; //блок с последней записью из блога
-        $tpl->topBlock2 = new View(TPL . 'topCart'); //корзина
-        $tpl->topBlock2->items = 0; //количество товаров в корзине
-        $tpl->topTitle = $htmlBlocks['topTitle']; //заголовок магазина вверху в виде html
-
-        $tpl->prod1 = Session::instance()->get('prod1'); //получение номеров товаров для сравнения
-        $tpl->prod2 = Session::instance()->get('prod2');
-        if (!isset($tpl->prod1)) //в сессии нет id товара
-        {
-            $tpl->prod1 = '';
-        }
-        else //товар найден, получаем его название
-        {
-            $p = ORM::factory('product', $tpl->prod1)->as_array();
-            $tpl->prod1 = ($p['name']) ? $p['name'] : ''; //название найдено? подставляем в шаблон
-        }
-        if (!isset($tpl->prod2)) //в сессии нет id товара
-        {
-            $tpl->prod2 = '';
-        }
-        else //товар найден, получаем его название
-        {
-            $p = ORM::factory('product', $tpl->prod2)->as_array();
-            $tpl->prod2 = ($p['name']) ? $p['name'] : ''; //название найдено? подставляем в шаблон
-        }
-
-
-        if (is_array(Session::instance()->get('cart')))
-        {
-            $cart = array_unique(Session::instance()->get('cart')); //удаление повторов
-            $tpl->topBlock2->items = count($cart); //подстановка количества товаров в корзине
-            Session::instance()->set('cart', $cart); //запись без дубликатов
-        }
-
-        $this->boolConfigs = Model::factory('config')->getbool(); //получение пользовательских настроек
-
-        if (!$this->boolConfigs['ShowBlog']) //если функция блога отключена
-        {
-            $tpl->menu[2] = FALSE;
-        } //прячем кнопку "Новости" из меню
-        else //иначе
-        {
-            if ($this->boolConfigs['LastNews']) //если включен блок последних новостей, вставляем в него последнюю запись из блога (200 симв.)
-            {
-                $tpl->lastNews = Model::factory('BlogPost')->last(200);
-            }
-        }
-
-
-        if (strlen(Session::instance()->get('currency')) === 3
-        ) //если в сессии есть 3-буквенный банковский код, устанавливаем его как валюту
-        {
-            $this->currency = Session::instance()->get('currency');
-        }
-        $currency = Model::factory('config')->getCurrency(); //получение валют из БД
-        if ($this->boolConfigs['currency']) //согласно настройкам
-        {
-            //подключение шаблона блока выбора валюты
-            $tpl->topBlock1 = new View(TPL . 'currency');
-            //подстановка выбранной валюты
-            $tpl->topBlock1->currency = $this->currency;
-            //подстановка в шаблон переменной с массивом названий (банковских кодов) валют
-            $tpl->topBlock1->array = array_keys($currency);
-        }
-
-        $this->auth = Auth::instance(); //инициализация механизма авторизации
-
-
-        $tpl->loginForm = new View(TPL . 'loginForm'); //подключаем шаблон формы авторизации.
-        //если пользователь уже пробовал авторизоваться и допустил ошибку, о которой свидетельствует COOKIES
-        if (Session::instance()->get('login_error') == 1)
-        {
-            $tpl->loginForm .= new View('modalLoginError'); //добавляем всплывающее окно
-            //удаляем переменную из COOKIES чтобы сообщеие больше не повторялось (до следующей ошибки авторизации)
-            Cookie::delete('login_error');
-        }
-
-        if (!$this->auth->logged_in()) //если пользователь не авторизован
-        { //инициализации автовхода по COOKIES.
-            $this->auth->auto_login();
-        }
-
-        if (!$this->auth->logged_in()) //если пользователь все равно не авторизован
-        {
-            $tpl->menu[6] = FALSE; //прячем кнопку "Аккаунт" из меню
-        }
-        else //авторизован?
-        { //получаем данные о пользователе и вместо формы авторизации показываем имя и кнопку выхода
-            $tpl->loginForm = new View(TPL . 'exitForm');
-            $this->user = $this->auth->get_user();
-            $tpl->loginForm->user = $this->user->username;
-        }
-
-
-        if (!$this->auth->logged_in('admin')) //если пользователь не авторизован как администратор,
-        {
-            $tpl->menu[5] = FALSE;
-        } //убераем из меню кнопку панели управления
-
-        //получение всех категорий
-        $catsArray = self::$cache->get('cats');
-        if (null === $catsArray)
-        {
-            $catsArray = DB::select()->from('categories')->order_by('id')
-                ->execute()->as_array();
-            self::$cache->set('cats', $catsArray);
-        }
-        //инициализация класса для построения дерева категорий
-        $this->categoriesObject = new Categories($catsArray);
-
-        if (MENU2 === TRUE)
-        {
-            $tpl->cats = $this->categoriesObject->menu2( //подстановка дерева категорий в представление
-                url::base() . 'shop/category',
-                $this->request->param('catid')
-            );
-        }
-        else
-        {
-            $tpl->cats = $this->categoriesObject->menu(
-                url::base() . 'shop/category',
-                $this->request->param('catid')
-            );
-        }
-
-        if ($this->boolConfigs['poll'])
-        {
-            $pollV = new View(TPL . 'poll');
-            $pollV->q = Model::factory('poll')->get();
-            $pollV->a = ORM::factory('poll_answer')->find_all();
-            $countV = 0;
-            foreach ($pollV->a as $answer)
-            {
-                $countV += $answer->count;
-            }
-            $pollV->count = $countV;
-            $pollV->cookie = Session::instance()->get('voted');
-            if ($this->user)
-            {
-                $pollV->cookie = Model_Vote::is_voted($this->user->id);
-            }
-            $tpl->loginForm .= $pollV;
-        }
-
-    }
-
     public function action_index() //главная страница
     {
         $pct = 1; //множитель скидки для незарегистрированных пользователей
@@ -401,19 +189,21 @@ class Controller_Shop extends Controller_Template
                     else //иначе если
                     {
                         if (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
-                        {
+                        {//записываем колич. 1
                             $products[$k]['bigcart'] = 1;
                         }
-                    } //записываем колич. 1
+                    }
                 }
             }
 
             $this->template->stuff->products = $products; //заполняем представление продуктами
         }
+
         if ($this->boolConfigs['bigCart'] && is_object($this->template->stuff)) //указываем опцию из настроек
         {
             $this->template->stuff->bigcart = 1;
         }
+
         if (isset($description))
         {
             if (strlen($this->apis['vkcomments']))
@@ -454,8 +244,8 @@ class Controller_Shop extends Controller_Template
         $this->template->title .= ' - Регистрация'; //дополнение заголовка страницы
         if ($this->auth->get_user()) //если пользователь уже авторизован,
         {
-            exit($this->request->redirect(url::base()));
-        } //перенаправим на главную страницу.
+            exit($this->request->redirect(url::base()));//перенаправим на главную страницу.
+        }
 
         $captcha = Captcha::instance(); //инициализируем механизм проверочного изображения
         $this->template->about = new View(TPL . 'registerForm'); //подключение формы
@@ -479,13 +269,12 @@ class Controller_Shop extends Controller_Template
             $errStr = 'При заполнении были допущены ошибки! ';
             foreach ($errors as $key => $value)
             {
-                $errStr .= $key . $value . '. ';
-            } //вместе с ключами массива
+                $errStr .= $key . $value . '. ';//вместе с ключами массива
+            }
         }
 
-        $this->template->about->val = Session::instance()->get(
-            'register_post'
-        ); //подключение в шаблон данных, которые были введены в прошлый раз (если тогда были ошибки)
+        //подключение в шаблон данных, которые были введены в прошлый раз (если тогда были ошибки)
+        $this->template->about->val = Session::instance()->get('register_post');
 
         Session::instance()->delete('register_errors'); //удаление полученых данных из сессии
         Session::instance()->delete('register_post');
@@ -540,32 +329,6 @@ class Controller_Shop extends Controller_Template
         $this->template->title .= ' - Личная страница ' . $this->user->username; //дополнение заголовка страницы
     }
 
-    public function action_clients()
-    {
-        if ($this->template->menu[4]) //если страница включена
-        {
-            $this->template->about = Model::factory('html')->getHtml(1); //подстановка HTML
-            $this->template->title .= ' - Наши клиенты'; //дополнение заголовка страницы
-        }
-        else
-        {
-            $this->request->redirect(url::base());
-        }
-    }
-
-    public function action_contacts()
-    {
-        if ($this->template->menu[3]) //если страница включена
-        {
-            $this->template->about = Model::factory('html')->getHtml(2); //подстановка HTML
-            $this->template->title .= ' - Наши контакты'; //дополнение заголовка страницы
-        }
-        else
-        {
-            $this->request->redirect(url::base());
-        }
-    }
-
     public function action_cart()
     {
         $this->template->title .= ' - Покупки';
@@ -618,105 +381,37 @@ class Controller_Shop extends Controller_Template
         $this->template->about->sum = Model_Ordproduct::sum();
     }
 
-    public function action_blog($id = 0)
-    {
-        $is_admin = Auth::instance()->logged_in('admin');
-        if ($id) //если он установлен
-        {
-            $view = new View(TPL . 'blogPost'); //подключение отображения
-            $view->post = Model::factory('BlogPost', $id); //получение записи
-            if (!isset($view->post->id)) //нет записи с таким id?
-            {
-                exit($this->request->redirect(url::base() . 'error/404'));
-            } //перенаправление на страницу 404
-            $view->post->title = htmlspecialchars($view->post->title);
-            $view->is_admin = $is_admin;
-            $this->template->about = $view; //запись есть? вставляем в страницу
-            $this->template->title .= ' - ' . $view->post->title; //дополняем заголовок страницы
-            //добавляем комментарии
-            if ($this->boolConfigs['comments'])
-            {
-                $this->template->about .= Model_Comment::form($id, FALSE);
-            }
-
-        }
-        else //id не установлен
-        {
-            $page = isset($_GET['page']) ? abs((int)$_GET['page'])
-                : 0; //получение GET параметра page с установкой его >= 0
-            if (!$page) //если он равен 0
-            {
-                $page = 1;
-            } //устанавливаем в 1
-            $array = Model::factory('BlogPost')->read($page, $this->blogLimit); //считываем несколько последних записей
-            $this->template->about = '';
-            foreach ($array as $post) //каждую оборачиваем в представление
-            { //и добавляем в $this->template->about
-                $view = new View(TPL . 'blogPost');
-                $view->post = $post;
-                if ($view->post->html2) //строка на случай если ф-я комментирования добавлена в версию движка "на гарячую"
-                {
-                    $view->post->html = $view->post->html2;
-                } //показываем сокращенныую новость вместо полной
-
-                $view->post->title = htmlspecialchars($view->post->title); //не будет html кода в заголовке
-                $view->is_admin = $is_admin;
-                $this->template->about .= $view;
-            }
-
-            $this->template->about .= new Pagination(array(
-                                                          'uri_segment'    => 'page',
-                                                          'total_items'    => Model::factory('BlogPost')->find_all()
-                                                              ->count(),
-                                                          'items_per_page' => $this->blogLimit,
-                                                     ));
-            $this->template->title .= ' - Новости магазина'; //дополняем заголовок страницы
-
-        }
-    }
-
-    public function action_forgotpassword() //забыли пароль
-    {
-        if ($this->auth->get_user()) //если пользователь уже авторизован,
-        {
-            exit($this->request->redirect(url::base()));
-        } //перенаправим на главную страницу.
-
-        $captcha = Captcha::instance(); //инициализируем механизм проверочного изображения
-        $this->template->about = new View(TPL . 'forgotPassword'); //подключение формы
-        $this->template->about->captcha = $captcha; //подстановка в форму captcha
-        //получение информации об ошибках из сессии
-        $this->template->about->errors = Session::instance()->get('emailpass_errors');
-        Session::instance()->delete('emailpass_errors'); //удаление переменной SESSION
-    }
-
-    public function action_currency($code = 0) //Смена валюты
+    /**
+     * Смена валюты
+     * @param int $code
+     */
+    public function action_currency($code = 0)
     { //в настройках машрутизации регулярное выражение [A-Z]{3}
         if ($code) //если параметр <code> установлен
         {
-            Session::instance()->set('currency', $code);
-        } //записываем в сессию
+            Session::instance()->set('currency', $code);//записываем в сессию
+        }
 
         if (!Request::$referrer)
         {
             Request::$referrer = url::base();
         }
-        if (FALSE === strpos(Request::$referrer, '://' . $_SERVER['HTTP_HOST'])
-        ) //если HTTP_REFERER содержит домен сайта
+        //если HTTP_REFERER содержит домен сайта
+        if (FALSE === strpos(Request::$referrer, '://' . $_SERVER['HTTP_HOST']))
         {
-            Request::$referrer = url::base();
-        } //на главную страницу
+            Request::$referrer = url::base(); //на главную страницу
+        }
         $this->request->redirect(Request::$referrer);
     }
 
+    /**
+     * Сортировка в категориях
+     * @param int $code
+     */
     public function action_sortset($code = 0)
     {
         Session::instance()->set('sort', $code);
-
-        $this->request->redirect(
-            url::base() . 'shop/category'
-                . Session::instance()->get('cat', 1)
-        );
+        $this->request->redirect(url::base() . 'shop/category' . Session::instance()->get('cat', 1));
     }
 
     public function action_order($phone = null)
@@ -823,6 +518,10 @@ class Controller_Shop extends Controller_Template
         }
     }
 
+    /**
+     * Пользователь перешел по партнерской ссылке
+     * @param $id
+     */
     public function action_referral($id)
     {
         if ($this->boolConfigs['refpp'])
@@ -832,140 +531,29 @@ class Controller_Shop extends Controller_Template
         $this->action_index();
     }
 
-    public function action_compare()
+
+    /**
+     * Метод перенесен в Controller_Page
+     * @param int $id
+     */
+    public function action_blog($id = 0)
     {
-        $pct = 1; //множитель скидки для незарегистрированных пользователей
-        $sessionCart = Session::instance()->get('cart'); //получаем содержимое корзины
-        if (!is_array($sessionCart)) //в массив $sessionCart
-        {
-            $sessionCart = array();
-        }
-        $bcart = Session::instance()->get('bigCart'); //массив количества товаров
-        $curr = Model::factory('config')->getCurrency($this->currency); //получение курса валют
-        if (!$curr) //если в сессию попал поддельный или уже не существующих в БД курс
-        {
-            Session::instance()->delete('currency'); //удаляем его из сессии
-            $this->request->redirect($_SERVER['REQUEST_URI']); //и обновляем страницу
-        }
-        $this->template->stuff = new View(TPL . 'products'); //Подключаем представление
-
-        $product1 = Session::instance()->get('prod1'); //получение номеров товаров
-        $product2 = Session::instance()->get('prod2');
-
-        if (isset($this->user->id)) //если пользователь зарегистрирован
-        {
-            $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки для пользователя
-        }
-
-        if ($product1 && $product1) //указаны продукты
-        {
-            $product1 = ORM::factory('product', $product1)->as_array(); //находим продукт в БД
-            $product2 = ORM::factory('product', $product2)->as_array();
-            if (!$product1['id'] || !$product2['id']) //если там нет,
-            {
-                $this->request->redirect(url::base());
-            } //перенаправляем на главную
-            else //если есть,
-            { //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
-                $product1['price'] = round($curr * $product1['price'] * $pct, 2);
-                $product1['price'] .= ' ' . $this->currency;
-                $product1['name'] = htmlspecialchars($product1['name']);
-                $product1['cart'] = FALSE; //по умолчанию продукт не в корзине
-                if (is_array($sessionCart)) //но если корзина записана как массив
-                {
-                    if (in_array($product1['id'], $sessionCart)) //и продукт в ней записан
-                    {
-                        $product1['cart'] = TRUE;
-                    }
-                } //передадим эту информацию в шаблон
-                $product2['price'] = round($curr * $product2['price'] * $pct, 2);
-                $product2['price'] .= ' ' . $this->currency;
-                $product2['name'] = htmlspecialchars($product2['name']);
-                $product2['cart'] = FALSE; //по умолчанию продукт не в корзине
-                if (is_array($sessionCart)) //но если корзина записана как массив
-                {
-                    if (in_array($product2['id'], $sessionCart)) //и продукт в ней записан
-                    {
-                        $product2['cart'] = TRUE;
-                    }
-                } //передадим эту информацию в шаблон
-                $this->template->stuff = new View(TPL . 'twoProducts'); //подключаем шаблон
-
-                if ($this->boolConfigs['bigCart'])
-                {
-                    if (isset($bcart[$product1['id']]))
-                    {
-                        $product1['bigcart'] = $bcart[$product1['id']];
-                    }
-                    else
-                    {
-                        if (in_array($product1['id'], $sessionCart))
-                        {
-                            $product1['bigcart'] = 1;
-                        }
-                    }
-                    if (isset($bcart[$product2['id']]))
-                    {
-                        $product2['bigcart'] = $bcart[$product2['id']];
-                    }
-                    else
-                    {
-                        if (in_array($product2['id'], $sessionCart))
-                        {
-                            $product2['bigcart'] = 1;
-                        }
-                    }
-                }
-
-
-                $this->template->stuff->item1 = $product1; //вставляем в шаблон данные о продукте
-                $this->template->stuff->item2 = $product2;
-                $description1 = new View(TPL . 'description');
-                $description1->__set('vk_on', FALSE);
-                $description1->text = ORM::factory('description', $product1['id'])->__get('text');
-                if ($this->auth->logged_in('admin'))
-                {
-                    $description1->id = $product1['id'];
-                }
-                $description2 = new View(TPL . 'description');
-                $description2->__set('vk_on', FALSE);
-                $description2->text = ORM::factory('description', $product2['id'])->__get('text');
-                if ($this->auth->logged_in('admin'))
-                {
-                    $description2->id = $product2['id'];
-                }
-
-                $this->template->stuff->description1 = $description1;
-                $this->template->stuff->description2 = $description2;
-                $this->template->title .= ' - Сравнение ' . $product1['name'] . ' и ' . $product2['name'];
-                $this->template->about = ''; //блок приветствия не отображаем
-                $this->template->prod1 = ''; //блок сравнения не отображаем
-
-                //Session::instance()->delete('prod1');                           //сравнение завершено
-                //Session::instance()->delete('prod2');
-
-            }
-        }
-        else //товары не указаны
-        {
-            $this->template->title .= ' - Страница сравнения товаров ';
-            $this->template->about = '<h2>Не выбраны товары для сравнения</h2>';
-            $this->template->stuff->products = array();
-        }
-
-        if ($this->boolConfigs['bigCart'] && is_object($this->template->stuff)) //указываем опцию из настроек
-        {
-            $this->template->stuff->bigcart = 1;
-        }
+        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : '' ));
     }
 
-    public function after()
+    /**
+     * Метод перенесен в Controller_Page
+     */
+    public function action_clients()
     {
-        parent::after();
-        //если в настройках это включено, в footer добавляется Benchmark
-        if ($this->boolConfigs['timeFooter'] && isset($this->template->banner4))
-        {
-            $this->template->banner4 .= Model::factory('Benchmark')->getTime();
-        }
+        $this->request->redirect(url::base() . 'page/clients');
     }
-} // End Controller_Shop
+
+    /**
+     * Метод перенесен в Controller_Page
+     */
+    public function action_contacts()
+    {
+        $this->request->redirect(url::base() . 'page/contacts');
+    }
+}

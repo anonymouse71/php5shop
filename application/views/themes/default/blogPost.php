@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
 <div class="post">
     <h2>
-        <a href="shop/blog/<?php echo $post->id;?>"><?php echo $post->title;?></a>
+        <a href="blog/<?php echo $post->id;?>"><?php echo $post->title;?></a>
     </h2>
     <div class="content">
         <?php echo $post->html;?>

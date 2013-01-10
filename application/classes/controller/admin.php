@@ -603,7 +603,7 @@ class Controller_Admin extends Controller_Template {
                 else
                 {                    
                     $this->template->body->errors = '<a href="' . url::base() . 
-                            'shop/blog/' . Model_LastInsert::id() .
+                            'blog/' . Model_LastInsert::id() .
                             '">Добавлено!</a>';
                     Model::factory('BlogPost')->updateFeed('/rss.xml');         //обновление RSS ленты
                     Model::factory('sitemap')->update();                        //обновление sitemap
@@ -636,7 +636,7 @@ class Controller_Admin extends Controller_Template {
                     }
                     else
                         $this->template->body->errors = '<a href="' . url::base() .
-                            'shop/blog/' . $edit . '">Обновлено!</a>';
+                            'blog/' . $edit . '">Обновлено!</a>';
                 }
                 $this->template->body->post = ORM::factory('BlogPost',$edit)->as_array();
                 if(!isset($this->template->body->post['title']))
@@ -646,7 +646,7 @@ class Controller_Admin extends Controller_Template {
             else                                                                //удаление
             {
                 ORM::factory('BlogPost',$edit)->delete();
-                $this->request->redirect(url::base() . 'shop/blog/');
+                $this->request->redirect(url::base() . 'blog/');
             }
         }
     }
@@ -749,7 +749,7 @@ class Controller_Admin extends Controller_Template {
         $referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : die($error);
 
         if( 
-            ( preg_match('|/shop/product[0-9]+|',$referer) OR preg_match('|/shop/blog/[0-9]+|',$referer) )
+            ( preg_match('|/shop/product[0-9]+|',$referer) OR preg_match('|/blog/[0-9]+|',$referer) )
                 &&
             FALSE !== strpos($referer, $_SERVER['HTTP_HOST'])
                 &&

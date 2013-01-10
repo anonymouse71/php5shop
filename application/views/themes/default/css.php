@@ -206,6 +206,13 @@ body {
     border-bottom: 1px solid #CDCDCD
 }
 
+#lastNews{
+    padding: 10px;
+    background-image: url(images/bg.gif);
+    background-position: top left;
+    background-repeat: repeat-y;
+}
+
 #news {
     padding: 0 5px 25px 13px;
     float: left;
@@ -297,10 +304,10 @@ body {
 }
 
 .topblock1 {
-    background-image: url(images/block1bg.gif);
+    background-image: url(images/block2bg.gif);
     background-position: top left;
     background-repeat: no-repeat;
-    width: 159px;
+    width: 218px;
     height: 46px;
     padding: 15px 1px 0 30px;
     margin-bottom: 10px;
@@ -329,7 +336,7 @@ body {
     background-image: url(images/block2bg.gif);
     background-position: top left;
     background-repeat: no-repeat;
-    width: 179px;
+    width: 218px;
     height: 46px;
     padding: 15px 1px 0 24px;
     float: left;

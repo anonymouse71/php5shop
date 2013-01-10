@@ -102,9 +102,9 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
         <ul id="menu">
             <li><img src="images/li.gif" alt="меню" width="19" height="29"></li>
             <?php if($menu[1]):?><li><a href=""><img src="images/main.jpg" alt="Главная страница магазина"></a></li><?php endif;?>
-            <?php if($menu[2]):?><li><a href="shop/blog"><img src="images/blog.jpg" width="121" height="29" alt="Новости магазина"></a></li><?php endif;?>
-            <?php if($menu[3]):?><li><a href="shop/contacts"><img src="images/contact.jpg" alt="Контакты и адреса" ></a></li><?php endif;?>
-            <?php if($menu[4]):?><li><a href="shop/clients"><img src="images/clients.jpg" alt="Наши клиенты" ></a></li><?php endif;?>
+            <?php if($menu[2]):?><li><a href="blog"><img src="images/blog.jpg" width="121" height="29" alt="Новости магазина"></a></li><?php endif;?>
+            <?php if($menu[3]):?><li><a href="page/contacts"><img src="images/contact.jpg" alt="Контакты и адреса" ></a></li><?php endif;?>
+            <?php if($menu[4]):?><li><a href="page/clients"><img src="images/clients.jpg" alt="Наши клиенты" ></a></li><?php endif;?>
             <?php if($menu[5]):?><li><a href="admin"><img src="images/admin.jpg" alt="Панель управления администратора" width="121" height="29"/></a></li><?php endif;?>
             <?php if($menu[6]):?><li><a href="shop/user"><img src="images/user.jpg" alt="Личный аккаунт в системе скидок"></a></li><?php endif;?>
             <?php if($menu[7]):?><li><a href="shop/cart"><img src="images/cart.jpg" alt="Покупки"></a></li><?php endif;?>
@@ -159,6 +159,7 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
 
             <div class="rightblock">
 
+
                 <?php echo $topBlock2;?>
 
                 <?php echo @$topBlock1;?>
@@ -167,19 +168,19 @@ Copyright (C) 2010-2012 phpdreamer, php5shop.com
 
 
                 <?php if(isset($lastNews['title'])):?>
-                <div class="blocks">
+
                     <!-- Послендяя запись в блоге-->
                     <img src="images/top_bg.gif" alt="" width="218" height="12">
-                    <div style="padding: 10px;">
+                    <div id="lastNews">
                         <h3><?php echo $lastNews['title'];?></h3>
                             <?php echo $lastNews['code'];?>
                         <div class="right" align="right" >
-                            <a href="shop/blog/<?php echo $lastNews['id'];?>">читать...</a>
+                            <a href="blog/<?php echo $lastNews['id'];?>">читать...</a>
                         </div>
                     </div>
                     <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
                     <!-- /Послендяя запись в блоге-->
-                </div>
+
                 <?php endif;?>
 
 
