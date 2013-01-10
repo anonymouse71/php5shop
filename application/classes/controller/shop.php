@@ -142,53 +142,31 @@ class Controller_Shop extends Controller_Template
         $currency = Model::factory('config')->getCurrency(); //получение валют из БД
         if ($this->boolConfigs['currency']) //согласно настройкам
         {
-            $tpl->topBlock1 = new View(TPL . 'currency'); //подключение шаблона блока выбора валюты
-            $tpl->topBlock1->currency = $this->currency; //подстановка выбранной валюты
-            $tpl->topBlock1->array = array_keys(
-                $currency
-            ); //подстановка в шаблон переменной с массивом названий (банковских кодов) валют
+            //подключение шаблона блока выбора валюты
+            $tpl->topBlock1 = new View(TPL . 'currency');
+            //подстановка выбранной валюты
+            $tpl->topBlock1->currency = $this->currency;
+            //подстановка в шаблон переменной с массивом названий (банковских кодов) валют
+            $tpl->topBlock1->array = array_keys($currency);
         }
 
         $this->auth = Auth::instance(); //инициализация механизма авторизации
 
 
         $tpl->loginForm = new View(TPL . 'loginForm'); //подключаем шаблон формы авторизации.
-        if (Session::instance()->get('login_error') == 1
-        ) //если пользователь уже пробовал авторизоваться и допустил ошибку, о которой свидетельствует COOKIES
+        //если пользователь уже пробовал авторизоваться и допустил ошибку, о которой свидетельствует COOKIES
+        if (Session::instance()->get('login_error') == 1)
         {
             $tpl->loginForm .= new View('modalLoginError'); //добавляем всплывающее окно
-            Session::instance()->delete(
-                'login_error'
-            ); //удаляем переменную из COOKIES чтобы сообщеие больше не повторялось (до следующей ошибки авторизации)
-        }
-
-        if (Session::instance()->get('needEmail'))
-        {
-            $tpl->loginForm .= new View('needEmailError'); //добавляем всплывающее окно
-            Session::instance()->delete('needEmail'); //удаляем переменную из COOKIES
-        }
-
-        if (Session::instance()->get('okEmail'))
-        {
-            $vOkEmail = new View('okEmail');
-            $vOkEmail->ok = (Session::instance()->get('okEmail') == 1);
-            $tpl->loginForm .= $vOkEmail;
-            Session::instance()->delete('okEmail');
-        }
-
-        if (Session::instance()->get('password_changed') == 1
-        ) //если пользователь использовал систему восстановления пароля
-        {
-            $tpl->loginForm .= new View('passwordsend'); //добавляем всплывающее окно
-            Session::instance()->delete(
-                'password_changed'
-            ); //удаляем переменную из COOKIES чтобы сообщеие больше не повторялось
+            //удаляем переменную из COOKIES чтобы сообщеие больше не повторялось (до следующей ошибки авторизации)
+            Cookie::delete('login_error');
         }
 
         if (!$this->auth->logged_in()) //если пользователь не авторизован
-        {
+        { //инициализации автовхода по COOKIES.
             $this->auth->auto_login();
-        } //инициализации автовхода по COOKIES.
+        }
+
         if (!$this->auth->logged_in()) //если пользователь все равно не авторизован
         {
             $tpl->menu[6] = FALSE; //прячем кнопку "Аккаунт" из меню

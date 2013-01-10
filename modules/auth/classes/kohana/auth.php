@@ -18,27 +18,27 @@ abstract class Kohana_Auth {
 	 *
 	 * @return Auth
 	 */
-	public static function instance()
-	{
-		if ( ! isset(Auth::$instance))
-		{
-			// Load the configuration for this type
-			$config = Kohana::config('auth');
+    public static function instance()
+    {
+        if (!isset(Auth::$instance))
+        {
+            // Load the configuration for this type
+            $config = Kohana::config('auth');
 
-			if ( ! $type = $config->get('driver'))
-			{
-				$type = 'ORM';
-			}
+            if (!$type = $config->get('driver'))
+            {
+                $type = 'ORM';
+            }
 
-			// Set the session class name
-			$class = 'Auth_'.ucfirst($type);
+            // Set the session class name
+            $class = 'Auth_' . ucfirst($type);
 
-			// Create a new session instance
-			Auth::$instance = new $class($config);
-		}
+            // Create a new session instance
+            Auth::$instance = new $class($config);
+        }
 
-		return Auth::$instance;
-	}
+        return Auth::$instance;
+    }
 
 	/**
 	 * Create an instance of Auth.

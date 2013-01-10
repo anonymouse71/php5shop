@@ -32,7 +32,6 @@ class Kohana_Auth_ORM extends Auth {
 
 			if ( ! empty($role))
 			{
-
 				// If role is an array
 				if (is_array($role))
 				{

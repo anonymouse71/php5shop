@@ -78,7 +78,10 @@ class Controller_Login extends Controller
                 Auth::instance()->force_login($userOrm);
 
             }
-
+            else
+            {
+                Cookie::set('login_error', 1, Date::HOUR);
+            }
         }
 
 
