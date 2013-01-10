@@ -398,7 +398,7 @@ REPLACE INTO `p5shp_state_orders` (`id`, `name`) VALUES
 
 CREATE TABLE IF NOT EXISTS `p5shp_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-
+  `email` VARCHAR( 127 ) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '',
   `username` varchar(32) NOT NULL DEFAULT '',
   `network` VARCHAR( 50 ) NOT NULL ,
   `identity` VARCHAR( 150 ) NOT NULL ,

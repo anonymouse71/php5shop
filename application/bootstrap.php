@@ -38,11 +38,6 @@ if (function_exists('date_default_timezone_set'))
 define('DEFAULT_CURRENCY', 'UAH'); //менять только на валюту, которая есть в базе данных
 define('LINE_CURR_CHANGE', __LINE__); //не менять
 
-/**
- * Проверка email при регистрации (отправкой письма со ссылкой)
- * TRUE - проверять или FALSE - не проверять
- */
-define('EMAIL_VERIFY', TRUE);
 
 /**
  * Меню expanded со скрытием подкатегорий
@@ -232,15 +227,6 @@ Route::set('pp', '<id>', array('id' => '[0-9]+'))
     )
 );
 
-//маршрут активации email
-Route::set('activEmail', 'email/<id>', array('id' => '.+'))
-    ->defaults(
-    array(
-         'controller' => 'login',
-         'action'     => 'email',
-         'param'      => 'id'
-    )
-);
 
 //стандартный маршрут
 Route::set('default', '(<controller>(/<action>(/<id>)))', array('id' => '[0-9]+'))
