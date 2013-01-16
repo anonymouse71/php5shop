@@ -263,7 +263,8 @@ class Controller_Admin extends Controller_Template
 
             $this->template->head = new View('admin/ckeditorHeader');
             if (isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['time']))
-                Model::factory('send_email')->send($_POST['title'], $_POST['editor'], time() - $_POST['time'] * 24 * 60 * 60);
+                Model::factory('send_email')
+                    ->send($_POST['title'], $_POST['editor'], time() - $_POST['time'] * 24 * 60 * 60);
 
             $clients = ORM::factory('user')->count_all();
 

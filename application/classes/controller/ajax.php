@@ -99,20 +99,15 @@ class Controller_Ajax extends Controller
         else
             echo ' Email не указан.';
 
+        if ($_POST['username']) //редактирование username
+        {
+            echo $user->set_username($id, $_POST['username']);
+        }
+        else
+            echo ' Имя не указано.';
+
         if ($admin)
-        { //если редактирует администратор, у него больше возможностей:
-
-            if ($_POST['username']) //редактирование имени пользователя
-            {
-                $user->__set('username', strip_tags($_POST['username']));
-                echo ' Имя пользователя сохранено. ';
-            }
-            else
-            {
-                echo ' Имя пользователя не указано.';
-            }
-
-
+        {
             if (isset($_POST['gid'])) //редактирование группы
             {
                 $gid = (int)$_POST['gid'];

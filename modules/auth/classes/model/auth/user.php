@@ -442,13 +442,38 @@ class Model_Auth_User extends ORM
         if (!$validate->check()) //если не прошел валидацию
         {
             $errors = $validate->errors('validate');
-            return 'Email' . $errors['email'] . '. ';
+            return ' Email' . $errors['email'] . '. ';
         }
         $user = ORM::factory('user', $id);
         $user->__set('email', $email);
         $user->save();
 
-        return 'Email сохранен. ';
+        return ' Email сохранен. ';
+    }
+
+    /**
+     * сохраняет username
+     * @param int    $id
+     * @param string $username
+     *
+     * @return string
+     */
+    public function set_username($id, $username)
+    {
+        $validate = Validate::factory(array('username' => $username))
+            ->rules('username', $this->_rules['username']);
+        if (!$validate->check()) //если не прошел валидацию
+        {
+            $errors = $validate->errors('validate');
+            if($errors['username'] == ': поле не отвечает формату')
+                return ' Укажите Ваши настоящие имя и фамилию.';
+            return ' Имя' . $errors['username'] . '. ';
+        }
+        $user = ORM::factory('user', $id);
+        $user->__set('email', $username);
+        $user->save();
+
+        return ' Имя сохранено. ';
     }
 
     /**

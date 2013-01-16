@@ -72,8 +72,9 @@ $('.removeIt').click(function(){
 <?php if(is_object($users))foreach($users as $user):?>
     <li>
         <a href="<?php echo url::base()?>admin/user/<?php echo $user->id;?>">
-            <?php echo $user->username;?> (<?php echo $user->email;?>)
+            <?php echo $user->username;?>
         </a>
+        <?php echo $user->profile;?>
     </li>
 <?php endforeach;?>
 </ul>
@@ -83,9 +84,8 @@ $('.removeIt').click(function(){
 <ul>
 <?php foreach($bestUsers as $user):?>
     <li>
-        <a href="<?php echo url::base()?>admin/user/<?php echo $user->id;?>">
-            <?php echo $user->username;?> (<?php echo $user->email;?>)
-        </a>
+        <a href="<?php echo url::base()?>admin/user/<?php echo $user->id;?>"><?php echo trim($user->username);?></a>
+        <?php echo $user->profile;?>
     </li>
 <?php endforeach;?>
 </ul>
