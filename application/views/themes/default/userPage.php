@@ -5,20 +5,13 @@
 <form action="" method="post" id="userForm">
     <table border="0" <?php if(!isset($adm)):?>width="350px"<?php endif;?>>
         <tr>
-            <td><span>Имя:</span> </td>
+            <td><span>Имя (ФИО):</span> </td>
             <td><input class="line" <?php if(!isset($adm)):?>disabled="1"<?php endif;?> type="text" name="username" value="<?php echo htmlspecialchars($user->username);?>"></td>
         </tr>
-        <tr>
-            <td><span>Новый пароль:</span></td>
-            <td><input class="line" type="password" name="password"></td>
-        </tr>
-        <tr>
-            <td><span>Пароль еще раз:</span></td>
-            <td><input class="line" type="password" name="password_confirm"></td>
-        </tr>
+
         <tr>
             <td><span>Email:</span> </td>
-            <td><input class="line" <?php if(!isset($adm)):?>disabled="1"<?php endif;?> type="text" name="email" value="<?php echo htmlspecialchars($user->email);?>"></td>
+            <td><input class="line" type="text" name="email" value="<?php echo htmlspecialchars($user->email);?>"></td>
         </tr>
         <?php if(isset($pct)):?><tr>
             <td><span>Скидка:</span> </td>
@@ -56,10 +49,7 @@
             <td><span>Администратор</span></td>
             <td><select name="is_admin"><?php if($is_admin):?><option value="1">да</option><option value="2">нет</option><?php else:?><option value="2">нет</option><option value="1">да</option><?php endif;?></select></td>
         </tr><?php endif;?>
-        <tr>
-            <td><span><b>Ваш текущий пароль</b></span></td>
-            <td><input class="line" type="password" name="pass"></td>            
-        </tr>
+
         <tr align="center">
             <td>&nbsp;</td>
             <td ><input type="button" id="submit" value="сохранить"></td>

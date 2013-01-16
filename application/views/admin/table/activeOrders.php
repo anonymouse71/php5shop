@@ -13,7 +13,8 @@ elseif(isset($array)): ?>
 <table id="playlist" cellspacing="0">
     <tbody>
         <tr class="selected">
-            <td class="actOrderClean" style="cursor: pointer;">заказ</td>
+            <td onclick="document.location.href='<?php echo url::base(), 'admin/index/?set_order_desc=',
+                (string)(bool)!$sortOrder;?>';" style="cursor: pointer;">заказ</td>
             <td>клиент</td>
             <td>телефон клиента</td>
             <td>статус заказа</td>
@@ -48,15 +49,13 @@ elseif(isset($array)): ?>
 <p>Активных заказов сейчас нет</p>
 <?php endif;?>
 
-<!--<span id="wnd1" onclick="var popupWin = window.open('/SHumi_-_Avto_signalizatsiya_Volshebnaya_kniga__%28get-tune.net%29.mp3', 'neworder', 'location,width=100,height=100,top=50,scrollbars=1,location=0,menubar=0,resizable=1,status=0,toolbar=0');popupWin.focus();return false;"></span>-->
-
 <script type="text/javascript">
-<!--
+
 $('#info').html($('#info').html() + '<' + 'di' + 'v ' + 'i' + 'd="in' + 'foOrder"' + '>' + '</' + 'di' + 'v' + '>');
 $('select').change(function(){$.get("<?php echo url::base();?>ajax/changestatus/" + $(this).attr('id') + "/" + encodeURIComponent($(this).val()));});
 $('.actOrder').click(function (){$.get("<?php echo url::base();?>ajax/orderinfo/" + $(this).html(), function(data){$('#infoOrder').html(data);});});
 $('.actOrderClean').click(function (){$('#infoOrder').html(null)});
-/*
+
 var ordc = parseInt($('#ordcount').html());
 function ordchk() {
     $.get('<?php echo url::base();?>ajax/countOrders', null, function(data){
@@ -68,6 +67,4 @@ function ordchk() {
     });
 }
 setInterval(ordchk, 60000);
-*/
--->
 </script>

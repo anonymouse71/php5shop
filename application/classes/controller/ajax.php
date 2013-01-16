@@ -42,100 +42,87 @@ class Controller_Ajax extends Controller
     {
         $auth = Auth::instance();
 
-        if(!$auth->logged_in() || !isset($_POST))                               //пользователь не авторизован или зашел на страницу напрямую
+        if (!$auth->logged_in() || !isset($_POST)) //пользователь не авторизован или зашел на страницу напрямую
+        {
             die('Авторизуйтесь');
+        }
+
         $admin = $auth->logged_in('admin');
 
-        $postKeys = array(                                                      //массив необходимых ключей массива POST
-            'password',
-            'password_confirm',
-            'phone',
-            'address',
-            'pass',
-            'id'
-            );
-        foreach($postKeys as $key)                                              //POST содержит не все ключи - запрос отправлен с другого сайта
-            if(!isset ($_POST[$key]))
+        //массив необходимых ключей массива POST
+        $postKeys = array('phone', 'address', 'id', 'email');
+        //POST содержит не все ключи => запрос отправлен с другого сайта
+        foreach ($postKeys as $key)
+            if (!isset ($_POST[$key]))
                 die(Request::factory(url::base() . 'error/xsrf')->execute());
-                                                                                
+
         $user = $auth->get_user();
 
-        $userId = $user->__get('id');                                        //получаем id
-        if($admin && $_POST['id'] != $userId )
+        $userId = $user->__get('id'); //получаем id
+        if ($admin && $_POST['id'] != $userId)
             $id = $_POST['id'];
         else
             $id = $userId;
 
-        $user = Model::factory('user',$id);
-        
-        if($id != $_POST['id'] && !$admin)                                      //пользователь отправил не свой id и он не админ (hack attempt)
+        $user = Model::factory('user', $id);
+
+        if ($id != $_POST['id'] && !$admin) //пользователь отправил не свой id и он не админ (hack attempt)
             die(Request::factory(url::base() . 'error/xsrf')->execute());
 
-                                                                                //проверка правильности текущего пароля (сравниваются "соленые" хэши)
-        if(
-           $auth->get_user()->password
-                !==
-           $auth->hash_password($_POST['pass'], $auth->find_salt($auth->password($auth->get_user()->username)))
-           )
-            die('Пароль введен неверно! Не сохранено');
-
-        if($_POST['password'])                                                  //если "новый" пароль не пуст,
-        {                                                                       //пробуем его установить
-            if( Model::factory('user')->set_password($id, $_POST['password'], $_POST['password_confirm']) )
-                echo 'Пароль успешно изменен. ';
-            else
-                echo 'Новый пароль введен в неверном формате или проверочный пароль с ним не совпадает. Пароль должен быть от 5 до 42 символов.';
-        }
-        if(ORM::factory('field')->count_all())                                  //если есть дополнительные поля
-            foreach(ORM::factory('field')->find_all() as $field)
-                if(isset($_POST['f' . $field->id]) && !empty($_POST['f' . $field->id]))
+        if (ORM::factory('field')->count_all()) //если есть дополнительные поля
+            foreach (ORM::factory('field')->find_all() as $field)
+                if (isset($_POST['f' . $field->id]) && !empty($_POST['f' . $field->id]))
                 {
-                    if(ORM::factory('field')->validate($_POST['f' . $field->id], $field->type))
+                    if (ORM::factory('field')->validate($_POST['f' . $field->id], $field->type))
                         Model::factory('field_value')->set($field->id, $id, $_POST['f' . $field->id]);
                     else
                         echo $field->name . ': поле введено в неправильном формате. ';
                 }
                 else
                 {
-                    if($field->empty)                    
-                        Model::factory('field_value')->set($field->id, $id,'');
+                    if ($field->empty)
+                        Model::factory('field_value')->set($field->id, $id, '');
                     else
                         echo $field->name . ': поле не должно быть пустым. ';
                 }
 
-        if($_POST['phone'])                                                     //телефон введен?
-            echo Model::factory('user')->set_phone($id,(string)$_POST['phone']);//устанавливаем
-        if($_POST['address'])                                                   //адрес введен?
-            echo Model::factory('user')->set_address($id,$_POST['address']);    //устанавливаем
-        if($admin)
-        {                                                                       //если редактирует администратор, у него больше возможностей:
-            
-            if($_POST['username'])                                              //редактирование имени пользователя
+        if ($_POST['phone']) //телефон введен?
+            echo Model::factory('user')->set_phone($id, (string)$_POST['phone']);
+        //устанавливаем
+        if ($_POST['address']) //адрес введен?
+            echo Model::factory('user')->set_address($id, $_POST['address']); //устанавливаем
+
+        if ($_POST['email']) //редактирование email
+        {
+            echo $user->set_email($id, $_POST['email']);
+        }
+        else
+            echo ' Email не указан.';
+
+        if ($admin)
+        { //если редактирует администратор, у него больше возможностей:
+
+            if ($_POST['username']) //редактирование имени пользователя
             {
-                if(!$user->is_username_available($_POST['username']))
+                $user->__set('username', strip_tags($_POST['username']));
+                echo ' Имя пользователя сохранено. ';
+            }
+            else
+            {
+                echo ' Имя пользователя не указано.';
+            }
+
+
+
+            if (isset($_POST['gid'])) //редактирование группы
+            {
+                $gid = (int)$_POST['gid'];
+                $gr = ORM::factory('groups_user', $_POST['id']);
+                if ($gid > 0 && $gid < 99)
                 {
-                    $user->__set('username',strip_tags($_POST['username']));
-                    echo ' Имя пользователя изменено. ';
-                }
-                else
-                    echo ' Имя пользователя не изменено (уже используется).  ';
-            }
-            if($_POST['email'])                                                 //редактирование email
-            {
-                if(!$user->check_email_in_db(strip_tags($_POST['email'])))
-                    $user->__set('email',strip_tags($_POST['email']));
-                else
-                    echo ' Email не изменен (уже используется). ';
-            }
-            if(isset($_POST['gid']))                                            //редактирование группы
-            {
-                $gid = (int) $_POST['gid'];
-                $gr = ORM::factory('groups_user',$_POST['id']);
-                if($gid>0 && $gid<99)
-                {                    
-                    if(!$gr->id)
-                            $gr->id = $_POST['id'];
-                    $gr->__set('gid',(int)$_POST['gid']);
+                    if (!$gr->id)
+                        $gr->id = $_POST['id'];
+                    $gr->__set('gid', (int)$_POST['gid']);
                     $gr->save();
                     echo 'Группа сохранена. ';
                 }
@@ -145,21 +132,15 @@ class Controller_Ajax extends Controller
                     echo 'Не состоит в группах. ';
                 }
             }
-            if(isset($_POST['is_admin']))
+            if (isset($_POST['is_admin']))
             {
-                if($_POST['is_admin'] == 1 && !$user->is_admin())
+                if ($_POST['is_admin'] == 1 && !$user->is_admin())
                     $user->make_admin();
-                if($_POST['is_admin'] == 2)
+                if ($_POST['is_admin'] == 2)
                     $user->make_not_admin();
             }
-            $user->save();
         }
-      
 
-
-        if(!$_POST['phone'] && !$_POST['address'] && !$_POST['password'])       //ничего не введено?
-            echo ' Не введено новой информации.';                               //выводим сообщение
-        
     }
 /**
  * Удаляет из сессии товары с заданным id
@@ -878,57 +859,16 @@ class Controller_Ajax extends Controller
         }
 
     }
-/*
-    public function action_export()
-    {
-        if(!Auth::instance()->logged_in('admin') )                              //пользователь не авторизован как admin или зашел на страницу напрямую
-            die('Авторизуйтесь');
-        $randomString = Kohana_Text::random('alpha', 16);        
-        $archiveFilename = 'images/products/backup_' . $randomString . '_' . date('Y-m-d') . '.zip';
-        $this->request->headers['Location'] = '../' . $archiveFilename;
-        $archive = new PclZip($archiveFilename);
-//получение изображений
-//        $openDIR = opendir('images/products');
-//        while ( FALSE !== ($scan = readdir($openDIR)) )
-//            if( strtolower(substr(strrchr($scan,"."),1)) == 'jpg' )
-//                $fileList[] = 'images/products/' . $scan;
-//        closedir($openDIR);
-        $htmlFile = 'application/cache/' . date('Y_m_d__H_i_s__') . 'backup__' . Kohana_Text::random('ph5sho', 8) . '.html';
-        $hd = fopen($htmlFile, 'a+');
-        fwrite($hd, '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><table>');
-        foreach (ORM::factory('product')->find_all() as $product)
-        {
-            fwrite($hd, '<tr><td>' . htmlspecialchars($product->cat) . '</td><td>' . htmlspecialchars($product->name) . '</td><td>');
-            $description = ORM::factory('description',$product->id)->__get('text');
-            if($description)
-                fwrite($hd, htmlspecialchars($description) . '</td><td>');
-            else
-                fwrite($hd, '</td><td>');
-            fwrite($hd, htmlspecialchars($product->price) . '</td><td>');
-//сохранение изображений
-//            if(file_exists('images/products/' . $product->id . '.jpg'))
-//                fwrite($hd, 'import/images/products/' . $product->id . '.jpg');
-//            $imgId = 1;
-//            while(file_exists('images/products/' . $product->id . '-' . $imgId . '.jpg'))
-//                fwrite($hd, ' import/images/products/' . $product->id . '-' . $imgId . '.jpg');
-            fwrite($hd, "</td><td>{$product->id}</td></tr>\n");
-        }
-        fwrite($hd, '</table></body></html>');
-        fclose($hd);
-        $fileList[] = $htmlFile;
-        $archive->add($fileList,'','application/cache');
-        unlink($htmlFile);
-    }
-*/
+
     public function action_compare($id=1)
     {
         Session::instance()->set('prod2', Session::instance()->get('prod1'));
         Session::instance()->set('prod1',(int) $id);
     }
 
-//    public function action_countOrders()
-//    {
-//        die(ORM::factory('order')->count_all());
-//    }
+    public function action_countOrders()
+    {
+        die(ORM::factory('order')->count_all());
+    }
 
 }

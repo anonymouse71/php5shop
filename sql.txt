@@ -76,8 +76,8 @@ REPLACE INTO `p5shp_configBool` (`name`, `value`) VALUES
 ('bigCart', 1),
 ('currency', 1),
 ('LastNews', 1),
-('ordJabb', 1),
-('ordMail', 1),
+('ordJabb', 0),
+('ordMail', 0),
 ('refpp', 0),
 ('poll', 0),
 ('comments', '1'),
@@ -463,6 +463,8 @@ CREATE TABLE IF NOT EXISTS `p5shp_fields` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+REPLACE INTO `p5shp_fields` (`id`, `name`, `type`, `empty`) VALUES
+(1, 'ФИО', 2, NULL);
 --
 -- Структура таблицы `field_values`
 --
