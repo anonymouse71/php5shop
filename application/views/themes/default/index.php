@@ -44,7 +44,7 @@
 <script type="text/javascript" src="js/jquery.simplemodal.js"></script>
 <!-- 
 php5shop - CMS интернет-магазина
-Copyright (C) 2010-2012 phpdreamer, php5shop.com
+Copyright (C) 2010-2014 phpdreamer, php5shop.com
 -->
 
 </head>
