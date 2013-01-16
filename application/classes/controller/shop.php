@@ -39,7 +39,7 @@ class Controller_Shop extends Controller_Site
         $product = $this->request->param('product'); //получение GET переменных
         $cat = $this->request->param('catid');
         $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 0; //номер страницы >=0
-        if (!$page) // > 0
+        if (!$page)
         {
             $page++;
         }
@@ -147,11 +147,12 @@ class Controller_Shop extends Controller_Site
 
                 }
                 $this->template->stuff->products = $products; //заполняем его продуктами
-                $Pagination = new Pagination(array( //создаем навигацию
-                                                    'uri_segment'    => 'page',
-                                                    'total_items'    => $productsCount,
-                                                    'items_per_page' => $this->productsOnPage,
-                                             ));
+                $Pagination = new Pagination(
+                    array ( //создаем навигацию
+                        'uri_segment' => 'page',
+                        'total_items' => $productsCount,
+                        'items_per_page' => $this->productsOnPage,
+                    ));
             }
 
             $this->template->title .= ' - ' . //добавляем в заголовок страницы
@@ -434,22 +435,20 @@ class Controller_Shop extends Controller_Site
         $this->template->about->message = FALSE;
         $emails = ORM::factory('mail')->find_all()->as_array('id', 'value'); //получение email и jabber менеджера
         $to = array();
-        if ($this->boolConfigs['ordMail'] && isset($emails[1])
-        ) //найден email и в настройках установлено отправлять на него
-        {
+        //найден email и в настройках установлено отправлять на него
+        if ($this->boolConfigs['ordMail'] && isset($emails[1]) )
             $to['email'] = $emails[1];
-        }
-        if ($this->boolConfigs['ordJabb'] && isset($emails[2])
-        ) //найден jabber и в настройках установлено отправлять на него
-        {
+
+        //найден jabber и в настройках установлено отправлять на него
+        if ($this->boolConfigs['ordJabb'] && isset($emails[2]) )
             $to['jabber'] = $emails[2];
-        }
+
         $products = Session::instance()->get('cart'); //получение списка продуктов из корзины
         $counts = Session::instance()->get('bigCart');
         if (!is_array($products) || !count($products)) //если продуктов там нет
-        {
+        {//перенаправление
             $this->request->redirect(url::base());
-        } //перенаправление
+        }
         $stop = $this->boolConfigs['regOrder']; //Нельзя совершать покупки без регистрации?
         $this->template->about->stop = $stop;
         $way = Session::instance()->get('way');

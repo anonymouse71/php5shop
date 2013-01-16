@@ -32,9 +32,7 @@
     <?php if(file_exists($_SERVER['DOCUMENT_ROOT'].url::base().'images/products/'.$item['id'].'.jpg')): ?>
     <img src="<?php echo url::base();?>images/viewmag.png" alt="Масштаб изображения" title="Смотреть фото" class="imgzoom">
     <?php endif;?>
-    <a href="javascript:void(0);">
-        <img src="<?php echo url::base();?>images/table_go.png" alt="Добавить к сравнению" title="Добавить к сравнению" class="imgcompare">
-    </a>
+
     <?php if($item['whs'] && !$item['cart']): ?>
     <a href="javascript:void(0);">
         <img src="<?php echo url::base();?>images/carts.gif" alt="Добавить в корзину" class="imgcart" title="Добавить в корзину" >
@@ -129,18 +127,6 @@ $('.count').keyup(function(){
 
 <?php endif;?>
 
-/*Обработка кнопки сравнения товаров*/
-$('.imgcompare').click(function(){
-    var id = $(this).parent().parent().attr('id').split('n')[1];
-    $(this).hide(100);
-    $.post('ajax/compare/' + id);
-    $(this).show(100);
-    
-    $("#prcomare2").html($("#prcomare1").html());
-    var chldr = $(this).parent().parent().children()[2];
-    $("#prcomare1").html($(chldr).html());
-    $("#comparebox").show();
-});
 
 -->
 </script>

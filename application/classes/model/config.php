@@ -39,9 +39,16 @@ class Model_Config{
      * @param bool $value
      * @return void
      */
-    public function setBool($name,$value)
+    public function setBool($name, $value)
     {
-        DB::update('configBool')->value('value', ($value? 1 : 0) )
+        if(is_array($name) && $value == null)
+        {
+            foreach($name as $key => $value)
+                $name[$key] = ($value? 1 : 0);
+            DB::update('configBool')->set($name)->execute();
+        }
+        else
+            DB::update('configBool')->value('value', ($value? 1 : 0) )
                 ->where('name', '=', $name)
                 ->limit(1)
                 ->execute();

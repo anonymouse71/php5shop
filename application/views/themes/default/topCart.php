@@ -14,6 +14,10 @@
 
 <script type="text/javascript">
 $(".imgcart").click(function () {
+
+    if($(this).attr('src') == "images/x.png")
+        return;
+
     /* scroll up to the top of page */
     $("#toTop").trigger('click');
     /* show help message */

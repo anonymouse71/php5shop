@@ -148,17 +148,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
         <div id="right" class="column">
             <?php echo $banner3;?>
 
-            <div id="comparebox" class="blocks"<?php if(!strlen($prod1)): /*скрывать блок сравнения если не выбраны товары для сравнения*/ ?> style="display:none"<?php endif;?>>
-                <img src="images/top_bg.gif" alt="верх фон" width="218" height="12">
-                <img id="deleteCompareBlock" src="images/delete.png" alt="x" title="Закрыть блок" style="float:right;cursor:pointer;" onclick="$('#comparebox').hide(500); $.post('ajax/compare/0');">
-                <div align="left" id="comparediv">
-                <a href="<?php echo url::base();?>shop/compare"><b><u><span>Сравнить <span id="prcomare1"><?php echo $prod1;?></span> и <span id="prcomare2"><?php echo $prod2;?></span></span></u></b></a>
-                </div>
-                <img src="images/bot_bg.gif" alt="низ фон" width="218" height="10"><br>
-            </div>
-
             <div class="rightblock">
-
 
                 <?php echo $topBlock2;?>
 
