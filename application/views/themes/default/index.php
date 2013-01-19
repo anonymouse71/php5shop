@@ -24,9 +24,9 @@
  * url::base()                          - каталог от корня вирт. сервера, куда установлен магазин
  * prod1                                - товар для сравнения 1
  * prod2                                - товар для сравнения 2
+ * oneProductPage                       - метка о том, что это страница одного товара (для микроразметки)
  */
-?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title><?php echo $title;?></title>
@@ -129,7 +129,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
             <?php echo $banner1;?>
             <div id="content">
                 <?php echo $about;?>
-                <div class="stuff">
+                <div class="stuff" <?php if(isset($oneProductPage)) echo 'itemscope itemtype="http://schema.org/Product"';?>>
                     <?php echo @$stuff;?>
                 </div>
             </div>

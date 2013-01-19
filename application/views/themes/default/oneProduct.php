@@ -1,8 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
 
+
 <input type="hidden" id="whs<?php echo $item['id'];?>" value="<?php echo $item['whs'];?>"/>
 
-<div class="item left70" id="n<?php echo $item['id'];?>" style="margin-right: 100%; margin-bottom: 5px;">
+<div class="item left70" id="n<?php echo $item['id'];?>" style="margin-right: 100%; margin-bottom: 5px;" >
     
     <?php $urlImg = 'images/products/small/' . $item['id'] . '.jpg" class="imgzoom';
           $pathImg = $_SERVER['DOCUMENT_ROOT'].url::base().'images/products/small/'.$item['id'].'.jpg';?>
@@ -21,12 +22,15 @@
         <?php endif;?>
     </div>
 
-    <a href="<?php echo 'shop/product' . $item['id']?>" class="name">
-            <?php echo $item['name'];?>
+    <a itemprop="url" href="<?php echo 'shop/product' . $item['id']?>" class="name">
+        <div itemprop="name"><strong><?php echo $item['name'];?></strong></div>
+
     </a>
 
-    <span>
-         <?php echo ($item['whs'])?$item['price']:'нет на складе';?>
+
+    <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <span itemprop="price"><?php echo ($item['whs'])?$item['price']:'нет на складе';?></span>
+
     </span>
 
     <?php if(file_exists($_SERVER['DOCUMENT_ROOT'].url::base().'images/products/'.$item['id'].'.jpg')): ?>
@@ -48,6 +52,9 @@
     <img alt="loading" src="images/loading.gif" class="hdn load">
     
     <div id="whsError<?php echo $item['id'];?>" class="whsError"></div>
+
+    <link itemprop="itemCondition" href="http://schema.org/NewCondition" />
+    <span style="display: none">ID: <span itemprop="productID"><?php echo $item['id']?></span></span>
 </div>
 
 

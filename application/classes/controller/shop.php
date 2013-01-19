@@ -53,8 +53,8 @@ class Controller_Shop extends Controller_Site
             $product = ORM::factory('product', $product)->as_array(); //находим продукт в БД
             if (!$product['id']) //если его там нет,
             {
-                $this->request->redirect(url::base());
-            } //перенаправляем на главную
+                $this->request->redirect(url::base());//перенаправляем на главную
+            }
             else //если есть,
             { //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
                 $product['price'] = round($curr * $product['price'] * $pct, 2);
@@ -95,6 +95,8 @@ class Controller_Shop extends Controller_Site
 
                 $this->template->title .= ' - ' . $product['name'];
                 $this->template->about = ''; //блок приветствия не отображаем
+
+                $this->template->oneProductPage = true;//показывать 'itemscope itemtype="http://schema.org/Product"'
             }
         }
         elseif ($cat) //указана категория

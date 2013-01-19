@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');?>
 
 <!-- описание товара -->
-<div style="width: 550px">
+<div style="width: 550px" itemprop="description">
     <?php echo $text;?>
 </div>
 <!-- /описание товара -->
