@@ -520,6 +520,9 @@ class Controller_Admin extends Controller_Template
                 case 8:
                     Model::factory('html')->setblock('logo', $_POST['editor']);
                     break;
+                case 9:
+                    Model::factory('html')->setblock('topTitle', $_POST['editor']);
+                    break;
                 default:
                     break;
             }
@@ -550,6 +553,9 @@ class Controller_Admin extends Controller_Template
                 break;
             case 8:
                 $this->template->body->text = Model::factory('html')->getblock('logo');
+                break;
+            case 9:
+                $this->template->body->text = Model::factory('html')->getblock('topTitle');
                 break;
             default:
                 $this->template->body->text = '';

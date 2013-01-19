@@ -26,6 +26,9 @@
     <li>
         <a href="<?php echo url::base();?>admin/edit/8">Логотип</a>
     </li>
+    <li>
+        <a href="<?php echo url::base();?>admin/edit/9">Заголовок магазина</a>
+    </li>
 </ul>
 <form action="" method="post">
     <p>
