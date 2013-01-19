@@ -14,19 +14,20 @@ elseif (isset($array)): ?>
     <tbody>
     <tr class="selected">
         <td onclick="document.location.href='<?php echo url::base(), 'admin/index/?set_order_desc=',
-        (string)(bool)!$sortOrder;?>';" style="cursor: pointer;">заказ
+        (string)(bool)!$sortOrder;?>';" style="cursor: pointer;">Заказ
         </td>
-        <td>клиент</td>
-        <td>телефон клиента</td>
-        <td>статус заказа</td>
-        <td>дата и время заказа</td>
-        <td>прошло</td>
+        <td>Клиент</td>
+        <td>Телефон клиента</td>
+        <td>Статус заказа</td>
+        <td>Дата и время заказа</td>
+        <td>Адрес доставки</td>
+        <td>Прошло времени</td>
     </tr>
         <?php foreach ($array as $item): ?>
     <tr>
         <td><a href="javascript:void(0);" class="actOrder"><?php echo $item['id'];?></a></td>
-        <td><?php echo (isset($item['user_id']) && isset($item['user_name'])) ?
-            '<a href="' . url::base() . 'admin/user/' . $item['user_id'] . '">' . $item['user_name'] . '</a>'
+        <td><?php echo (isset($item['user_id']) && isset($item['username'])) ?
+            '<a href="' . url::base() . 'admin/user/' . $item['user_id'] . '">' . $item['username'] . '</a>'
             :
             'Не зарег.';
             ?></td>
@@ -40,6 +41,7 @@ elseif (isset($array)): ?>
             </select>
         </td>
         <td><?php echo $item['date'];?></td>
+        <td><?php echo $item['address'];?></td>
         <td><?php echo $item['difference'];?></td>
     </tr>
         <?php endforeach;?>

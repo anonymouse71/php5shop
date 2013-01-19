@@ -64,78 +64,13 @@ class Controller_Ajax extends Controller
         else
             $id = $userId;
 
-        $user = Model::factory('user', $id);
-
         if ($id != $_POST['id'] && !$admin) //пользователь отправил не свой id и он не админ (hack attempt)
             die(Request::factory(url::base() . 'error/xsrf')->execute());
 
-        if (ORM::factory('field')->count_all()) //если есть дополнительные поля
-            foreach (ORM::factory('field')->find_all() as $field)
-                if (isset($_POST['f' . $field->id]) && !empty($_POST['f' . $field->id]))
-                {
-                    if (ORM::factory('field')->validate($_POST['f' . $field->id], $field->type))
-                        Model::factory('field_value')->set($field->id, $id, $_POST['f' . $field->id]);
-                    else
-                        echo $field->name . ': поле введено в неправильном формате. ';
-                }
-                else
-                {
-                    if ($field->empty)
-                        Model::factory('field_value')->set($field->id, $id, '');
-                    else
-                        echo $field->name . ': поле не должно быть пустым. ';
-                }
-
-        if ($_POST['phone']) //телефон введен?
-            echo Model::factory('user')->set_phone($id, (string)$_POST['phone']);
-        //устанавливаем
-        if ($_POST['address']) //адрес введен?
-            echo Model::factory('user')->set_address($id, $_POST['address']); //устанавливаем
-
-        if ($_POST['email']) //редактирование email
-        {
-            echo $user->set_email($id, $_POST['email']);
-        }
-        else
-            echo ' Email не указан.';
-
-        if ($_POST['username']) //редактирование username
-        {
-            echo $user->set_username($id, $_POST['username']);
-        }
-        else
-            echo ' Имя не указано.';
-
-        if ($admin)
-        {
-            if (isset($_POST['gid'])) //редактирование группы
-            {
-                $gid = (int)$_POST['gid'];
-                $gr = ORM::factory('groups_user', $_POST['id']);
-                if ($gid > 0 && $gid < 99)
-                {
-                    if (!$gr->id)
-                        $gr->id = $_POST['id'];
-                    $gr->__set('gid', (int)$_POST['gid']);
-                    $gr->save();
-                    echo 'Группа сохранена. ';
-                }
-                else
-                {
-                    $gr->delete();
-                    echo 'Не состоит в группах. ';
-                }
-            }
-            if (isset($_POST['is_admin']))
-            {
-                if ($_POST['is_admin'] == 1 && !$user->is_admin())
-                    $user->make_admin();
-                if ($_POST['is_admin'] == 2)
-                    $user->make_not_admin();
-            }
-        }
+        echo $user->updateUser($id, $_POST, $admin);
 
     }
+
 
     /**
      * Удаляет из сессии товары с заданным id
@@ -324,8 +259,8 @@ class Controller_Ajax extends Controller
 
         //установка bool настроек
         $boolConfigs = array(
-            'bigCart', 'currency', 'LastNews', 'ordJabb', 'refpp', 'ordMail', 'ShowBlog', 'timeFooter', 'poll',
-            'regOrder', 'comments', 'invite'
+            'bigCart', 'currency', 'LastNews', 'ordJabb', 'ordMail',
+            'ShowBlog', 'timeFooter', 'poll', 'regOrder', 'comments'
         );
         $boolConfigsSave = array();
         foreach($boolConfigs as $key)

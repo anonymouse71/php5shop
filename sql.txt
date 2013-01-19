@@ -78,12 +78,10 @@ REPLACE INTO `p5shp_configBool` (`name`, `value`) VALUES
 ('LastNews', 1),
 ('ordJabb', 0),
 ('ordMail', 0),
-('refpp', 0),
 ('poll', 0),
 ('comments', '1'),
 ('ShowBlog', 1),
 ('regOrder', 0),
-('invite', 0),
 ('timeFooter', 1) ;
 
 -- --------------------------------------------------------
@@ -266,6 +264,8 @@ CREATE TABLE IF NOT EXISTS `p5shp_orders` (
   `phone` VARCHAR( 13 ) NOT NULL DEFAULT '',
   `status` int(1) unsigned DEFAULT '1',
   `date` int(10) unsigned NOT NULL,
+  `username` varchar(32) NOT NULL DEFAULT '',
+  `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -499,30 +499,8 @@ REPLACE INTO `p5shp_field_types` VALUES (4, 'любые символы', '#.{1,}
 REPLACE INTO `p5shp_field_types` VALUES (5, 'чекбокс (флажок)', '/^(on|off)$/');
 REPLACE INTO `p5shp_field_types` VALUES (6, 'текстовое поле', '#.{1,}#usm');
 
---
--- Структура таблицы `affiliate`
---
-
-CREATE TABLE IF NOT EXISTS `p5shp_affiliate` (
-  `percent` float unsigned zerofill NOT NULL DEFAULT '000000000002',
-  `about` text NOT NULL,
-  PRIMARY KEY (`percent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `affiliate`
---
-REPLACE INTO `p5shp_affiliate` VALUES (2, '<p>Вы получите 2% от суммы всех заказов клиентов, которые зарегистрируются после перехода по Вашей реферальной ссылке <code>{{link}}</code></p>\n<p>Получить деньги Вы можете товарами, либо наличными (если сумма достигла 100 у.е.)</p>\n');
-
---
--- Структура таблицы `referrals`
---
-
-CREATE TABLE IF NOT EXISTS `p5shp_referrals` (
-  `id` int(10) unsigned NOT NULL,
-  `ref` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --
 -- Структура таблицы `send_emails`
 --
@@ -618,8 +596,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_pay_types` (
 REPLACE  INTO `p5shp_pay_types` (`id`, `name`, `text`, `active`) VALUES
 (1, 'Оплата наличными при получении', 'Ваш номер заказа {{id}}. <br>\r\nВы можете заказать по телефону (icq, email) доставку (Доставка по Украине 180 грн.) или подъехать к нам в офис и получить заказ по его номеру ({{id}}).', 1),
 (2, 'Оплата через webmoney', '<p>Наши кошельки:</p>\n<p>Z000000000000<br>\n	R000000000000<br>\n	U000000000000</p>\n<p>перевидите указанную сумму на любой из кошельков (по курсу savechange.ru ) с комментарием &quot;Заказ номер <small>{{id}}</small>&quot;</p>\n', 1),
-(3, 'Оплата банковским переводом', '<p>расчетный счет: 00000000000000000000<br>\n	ИНН: 000000000<br>\n	КПП: 000000000<br>\n	банк получателя: ООО Банк &quot;Банк&quot;<br>\n	корреспондентский счет: 00000000000000000000<br>\n	БИК 000000000<br>\n	назначение платежа: Заказ номер {{id}}</p>\n<p>Сумма перевода <small>{{sum}}</small></p>\n', 1),
-(4, 'Оплата из заработка в партнерской программе', '<p>Ваш баланс в партнерской программе {{refpp}}</p>\n<p>* Если суммы на счету не достаточно для заказа, Вы можете доплатить наличными при получении. В этом случае предварительно предупредите менеджера.</p>\n', 1);
+(3, 'Оплата банковским переводом', '<p>расчетный счет: 00000000000000000000<br>\n	ИНН: 000000000<br>\n	КПП: 000000000<br>\n	банк получателя: ООО Банк &quot;Банк&quot;<br>\n	корреспондентский счет: 00000000000000000000<br>\n	БИК 000000000<br>\n	назначение платежа: Заказ номер {{id}}</p>\n<p>Сумма перевода <small>{{sum}}</small></p>\n', 1);
 
 --
 --
@@ -638,17 +615,6 @@ CREATE TABLE IF NOT EXISTS `p5shp_rating_users` (
   `val` tinyint(1) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Структура таблицы `invites`
---
-
-CREATE TABLE IF NOT EXISTS `p5shp_invites` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(10) NOT NULL,
-  `group` int(2) unsigned zerofill NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Структура таблицы `rating_values`

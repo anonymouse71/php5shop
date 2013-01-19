@@ -470,7 +470,7 @@ class Model_Auth_User extends ORM
             return ' Имя' . $errors['username'] . '. ';
         }
         $user = ORM::factory('user', $id);
-        $user->__set('email', $username);
+        $user->__set('username', $username);
         $user->save();
 
         return ' Имя сохранено. ';
@@ -559,5 +559,116 @@ class Model_Auth_User extends ORM
         }
     }
 
+    /**
+     * Обновление информации о пользователе
+     * @param int $id
+     * @param array $post
+     * @param bool $is_admin
+     * @param bool $quiet
+     * @param bool $readonly
+     * @return string $messages
+     */
+    public function updateUser($id, $post, $is_admin = false, $quiet = false, $readonly = false)
+    {
+        $user = Model::factory('user', $id);
+
+        $messages = '';
+
+        if (ORM::factory('field')->count_all()) //если есть дополнительные поля
+            foreach (ORM::factory('field')->find_all() as $field)
+                if (isset($post['f' . $field->id]) && !empty($post['f' . $field->id]))
+                {
+                    if (!$readonly && ORM::factory('field')->validate($post['f' . $field->id], $field->type))
+                        Model::factory('field_value')->set($field->id, $id, $post['f' . $field->id]);
+                    else
+                        $messages .= htmlspecialchars($field->name) . ': поле введено в неправильном формате. ';
+                }
+                else
+                {
+                    if (!$readonly && $field->empty)
+                        Model::factory('field_value')->set($field->id, $id, '');
+                    else
+                        $messages .=  htmlspecialchars($field->name) . ': поле не должно быть пустым. ';
+                }
+
+        $fields = array(
+            'username' => array(
+                'ok' => ' Имя сохранено. ',
+                'notSet' => 'Имя не указано. ',
+                'err' => 'Имя'
+            ),
+            'email' => array(
+                'ok' => ' Email сохранен. ',
+                'notSet' => ' Email не указан. ',
+                'err' => ' Email'
+            ),
+            'phone' => array(
+                'ok' => 'Телефон сохранен. ',
+                'notSet' => 'Телефон не указан. ',
+                'err' => 'Телефон'
+            ),
+            'address' => array(
+                'ok' => ' Адрес сохранен. ',
+                'notSet' => ' Адрес не указан. ',
+                'err' => 'Адрес'
+            ),
+        );
+
+        foreach($fields as $key => $fieldMessages)
+            if ($post[$key]) // введен?
+            {
+                $validate = Validate::factory(array($key => $post[$key]))->rules($key, $this->_rules[$key]);
+                if (!$validate->check()) //если не прошел валидацию
+                {
+                    $errors = $validate->errors('validate');
+                    if($key == 'username' && $errors['username'] == ': поле не отвечает формату')
+                        $messages .=  ' Укажите Ваши настоящие имя и фамилию.';
+                    else
+                        $messages .=  $fieldMessages['err'] . $errors[$key] . '. ';
+                }
+                else
+                {
+                    $user->$key = $post[$key];
+                    if(!$quiet)
+                        $messages .=  $fieldMessages['ok'];
+                }
+            }
+            else
+                $messages .=  $fieldMessages['notSet'];
+
+        if (!$readonly &&$is_admin)
+        {
+            if (isset($post['gid'])) //редактирование группы
+            {
+                $gid = (int)$post['gid'];
+                $gr = ORM::factory('groups_user', $post['id']);
+                if ($gid > 0 && $gid < 99)
+                {
+                    if (!$gr->id)
+                        $gr->id = $post['id'];
+                    $gr->__set('gid', (int)$post['gid']);
+                    $gr->save();
+                    $messages .=  'Группа сохранена. ';
+                }
+                else
+                {
+                    $gr->delete();
+                    $messages .=  'Не состоит в группах. ';
+                }
+            }
+
+            if (isset($post['is_admin']))
+            {
+                if ($post['is_admin'] == 1 && !$user->is_admin())
+                    $user->make_admin();
+                if ($post['is_admin'] == 2)
+                    $user->make_not_admin();
+            }
+        }
+
+        if(!$readonly)
+            $user->save();
+        return $messages;
+    }
 
 } // End Auth User Model

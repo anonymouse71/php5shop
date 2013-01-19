@@ -1,56 +1,93 @@
-<?php defined('SYSPATH') or die('No direct script access.');?>
+<?php defined('SYSPATH') or die('No direct script access.'); ?>
+<h1>Оформление заказа</h1>
 
-<?php if($message): /*заказ успешно сохранен*/ 
-            echo $message;?>
-<?php elseif(!$stop && isset($nophone)):  /*регистрация не обязательна, но нет номера телефона*/ ?>
+<?php if ($message): /*заказ успешно сохранен*/
+    echo '<br>', $message;
 
-У нас нет Вашего номера телефона. Укажите его, пожалуйста...<br>
-<input type="text" id="phone" maxlength="12"> <input type="button" value="Вот мой номер, звоните" id="sendphone">
+elseif (!$stop): /* регистрация не обязательна */
+    ?>
+
+<?php if (!$register): /*не зарегистрирован*/ ?>
+
+<br>Рекомендуем Вам сначала войти через один из аккаунтов, иконки которых в верху страницы. <br>
+Это позволит Вам повторно использовать Вашу контактную информацию при следующем заказе.<br><br>
+
+<?php endif; ?>
+
+<?php echo $userInfo; ?>
+<br>
+
+<?php
+elseif ($stop && !$register): /*регистрация обязательна, и ее нет*/ ?>
+
+<br>Войдите через один из аккаунтов, иконки которых в верху страницы. <br>
+Это необходимо чтобы Вы могли повторно использовать Вашу контактную информацию.<br>
+Регистрация обязательна и не займет много времени.
+
+<?php
+elseif ($stop && $register): /*регистрация обязательна, и она есть*/
+    echo $userInfo;
+endif;
+
+if (!$message): /*заказ еще не сохранен*/
+    ?>
+
 <script type="text/javascript">
-$('#sendphone').click(function(){document.location.href = $('base').attr('href') + 'shop/order/' + $('#phone').val();});
+    function submitForm(i) {
+        $.each($('#formway' + i).find('p,div'), function (i, e) {
+            $(e).hide();
+        });
+
+        $('#userForm').append($('#formway' + i).html());
+
+        $('#userForm').submit();
+    }
 </script>
-    
-    <?php if(!isset($register)):  /*не зарегистрирован*/ ?>
 
-    <br><br>Рекомендуем Вам сначала зарегистрироваться и указать адрес доставки и другую контактную информацию.
+<?php if (!isset($way)): /*не указан тип оплаты*/ ?>
 
-    <?php else:  /*зарегистрирован*/ ?>
-
-    <br><br>Рекомендуем Вам сохранить номер на <a href="shop/user">странице управления аккаунтом</a>.
-    <?php endif;?>
-
-<?php elseif($stop && !isset($register)):  /*регистрация обязательна, и ее нет*/ ?>
-
-<br>Вам необходимо <a href="shop/register">зарегистрироваться</a>.
-
-<?php endif;?>
-
-<?php if(!isset($nophone) && !$message):  /*телефон вводить не нужно, заказ еще не сохранен*/ ?>
-
-    <?php if(!isset($way) ):  /*не указан тип оплаты*/ ?>
-
-    <form action="" method="post" id="formway">
-    Тип оплаты
-    <select id="way" name="way" onchange="$('#formway').submit();">
-        <?php foreach($ways as $w):?>
-        <option value="<?php echo $w->id;?>"><?php echo $w->name;?></option>
-        <?php endforeach;?>
-    </select>
-    <input type="submit" value="ок">
+<div class="left70">
+    <form action="" method="post" id="formway1">
+        <div>Тип оплаты
+            <select id="way" name="way" onchange="submitForm(1);">
+                <?php foreach ($ways as $w): ?>
+                <option value="<?php echo $w->id;?>"><?php echo $w->name;?></option>
+                <?php endforeach;?>
+            </select>
+            <input type="button" value="Ok" onclick="submitForm(1);">
+        </div>
     </form>
+</div>
 
-    <?php elseif(isset($way)):  /*указан тип оплаты*/ ?>
-        <?php if($way->text):?>
-            <?php echo $way->text; ?>
+
+<?php elseif (isset($way)): /*указан тип оплаты*/ ?>
+
+<form action="" method="post" id="formway3" style="margin: 15px;">
+    <input type="hidden" name="unsetway" value="true" id="unsetway">
+
+    <p><input type="button" value="Выбрать другой способ оплаты" onclick="submitForm(3);"></p>
+</form>
+
+<?php if ($way->text): ?>
+    <?php echo $way->text; ?>
     <br>
-    <form action="" method="post" id="formway">
-        <p><input type="submit" name="confirm" value="Подтвердить заказ"></p>
-    </form>
-        <?php endif;?>
-    <form action="" method="post" id="formway">
-        <p><input type="submit" name="unsetway" value="Выбрать другой способ оплаты"></p>
-    </form>
-        
-    <?php endif;?>
+    <form action="" method="post" id="formway2" style="margin-top: 20px;">
+        <input type="hidden" name="confirm" value="true" id="confirm">
 
-<?php endif;?>
+        <p style="float: right; font-size: large;">
+            <?php if ($errors)
+            echo 'Исправьте контактные данные и нажмите:';
+        else
+            echo 'Чтобы подтвердить свое согласие, нажмите:';?>
+        </p>
+
+        <p style="float: right;">
+            <input type="button" name="confirm" value="Подтвердить заказ" onclick="submitForm(2);"
+                   style="font-size: large;">
+        </p>
+    </form>
+    <?php endif; ?>
+
+
+<?php endif;
+endif;?>

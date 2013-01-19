@@ -612,12 +612,19 @@ a {
     float: left;
 }
 
-input, select {
+input, select, textarea {
     border: 1px;
     border-color: gray;
     border-style: solid;
     font-family: Verdana;
     font-size: 10px;
+}
+
+input[type=text],textarea{
+    width: 140px;
+}
+input.count{
+    width: 20px;
 }
 
 #sape, #sape a {

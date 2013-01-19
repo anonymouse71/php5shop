@@ -4,7 +4,7 @@
     <br>Нажмите на корзину <br>чтобы перейти к <br>оформлению заказа.
 </div>
 
-<div class="topblock2" onclick="document.location.href = '<?php echo url::base();?>shop/cart/'" style="cursor: pointer">
+<div class="topblock2" onclick="document.location.href = '<?php echo url::base();?>order/cart'" style="cursor: pointer">
     <img src="images/shopping.gif" alt="корзина" class="shopping" height="24" width="24">
 
     <p>В корзине </p>

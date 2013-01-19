@@ -19,7 +19,7 @@
         </tr><?php endif;?>
         <tr>
             <td><span>Телефон:</span></td>
-            <td><input class="line" type="text" name="phone" value="<?php echo $user->phone;?>"></td>
+            <td><input class="line" type="text" name="phone" value="<?php echo htmlspecialchars($user->phone);?>"></td>
         </tr>
         <?php if(isset($fields) && is_object($fields)): ?>
         <?php foreach($fields as $field):?>
@@ -28,7 +28,7 @@
             <td>
                 <?php if($field->type < 5): ?><input class="line" type="text" name="f<?php echo $field->id;?>" value="<?php if(isset($fieldVals[$field->id]))echo htmlspecialchars( $fieldVals[$field->id] );?>">
                 <?php elseif($field->type == 5):?><input class="line" type="checkbox" name="f<?php echo $field->id;?>" <?php if(isset($fieldVals[$field->id]) && $fieldVals[$field->id])echo 'checked="1"';?>>
-                <?php elseif($field->type == 6):?><textarea class="line" cols="15" rows="2" name="f<?php echo $field->id;?>"><?php if(isset($fieldVals[$field->id]))echo htmlspecialchars( $fieldVals[$field->id] );?></textarea>
+                <?php elseif($field->type == 6):?><textarea class="line" cols="18" rows="2" name="f<?php echo $field->id;?>"><?php if(isset($fieldVals[$field->id]))echo htmlspecialchars( $fieldVals[$field->id] );?></textarea>
                 <?php endif;?>
             </td>
         </tr>
@@ -37,7 +37,7 @@
         <?php endif;?>
         <tr>
             <td><span>Адрес доставки:</span> </td>
-            <td><input class="line" type="text" name="address" value="<?php echo htmlspecialchars($user->address);?>"></td>
+            <td><textarea class="line" cols="18" rows="2" name="address"><?php echo nl2br(htmlspecialchars($user->address));?></textarea></td>
         </tr>
         <?php if(isset($adm) && isset($groups)):?>
         <tr>
@@ -52,7 +52,7 @@
 
         <tr align="center">
             <td>&nbsp;</td>
-            <td ><input type="button" id="submit" value="сохранить"></td>
+            <td><input type="button" id="submit" value="сохранить"></td>
         </tr>
     </table>
     <br><br>
@@ -84,15 +84,4 @@ $('#ansver').click(function (){$(this).hide(1000);});
     <?php echo $info;?>    
 </p>
 <?php endif;?>
-<?php if(isset($info) && isset($balance)): ?>
-<p>
-    Ваш текущий баланс в реферальной системе: <strong><i><?php echo $balance;?></i></strong>
-</p>
-<?php elseif(isset($balance)): ?>
-<form action="" method="post">
-    <p>
-    Баланс пользователя в реферальной системе:
-    <input type="text" size="10" name="balance" value="<?php $balance = explode(' ', $balance); echo $balance[0]; ?>">
-    <input type="submit" value="установить">
-    </p></form>
-<?php endif;?>
+

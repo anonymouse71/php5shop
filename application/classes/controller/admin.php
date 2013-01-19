@@ -51,8 +51,6 @@ class Controller_Admin extends Controller_Template
      */
     public function action_index()
     {
-
-
         $this->template->title .= '- Активные заказы';
         $this->template->head = new View('admin/table/head');
         $this->template->body = new View('admin/table/activeOrders');
@@ -90,10 +88,12 @@ class Controller_Admin extends Controller_Template
                     if ($item->user)
                     {
                         $this->template->body->array[$k]['user_id'] = $item->user;
-                        $this->template->body->array[$k]['user_name']
-                            = ORM::factory('user', $item->user)->__get('username');
+                        $this->template->body->array[$k]['username'] = htmlspecialchars($item->username);
                     }
-                    $this->template->body->array[$k]['phone'] = $item->phone;
+
+                    $this->template->body->array[$k]['address'] = nl2br(htmlspecialchars($item->address));
+
+                    $this->template->body->array[$k]['phone'] = htmlspecialchars($item->phone);
                     $this->template->body->array[$k]['status']
                         = isset($state[$item->status]) ? $state[$item->status] : 'название этого статуса удалено';
                     $this->template->body->array[$k]['else_status'] = array();
@@ -214,13 +214,7 @@ class Controller_Admin extends Controller_Template
                     $fieldVals[$field->id] = $fieldORM->get($field->id, $id);
                 $edit->fieldVals = $fieldVals;
             }
-            if (isset($_POST['balance']))
-            {
-                $b = ORM::factory('balance_user')->balance_set($id, $_POST['balance']);
-                $edit->balance = (float)$_POST['balance'];
-            }
-            else
-                $edit->balance = Model::factory('balance_user')->balance($id, FALSE);
+
 
             $info = new View('admin/info');
 
@@ -314,13 +308,6 @@ class Controller_Admin extends Controller_Template
         $this->template->body->sape = Model_Apis::get('sape');
         $this->template->body->disqus = Model_Apis::get('disqus');
         $this->template->body->vkcomments = Model_Apis::get('vkcomments');
-        $this->template->head = new View('admin/ckeditorHeader');
-        if (isset($_POST['percent']))
-            Model::factory('affiliate')->percent(str_replace(',', '.', $_POST['percent']));
-        if (isset($_POST['editor']))
-            Model::factory('affiliate')->about($_POST['editor']);
-        $this->template->body->percent = (float)Model::factory('affiliate')->percent();
-        $this->template->body->about = Model::factory('affiliate')->about();
 
         if (isset($_POST['question']))
             Model::factory('poll')->set(strip_tags($_POST['question']));
@@ -726,12 +713,6 @@ class Controller_Admin extends Controller_Template
 
         $this->template->body .= $info;
 
-    }
-
-    public function action_invite()
-    {
-        $this->template->body = new View('admin/invite');
-        $this->template->body->groups = ORM::factory('Group')->find_all();
     }
 
     //удаление комментария

@@ -107,7 +107,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
             <?php if($menu[4]):?><li><a href="page/clients"><img src="images/clients.jpg" alt="Наши клиенты" ></a></li><?php endif;?>
             <?php if($menu[5]):?><li><a href="admin"><img src="images/admin.jpg" alt="Панель управления администратора" width="121" height="29"/></a></li><?php endif;?>
             <?php if($menu[6]):?><li><a href="shop/user"><img src="images/user.jpg" alt="Личный аккаунт в системе скидок"></a></li><?php endif;?>
-            <?php if($menu[7]):?><li><a href="shop/cart"><img src="images/cart.jpg" alt="Покупки"></a></li><?php endif;?>
+            <?php if($menu[7]):?><li><a href="order/cart"><img src="images/cart.jpg" alt="Покупки"></a></li><?php endif;?>
             <?php if($menu[8]):?>   <li><a href="rss.xml"><img src="images/rss.gif" alt="Лента новостей" ></a></li><?php endif;?>
         </ul>
         <!-- /меню-->

@@ -39,10 +39,7 @@
                         <td><span>Нельзя совершать покупки без регистрации</span></td>
                         <td><input type="checkbox" name="regOrder" <?php if($bool['regOrder'])echo 'checked="1"';?>></td>
                     </tr>
-                    <tr>
-                        <td><span>Партнерская программа включена</span></td>
-                        <td><input type="checkbox" name="refpp" <?php if($bool['refpp'])echo 'checked="1"';?>></td>
-                    </tr>
+
                     <tr>
                         <td><span>Голосование включено</span></td>
                         <td><input type="checkbox" name="poll" <?php if($bool['poll'])echo 'checked="1"';?>></td>
@@ -51,21 +48,18 @@
                         <td><span>Комментирование включено</span></td>
                         <td><input type="checkbox" name="comments" <?php if($bool['comments'])echo 'checked="1"';?>></td>
                     </tr>
-                    <tr  id="turnOnInvites">
-                        <td><span>Система инвайтов включена</span></td>
-                        <td><input type="checkbox" name="invite" <?php if($bool['invite'])echo 'checked="1"';?>></td>
-                    </tr>
+
                     <tr>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>Название магазина <input type="text" name="shopName" value="<?php echo $shopName;?>"></td>
+                        <td>Название магазина <input type="text" name="shopName" value="<?php echo $shopName;?>" style="width: 60%"></td>
                     </tr>
                     <tr>
                         <td>Ключевые слова для поисковых роботов: <textarea cols="55" rows="1" name="keywords"><?php echo $keywords;?></textarea></td>
                     </tr>
                     <tr>
-                        <td>Email от имени которого отправляются письма <input type="text" name="email3" value="<?php echo $email3;?>"><br>(восстановление паролей)</td>
+                        <td>Email от имени которого отправляются письма <input type="text" name="email3" value="<?php echo $email3;?>"><br></td>
                     </tr>
                     <tr>
                         <td><h3>Подключение внешних систем:</h3></td>
@@ -171,24 +165,6 @@
 
         </td>
     </tr>
-    <tr>
-        <td rowspan="2">
-            <hr><br>
-            <form action="" method="post">
-                Процент партнерской программы: <input type="text" name="percent" value="<?php echo $percent;?>">
-                <p>
-                    Условия партнерской программы:
-                    <textarea cols="80" id="editor1" name="editor" rows="10"><?php echo $about;?></textarea>
-                    <script type="text/javascript" src="js/ckedit/inc.js"></script>
-                    * используйте {{link}} чтобы вставить партнерскую ссылку
-                </p>
-                <p align="center">
-                    <input type="submit" value="Сохранить">
-                </p>
-            </form>
-            <hr><br>
-        </td>
-    </tr>
 </table>
 <script type="text/javascript">
 $.each($("#userForm").find('input[type=checkbox]'), function(){
@@ -230,13 +206,7 @@ $('.removeIt').click(function(){
     $(this).parent().hide();
 });
 $("#datalog").css('display','none');
-$("#readerrors").click(function(){
-    $("#errorlogplace").html($("#datalog").html());
-    $("#errorlogplace").css('border-style','solid');
-    $("#errorlogplace").css('border-color','red');
-    $("#errorlogplace").css('padding','10px');
-    $(this).parent().html('Вы смотрите журнал ошибок за <?php echo date("m месяц Y года");?>');
-});
+
 $('#turnOnInvites').click(function(){$('#turnOnInvites').css('background-color','white');});
 </script>
 <ul>
@@ -244,5 +214,4 @@ $('#turnOnInvites').click(function(){$('#turnOnInvites').css('background-color',
 
 <li><a href="admin/paytypes">Редактирование способов оплаты</a></li>
 
-<li><a href="admin/invite">Приглашения (инвайты)</a>. Система инвайтов должна быть <a href="admin/config#turnOnInvites" onclick="$('#turnOnInvites').css('background-color','yellow')">включена</a></li>
 </ul>

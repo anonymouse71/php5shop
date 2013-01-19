@@ -94,17 +94,17 @@ Kohana::$config->attach(new Kohana_Config_File);
  */
 Kohana::modules(
     array(
-         'auth'       => MODPATH . 'auth',
-         'database'   => MODPATH . 'database',
-         'image'      => MODPATH . 'image',
-         'orm'        => MODPATH . 'orm',
-         'pagination' => MODPATH . 'pagination',
-         'captcha'    => MODPATH . 'captcha',
-         'categories' => MODPATH . 'categories',
-         'jabber'     => MODPATH . 'jabber',
-         'xlsreader'  => MODPATH . 'xlsreader',
-         'PclZip'     => MODPATH . 'pclzip',
-         'cache'      => MODPATH . 'cache',
+        'auth' => MODPATH . 'auth',
+        'database' => MODPATH . 'database',
+        'image' => MODPATH . 'image',
+        'orm' => MODPATH . 'orm',
+        'pagination' => MODPATH . 'pagination',
+        'captcha' => MODPATH . 'captcha',
+        'categories' => MODPATH . 'categories',
+        'jabber' => MODPATH . 'jabber',
+        'xlsreader' => MODPATH . 'xlsreader',
+        'PclZip' => MODPATH . 'pclzip',
+        'cache' => MODPATH . 'cache',
     )
 );
 
@@ -115,9 +115,9 @@ Kohana::modules(
 Route::set('curr', 'shop/currency/<code>', array('code' => '[A-Z]{3}'))
     ->defaults(
     array(
-         'controller' => 'shop',
-         'action'     => 'currency',
-         'param'      => 'code'
+        'controller' => 'shop',
+        'action' => 'currency',
+        'param' => 'code'
     )
 );
 
@@ -125,21 +125,21 @@ Route::set('curr', 'shop/currency/<code>', array('code' => '[A-Z]{3}'))
 Route::set('blog', 'blog(/<id>)', array('id' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'page',
-         'action'     => 'blog',
-         'param'      => 'id'
+        'controller' => 'page',
+        'action' => 'blog',
+        'param' => 'id'
     )
 );
 Route::set('blog_news', 'blog')
     ->defaults(
     array(
-         'controller' => 'page',
-         'action'     => 'blog',
-         'param'      => ''
+        'controller' => 'page',
+        'action' => 'blog',
+        'param' => ''
     )
 );
 
-//маршрут для заказа по номеру телефона (без регистрации)
+/* //маршрут для заказа по номеру телефона (без регистрации)
 Route::set('phone order', 'shop/order/<code>', array('code' => '\+?[0-9\s+\-]{1,}'))
     ->defaults(
     array(
@@ -147,14 +147,14 @@ Route::set('phone order', 'shop/order/<code>', array('code' => '\+?[0-9\s+\-]{1,
          'action'     => 'order',
          'param'      => 'id'
     )
-);
+);*/
 
 //маршрут для добавления продуктов в корзину
 Route::set('addtocart', 'ajax/add_to_cart/<id>(/<count>)', array('id' => '[0-9]+', 'count' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'ajax',
-         'action'     => 'add_to_cart',
+        'controller' => 'ajax',
+        'action' => 'add_to_cart',
     )
 );
 //маршрут для добавления восстановления пароля
@@ -168,8 +168,8 @@ Route::set('addtocart', 'ajax/add_to_cart/<id>(/<count>)', array('id' => '[0-9]+
 Route::set('poll', 'ajax/vote<id>', array('id' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'ajax',
-         'action'     => 'vote'
+        'controller' => 'ajax',
+        'action' => 'vote'
     )
 );
 
@@ -177,8 +177,8 @@ Route::set('poll', 'ajax/vote<id>', array('id' => '[0-9]+'))
 Route::set('searchproducts', 'ajax/search/<string>', array('string' => '[^/]+'))
     ->defaults(
     array(
-         'controller' => 'ajax',
-         'action'     => 'search',
+        'controller' => 'ajax',
+        'action' => 'search',
     )
 );
 
@@ -186,8 +186,8 @@ Route::set('searchproducts', 'ajax/search/<string>', array('string' => '[^/]+'))
 Route::set('cat', 'shop/category<catid>', array('catid' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'shop',
-         'action'     => 'index'
+        'controller' => 'shop',
+        'action' => 'index'
     )
 );
 
@@ -195,8 +195,8 @@ Route::set('cat', 'shop/category<catid>', array('catid' => '[0-9]+'))
 Route::set('product', 'shop/product<product>', array('product' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'shop',
-         'action'     => 'index'
+        'controller' => 'shop',
+        'action' => 'index'
     )
 );
 
@@ -204,8 +204,8 @@ Route::set('product', 'shop/product<product>', array('product' => '[0-9]+'))
 Route::set('changestatus', 'ajax/changestatus/<id>/<status>', array('id' => '[0-9]+', 'status' => '[^/]+'))
     ->defaults(
     array(
-         'controller' => 'ajax',
-         'action'     => 'changestatus',
+        'controller' => 'ajax',
+        'action' => 'changestatus',
     )
 );
 
@@ -213,8 +213,8 @@ Route::set('changestatus', 'ajax/changestatus/<id>/<status>', array('id' => '[0-
 Route::set('version', 'about')
     ->defaults(
     array(
-         'controller' => 'error',
-         'action'     => 'version',
+        'controller' => 'error',
+        'action' => 'version',
     )
 );
 
@@ -222,8 +222,8 @@ Route::set('version', 'about')
 Route::set('pp', '<id>', array('id' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'shop',
-         'action'     => 'referral',
+        'controller' => 'shop',
+        'action' => 'referral',
     )
 );
 
@@ -232,17 +232,17 @@ Route::set('pp', '<id>', array('id' => '[0-9]+'))
 Route::set('default', '(<controller>(/<action>(/<id>)))', array('id' => '[0-9]+'))
     ->defaults(
     array(
-         'controller' => 'shop',
-         'action'     => 'index',
+        'controller' => 'shop',
+        'action' => 'index',
     )
 );
 
-//маршрут делает доступным страницу index.php
+//страница index.php
 Route::set('index', '(index.php)')
     ->defaults(
     array(
-         'controller' => 'shop',
-         'action'     => 'index',
+        'controller' => 'shop',
+        'action' => 'indexphp',
     )
 );
 
@@ -250,8 +250,8 @@ Route::set('index', '(index.php)')
 Route::set('files', '(<file>)', array('file' => '.+'))
     ->defaults(
     array(
-         'controller' => 'error',
-         'action'     => '404',
+        'controller' => 'error',
+        'action' => '404',
     )
 );
 
@@ -271,17 +271,11 @@ catch (ReflectionException $e)
 catch (Exception $e)
 {
     if (!IN_PRODUCTION)
-    {
         throw $e;
-    }
     $request = Request::factory('error/500')->execute();
 }
 
 if (FALSE !== strpos($request->response, '<html')) //если контент в HTML, минимизируем код
-{
     echo preg_replace('/(\s+)\s{1,}/u', "\n", $request->response);
-}
 else
-{
     echo $request->send_headers()->response;
-}

@@ -85,7 +85,6 @@ class Controller_Shop extends Controller_Site
                     }
                 }
 
-
                 $this->template->stuff->item = $product; //вставляем в шаблон данные о продукте
                 $description = new View(TPL . 'description');
                 $description->text = ORM::factory('description', $product['id'])->__get('text');
@@ -240,6 +239,138 @@ class Controller_Shop extends Controller_Site
         }
     }
 
+    public function action_user()
+    {
+        if (!$this->user) //если пользователь не авторизован,
+        {
+            exit($this->request->redirect(url::base()));
+        } //перенаправим на главную страницу.
+        $this->template->about = new View(TPL . 'userPage');
+        $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки
+        if ($pct != 1) //если он не равен 1
+        {
+            $this->template->about->pct = (100 * (1 - $pct)) . '%';
+        } //подставляем в представление
+        if (Auth::instance()->logged_in('admin'))
+        {
+            $this->template->about->adm = 1;
+        }
+
+        if (ORM::factory('field')->count_all())
+        {
+            $this->template->about->fields = ORM::factory('field')->find_all();
+            $fieldORM = ORM::factory('field_value');
+            foreach ($this->template->about->fields as $field)
+            {
+                $fieldVals[$field->id] = $fieldORM->get($field->id, $this->user->id);
+            }
+            $this->template->about->fieldVals = $fieldVals;
+        }
+
+        $this->template->about->user = $this->user; //подставляем данные пользователя
+        $this->template->title .= ' - Личная страница ' . $this->user->username; //дополнение заголовка страницы
+    }
+
+
+    /**
+     * Смена валюты
+     * @param int $code
+     */
+    public function action_currency($code = 0)
+    { //в настройках машрутизации регулярное выражение [A-Z]{3}
+        if ($code) //если параметр <code> установлен
+        {
+            Session::instance()->set('currency', $code);//записываем в сессию
+        }
+
+        if (!Request::$referrer)
+        {
+            Request::$referrer = url::base();
+        }
+        //если HTTP_REFERER содержит домен сайта
+        if (FALSE === strpos(Request::$referrer, '://' . $_SERVER['HTTP_HOST']))
+        {
+            Request::$referrer = url::base(); //на главную страницу
+        }
+        $this->request->redirect(Request::$referrer);
+    }
+
+    /**
+     * Сортировка в категориях
+     * @param int $code
+     */
+    public function action_sortset($code = 0)
+    {
+        Session::instance()->set('sort', $code);
+        $this->request->redirect(url::base() . 'shop/category' . Session::instance()->get('cat', 1));
+    }
+
+    /**
+     * Пользователь перешел по партнерской ссылке
+     * @param $id
+     */
+    public function action_referral($id)
+    {
+        if ($this->boolConfigs['refpp'])
+        {
+            Session::instance()->set('referral', $id);
+        }
+        $this->action_index();
+    }
+
+    /**
+     * Метод перенесен в Controller_Page
+     * @param int $id
+     */
+    public function action_blog($id = 0)
+    {
+        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : '' ));
+    }
+
+    /**
+     * Метод перенесен в Controller_Page
+     */
+    public function action_clients()
+    {
+        $this->request->redirect(url::base() . 'page/clients');
+    }
+
+    /**
+     * Метод перенесен в Controller_Page
+     */
+    public function action_contacts()
+    {
+        $this->request->redirect(url::base() . 'page/contacts');
+    }
+
+    /**
+     * Метод перенесен в Controller_Order
+     */
+    public function action_order()
+    {
+        throw new Exception('Ссылка устарела!');
+        $this->request->redirect(url::base() . 'order');
+    }
+
+    /**
+     * Метод перенесен в Controller_Order
+     */
+    public function action_cart()
+    {
+        throw new Exception('Ссылка устарела!');
+        $this->request->redirect(url::base() . 'order/cart');
+    }
+
+    /**
+     * Redirect form "/index.php" to "/"
+     */
+    public function action_indexphp()
+    {
+        if(strpos(url::base(),'index.php') === FALSE)
+            $this->request->redirect(url::base());
+    }
+
+    /*
     public function action_register()
     {
         $this->template->title .= ' - Регистрация'; //дополнение заголовка страницы
@@ -289,270 +420,5 @@ class Controller_Shop extends Controller_Site
         }
         $this->template->about->errors = $errStr;
 
-    }
-
-    public function action_user()
-    {
-        if (!$this->user) //если пользователь не авторизован,
-        {
-            exit($this->request->redirect(url::base()));
-        } //перенаправим на главную страницу.
-        $this->template->about = new View(TPL . 'userPage');
-        $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки
-        if ($pct != 1) //если он не равен 1
-        {
-            $this->template->about->pct = (100 * (1 - $pct)) . '%';
-        } //подставляем в представление
-        if (Auth::instance()->logged_in('admin'))
-        {
-            $this->template->about->adm = 1;
-        }
-
-        if (ORM::factory('field')->count_all())
-        {
-            $this->template->about->fields = ORM::factory('field')->find_all();
-            $fieldORM = ORM::factory('field_value');
-            foreach ($this->template->about->fields as $field)
-            {
-                $fieldVals[$field->id] = $fieldORM->get($field->id, $this->user->id);
-            }
-            $this->template->about->fieldVals = $fieldVals;
-        }
-        if ($this->boolConfigs['refpp'])
-        {
-            $this->template->about->balance = Model::factory('balance_user')->balance($this->user->id);
-            $this->template->about->info = str_replace(
-                '{{link}}', (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . url::base()
-                . $this->user->id, Model::factory('affiliate')->about()
-            );
-        }
-        $this->template->about->user = $this->user; //подставляем данные пользователя
-        $this->template->title .= ' - Личная страница ' . $this->user->username; //дополнение заголовка страницы
-    }
-
-    public function action_cart()
-    {
-        $this->template->title .= ' - Покупки';
-        $cart = Session::instance()->get('cart');
-        if (!is_array($cart))
-        {
-            $cart = array();
-        }
-        $cart = array_unique($cart);
-        $bcart = Session::instance()->get('bigCart');
-        if (!is_array($bcart))
-        {
-            $bcart = array();
-        }
-        $this->template->about = new View(TPL . 'shopingCart');
-        $i = 0;
-        $curr = Model::factory('config')->getCurrency($this->currency); //получение курса валют
-        if (!$curr) //если в сессию попал поддельный или уже не существующих в БД курс
-        {
-            Session::instance()->delete('currency'); //удаляем его из сессии
-            $this->request->redirect($_SERVER['REQUEST_URI']); //и обновляем страницу
-        } //получаем множитель скидки для пользователя
-        $pct = isset($this->user->id) ? Model::factory('group')->get_pct($this->user->id) : 1;
-        foreach ($cart as $id)
-        {
-            $products[$i] = ORM::factory('product', $id)->as_array();
-            if (is_array($products[$i]))
-            {
-                $products[$i]['price'] = round($curr * $products[$i]['price'] * $pct, 2) . ' ' . $this->currency;
-                if (isset($bcart[$id]))
-                {
-                    $products[$i]['count'] = $bcart[$id];
-                }
-                else
-                {
-                    $products[$i]['count'] = 1;
-                }
-                $i++;
-            }
-        }
-        if (isset($products) && is_array($products))
-        {
-            $this->template->about->products = $products;
-        }
-        else
-        {
-            $this->template->about->products = array();
-        }
-
-        $this->template->about->sum = Model_Ordproduct::sum();
-    }
-
-    /**
-     * Смена валюты
-     * @param int $code
-     */
-    public function action_currency($code = 0)
-    { //в настройках машрутизации регулярное выражение [A-Z]{3}
-        if ($code) //если параметр <code> установлен
-        {
-            Session::instance()->set('currency', $code);//записываем в сессию
-        }
-
-        if (!Request::$referrer)
-        {
-            Request::$referrer = url::base();
-        }
-        //если HTTP_REFERER содержит домен сайта
-        if (FALSE === strpos(Request::$referrer, '://' . $_SERVER['HTTP_HOST']))
-        {
-            Request::$referrer = url::base(); //на главную страницу
-        }
-        $this->request->redirect(Request::$referrer);
-    }
-
-    /**
-     * Сортировка в категориях
-     * @param int $code
-     */
-    public function action_sortset($code = 0)
-    {
-        Session::instance()->set('sort', $code);
-        $this->request->redirect(url::base() . 'shop/category' . Session::instance()->get('cat', 1));
-    }
-
-    public function action_order($phone = null)
-    {
-        if (null != $phone)
-        {
-            $phone = preg_replace('|[\s\-+]|', '', $phone);
-        }
-        $way = null; //способ заказа
-        if (isset($_POST['way']) && ORM::factory('pay_type', $_POST['way']))
-        {
-            Session::instance()->set('way', $_POST['way']);
-        }
-        if (isset($_POST['unsetway']))
-        {
-            Session::instance()->delete('way');
-        }
-
-        $this->template->about = new View('order');
-        $this->template->about->message = FALSE;
-        $emails = ORM::factory('mail')->find_all()->as_array('id', 'value'); //получение email и jabber менеджера
-        $to = array();
-        //найден email и в настройках установлено отправлять на него
-        if ($this->boolConfigs['ordMail'] && isset($emails[1]) )
-            $to['email'] = $emails[1];
-
-        //найден jabber и в настройках установлено отправлять на него
-        if ($this->boolConfigs['ordJabb'] && isset($emails[2]) )
-            $to['jabber'] = $emails[2];
-
-        $products = Session::instance()->get('cart'); //получение списка продуктов из корзины
-        $counts = Session::instance()->get('bigCart');
-        if (!is_array($products) || !count($products)) //если продуктов там нет
-        {//перенаправление
-            $this->request->redirect(url::base());
-        }
-        $stop = $this->boolConfigs['regOrder']; //Нельзя совершать покупки без регистрации?
-        $this->template->about->stop = $stop;
-        $way = Session::instance()->get('way');
-        if (ORM::factory('pay_type')->count_all() == 1)
-        {
-            $way = ORM::factory('pay_type')->find()->__get('id');
-        }
-        else
-        {
-            $this->template->about->ways = ORM::factory('pay_type')->where('active', '=', 1)->find_all();
-        }
-
-        if (Auth::instance()->logged_in()) //пользователь авторизован?
-        {
-            $user = Auth::instance()->get_user()->as_array(); //извлекаем данные о нем в массив
-            if (isset($user['phone']) && $way && isset($_POST['confirm'])) //есть все необходимое для заказа
-            {
-                $message = Model_Order::create($products, $user, $to, $way, $counts);
-            }
-            //заказ сохранен
-
-            $this->template->about->register = 1;
-        }
-        elseif ($phone && strlen($phone) >= 6 && strlen($phone) <= 12 && !$stop && $way && isset($_POST['confirm']))
-        {
-            $message = Model_Order::create(
-                $products, array('phone' => $phone), $to, $way, $counts
-            );
-        } //заказ сохранен
-        elseif (!$phone)
-        {
-            $this->template->about->nophone = 1;
-        }
-
-        if ($way)
-        {
-            $this->template->about->way = ORM::factory('pay_type', $way);
-            $text = $this->template->about->way->text;
-            $text = str_replace('{{id}}', Model::factory('Tmp_Order')->new_id(), $text); //предварительный id заказа
-            $text = str_replace('{{sum}}', Model_Ordproduct::sum(), $text); //сумма заказа
-
-
-            if (isset($this->user->id))
-            {
-                $balance = Model::factory('balance_user')->balance($this->user->id);
-                $text = str_replace('{{refpp}}', $balance, $text);
-            }
-            elseif (FALSE !== strpos($text, '{{refpp}}'))
-            {
-                $this->template->about->stop = 1;
-                $text = '';
-                $way = 0;
-                Session::instance()->delete('way');
-            }
-
-            $this->template->about->way->text = $text;
-        }
-
-        if (isset($message)) //статус = ok
-        {
-            $this->template->about->message = $message;
-            Session::instance()->delete('cart'); //корзина очищена
-            Session::instance()->delete('bigCart');
-            Session::instance()->delete('way');
-            $this->template->topBlock2->items = 0; //виджет корзины обновлен
-        }
-    }
-
-    /**
-     * Пользователь перешел по партнерской ссылке
-     * @param $id
-     */
-    public function action_referral($id)
-    {
-        if ($this->boolConfigs['refpp'])
-        {
-            Session::instance()->set('referral', $id);
-        }
-        $this->action_index();
-    }
-
-
-    /**
-     * Метод перенесен в Controller_Page
-     * @param int $id
-     */
-    public function action_blog($id = 0)
-    {
-        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : '' ));
-    }
-
-    /**
-     * Метод перенесен в Controller_Page
-     */
-    public function action_clients()
-    {
-        $this->request->redirect(url::base() . 'page/clients');
-    }
-
-    /**
-     * Метод перенесен в Controller_Page
-     */
-    public function action_contacts()
-    {
-        $this->request->redirect(url::base() . 'page/contacts');
-    }
+    }*/
 }
