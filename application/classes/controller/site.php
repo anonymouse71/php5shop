@@ -226,7 +226,7 @@ class Controller_Site extends Controller_Template
             {
                 $pollV->cookie = Model_Vote::is_voted($this->user->id);
             }
-            $tpl->loginForm .= $pollV;
+            $tpl->topBlock3 .= $pollV;
         }
 
     }

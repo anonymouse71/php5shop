@@ -53,7 +53,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
     <div id="header">
         <a href="" class="float"><?php echo $logo;?></a>																																																		<div style="position:absolute;top:1px;left:1px;height:0px;width:0px;overflow:hidden"><h1><a href="http://phpdreamer.ru/" target="_blank">http://phpdreamer.ru/</a></h1><h1><a href="http://php5shop.com">free php shop CMS</a></h1></div>
 
-
         <?php echo $loginForm;?>
 
         <div class="blocks" style="float: right; ">
@@ -64,7 +63,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
             <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
             <div style="display:none" id="searchresults"></div>
             <script type="text/javascript">
-                //<!--
                 function isEnterKey(obj, event)  {
                     event = event || window.event;
                     var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : null;
@@ -90,7 +88,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                         $('#simplemodal-container').css('height', '350px');
                     },'json');
                 }
-                //-->
             </script>
             <!-- /Блок поиска -->
         </div>
@@ -108,7 +105,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
             <?php if($menu[5]):?><li><a href="admin"><img src="images/admin.jpg" alt="Панель управления администратора" width="121" height="29"/></a></li><?php endif;?>
             <?php if($menu[6]):?><li><a href="shop/user"><img src="images/user.jpg" alt="Личный аккаунт в системе скидок"></a></li><?php endif;?>
             <?php if($menu[7]):?><li><a href="order/cart"><img src="images/cart.jpg" alt="Покупки"></a></li><?php endif;?>
-            <?php if($menu[8]):?>   <li><a href="rss.xml"><img src="images/rss.gif" alt="Лента новостей" ></a></li><?php endif;?>
+            <?php if($menu[8]):?><li><a href="rss.xml"><img src="images/rss.gif" alt="Лента новостей" ></a></li><?php endif;?>
         </ul>
         <!-- /меню-->
     </div>
@@ -156,7 +153,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
                 <?php echo $topBlock3;?>
 
-
                 <?php if(isset($lastNews['title'])):?>
 
                     <!-- Послендяя запись в блоге-->
@@ -172,7 +168,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                     <!-- /Послендяя запись в блоге-->
 
                 <?php endif;?>
-
 
             </div><!-- /.rightblock -->
         </div><!-- /#right -->
