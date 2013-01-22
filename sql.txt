@@ -1,25 +1,3 @@
--- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- --------------------------------------------------------
-
---
--- Структура таблицы `antibruteforce`
---
-
-CREATE TABLE IF NOT EXISTS `p5shp_antibruteforce` (
-  `ip` bigint(11) unsigned NOT NULL,
-  `try` int(1) DEFAULT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `antibruteforce`
---
-
-
--- --------------------------------------------------------
 
 --
 -- Структура таблицы `blogposts`
@@ -407,11 +385,9 @@ CREATE TABLE IF NOT EXISTS `p5shp_users` (
   `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`,`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
-ALTER TABLE `p5shp_users` ADD UNIQUE (
-`identity`
-);
+ALTER TABLE `p5shp_users` ADD UNIQUE (`identity`);
 
 -- --------------------------------------------------------
 
@@ -462,8 +438,6 @@ CREATE TABLE IF NOT EXISTS `p5shp_fields` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-REPLACE INTO `p5shp_fields` (`id`, `name`, `type`, `empty`) VALUES
-(1, 'ФИО', 2, NULL);
 --
 -- Структура таблицы `field_values`
 --
@@ -519,15 +493,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_send_texts` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
---
--- Структура таблицы `balance_users`
---
 
-CREATE TABLE IF NOT EXISTS `p5shp_balance_users` (
-  `id` int(10) unsigned NOT NULL,
-  `balance` float NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Структура таблицы `poll_answers`

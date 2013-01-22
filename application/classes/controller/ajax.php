@@ -266,7 +266,7 @@ class Controller_Ajax extends Controller
         foreach($boolConfigs as $key)
             $boolConfigsSave[$key] = isset($_POST[$key]) ? 1 : 0;
         unset($boolConfigs);
-        Model::factory('config')->setBool($boolConfigsSave);
+        Model::factory('config')->setBool($boolConfigsSave, null);
 
         // html blocks
         Model::factory('html')->setblock('shopName', isset($_POST['shopName']) ? $_POST['shopName'] : 'Магазин PHP5shop');
