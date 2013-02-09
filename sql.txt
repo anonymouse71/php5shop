@@ -384,10 +384,8 @@ CREATE TABLE IF NOT EXISTS `p5shp_users` (
   `phone` VARCHAR( 13 ) DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`,`username`)
+  UNIQUE KEY `identity` (`identity`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
-ALTER TABLE `p5shp_users` ADD UNIQUE (`identity`);
 
 -- --------------------------------------------------------
 
