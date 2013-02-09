@@ -40,7 +40,7 @@
 endif;?>
 <br>
 <script type="text/javascript">
-<!--
+
 $('#changeGlobalCat').click(function(){
     val = $('select').val();
     chldr = $('select').children();
@@ -62,18 +62,18 @@ $.post('ajax/products/1',{ filename: $('#uploaded').val() },function (data){
        $('#addit').attr('disabled', 0);
 });
 });
--->
+
 </script>
 <p id="ansver" style="background-color: #F0F0F0; padding: 10px; display: none; cursor: pointer;"></p>
 <script type="text/javascript">
-<!--
+
 $('#ansver').ajaxError(function() {
   $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
   $(this).show("slow");
   $('#submit').attr('disabled', 0);
 });
 $('#ansver').click(function(){$(this).hide("slow");});
--->
+
 </script>
 <?php if(count($cats)): ?>
 
@@ -121,7 +121,7 @@ $('#ansver').click(function(){$(this).hide("slow");});
     </tbody>
 </table>
 <script type="text/javascript">
-<!--
+
 $('.saveIt').css('cursor', 'pointer');
 $('.removeIt').css('cursor', 'pointer');
 $('.editd').css('border', '0');
@@ -145,7 +145,7 @@ $('.removeIt').click(function(){
     $.post('ajax/products/3',{ id: $(this).parent().parent().children().html() });    
 });
 
--->
+
 </script>
 <?php else:?>
 <p>В категории товаров нет</p>
@@ -154,7 +154,16 @@ $('.removeIt').click(function(){
 <br>
 <div id="chPrice">
     <b>Изменить все цены </b>на <input type="text" size="3"> процентов, исключая категории с номерами <input type="text" size="6"> (через запятую)
-    <input type="button" value="ок" onclick="$.post('ajax/changePrice',{a: $(this).prev().val(), p: $(this).prev().prev().val()});document.location.href='admin/products';">
+    <input type="button" value="ок" id="button2changePrices">
 </div>
 <br>
+<script type="text/javascript">
+    $("#button2changePrices").click(function () {
+        $.post('ajax/changePrice',
+                {a:$(this).prev().val(), p:$(this).prev().prev().val()},
+                function () {
+                    document.location.href = 'admin/products';
+                });
+    });
+</script>
 <?php endif;?>

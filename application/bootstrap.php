@@ -55,7 +55,7 @@ setlocale(LC_ALL, 'ru_RU.utf-8');
 /**
  * Версия php5shop
  */
-define('VERSION', '1.5');
+define('VERSION', '1.5.1');
 
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
