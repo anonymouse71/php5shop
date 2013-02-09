@@ -738,6 +738,22 @@ class Controller_Ajax extends Controller
                 $answer->save();
                 Model_Vote::clear_all();
             }
+
+        $pollV = new View('themes/default/poll');
+        $pollV->q = Model::factory('poll')->get();
+        $pollV->a = ORM::factory('poll_answer')->find_all();
+        $countV = 0;
+        foreach ($pollV->a as $answer)
+        {
+            $countV += $answer->count;
+        }
+        $pollV->count = $countV;
+        $pollV->cookie = Session::instance()->get('voted');
+        if ($user)
+        {
+            $pollV->cookie = Model_Vote::is_voted($user->id);
+        }
+        echo $pollV;
     }
 
     /**

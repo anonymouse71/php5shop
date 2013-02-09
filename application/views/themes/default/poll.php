@@ -1,5 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.'); ?>
 <div>
+<div id="votingDiv">
     <img src="images/top_bg.gif" alt="" width="218" height="12">
 
     <div style="padding: 10px; margin: 0px;" class="blocks">
@@ -15,8 +16,10 @@
                 <?php endforeach; ?>
             <script type="text/javascript">
                 $('.vote').click(function () {
-                    $.post('ajax/' + $(this).attr('id'));
-                    document.location.href = document.location.href + '';
+                    $.post('ajax/' + $(this).attr('id'),null,function(data){
+                        $($("#votingDiv").parent()).html(data);
+                    },'html');
+
                 });
             </script>
             <?php else: ?>
@@ -32,3 +35,4 @@
     <img src="images/bot_bg.gif" alt="" width="218" height="10">
 </div>
 <br>
+</div>
