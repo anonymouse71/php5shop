@@ -167,3 +167,8 @@ $('.removeIt').click(function(){
     });
 </script>
 <?php endif;?>
+
+<form id="addItemForm" action="/admin/products#addItemForm" method="POST">
+    Добавить товар: <input type="text" name="add_item" value="" size="35">
+    <input type="submit" value="Сохранить">
+</form>

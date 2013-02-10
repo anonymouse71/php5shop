@@ -38,6 +38,7 @@ if (function_exists('date_default_timezone_set'))
 define('DEFAULT_CURRENCY', 'UAH'); //менять только на валюту, которая есть в базе данных
 define('LINE_CURR_CHANGE', __LINE__); //не менять
 
+Cookie::$expiration = Date::YEAR;
 
 /**
  * Меню expanded со скрытием подкатегорий
@@ -55,7 +56,7 @@ setlocale(LC_ALL, 'ru_RU.utf-8');
 /**
  * Версия php5shop
  */
-define('VERSION', '1.5.1');
+define('VERSION', '1.5.2');
 
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');

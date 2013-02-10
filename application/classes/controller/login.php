@@ -49,7 +49,6 @@ class Controller_Login extends Controller
             }
         }
         */
-
         if (isset($_POST['token']))
         {
             $s = file_get_contents(
