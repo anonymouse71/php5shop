@@ -38,8 +38,6 @@ if (function_exists('date_default_timezone_set'))
 define('DEFAULT_CURRENCY', 'UAH'); //менять только на валюту, которая есть в базе данных
 define('LINE_CURR_CHANGE', __LINE__); //не менять
 
-Cookie::$expiration = Date::YEAR;
-
 /**
  * Меню expanded со скрытием подкатегорий
  * TRUE - включено FALSE - обычное меню, показывать все категории стразу
@@ -90,6 +88,7 @@ Kohana::$log->attach(new Kohana_Log_File(APPPATH . 'logs'));
  */
 Kohana::$config->attach(new Kohana_Config_File);
 
+Cookie::$expiration = 31536000;
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
