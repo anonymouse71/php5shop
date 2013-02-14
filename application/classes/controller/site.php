@@ -78,9 +78,10 @@ class Controller_Site extends Controller_Template
         $tpl->keywords = htmlspecialchars($htmlBlocks['keywords']); //переменная с ключевыми словами для SEO оптимизации
         $tpl->banner1 = $htmlBlocks['banner1']; //HTML код 4 баннеров или пользовательских блоков
         $tpl->banner2 = $htmlBlocks['banner2'];
-        $tpl->banner3 = $htmlBlocks['banner3'];
-        $tpl->banner4 = $htmlBlocks['banner4']
-            . Model_Sape_client::links($this->apis['sape']); //подключение сервиса Sape.ru
+        $tpl->banner3 = $htmlBlocks['banner3']
+            . Model_Sape_client::links($this->apis['sape']); //подключение сервиса Sape.ru;
+        $tpl->banner4 = $htmlBlocks['banner4'];
+
         $tpl->logo = $htmlBlocks['logo']; //логотип
         $tpl->about = $htmlBlocks['about']; //HTML код с описанием магазина
         $tpl->title = htmlspecialchars($htmlBlocks['shopName']); //название магазина
