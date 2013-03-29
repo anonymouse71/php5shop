@@ -421,14 +421,6 @@ class Controller_Admin extends Controller_Template
             exit;
         }
 
-        $openDIR = opendir('images/products'); //удаление не сегодняшних бекапов
-        while (FALSE !== ($scan = readdir($openDIR)))
-            if (strtolower(substr(strrchr($scan, "."), 1)) == 'zip')
-                if (preg_match('#([0-9]{4})-([0-9]{2})-([0-9]{2})#', $scan, $date))
-                    if ($date[1] != date('Y') || $date[2] != date('m') || $date[3] != date('d'))
-                        unlink('images/products/' . $scan);
-        closedir($openDIR);
-
         $this->template->title .= '- Товары';
         $this->template->head = new View('admin/table/head');
         $this->template->body = new View('admin/table/products');
@@ -449,28 +441,18 @@ class Controller_Admin extends Controller_Template
         $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 0; //получение GET параметра page >= 0
         if (!$page) //если он равен 0
             $page = 1; //устанавливаем в 1
+        $cats = ORM::factory('product');
         if ($cat)
-        {
-            $cats = ORM::factory('product')
-                ->where('cat', '=', $cat)
-                ->limit($onPage)
-                ->offset(($page - 1) * $onPage)
-                ->find_all();
-            $countAll = ORM::factory('product')
-                ->where('cat', '=', $cat)
-                ->find_all()
-                ->count();
-        }
-        else
-        {
-            $cats = ORM::factory('product')
-                ->limit($onPage)
-                ->offset(($page - 1) * $onPage)
-                ->find_all();
-            $countAll = ORM::factory('product')
-                ->find_all()
-                ->count();
-        }
+            $cats->where('cat', '=', $cat);
+        $cats->limit($onPage)
+            ->offset(($page - 1) * $onPage);
+        $cats = $cats->find_all();
+
+        $countAll = ORM::factory('product');
+        if ($cat)
+            $countAll->where('cat', '=', $cat);
+
+        $countAll = $countAll->find_all()->count();
         $this->template->body->cats = array();
         foreach ($cats as $c)
         {

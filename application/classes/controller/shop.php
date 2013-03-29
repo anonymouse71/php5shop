@@ -372,6 +372,13 @@ class Controller_Shop extends Controller_Site
             $this->request->redirect(url::base());
     }
 
+    public function action_yml()
+    {
+        header('Content-Type: text/xml; charset=utf-8');
+        echo Model_Yml::get();
+        exit;
+    }
+
     /*
     public function action_register()
     {
