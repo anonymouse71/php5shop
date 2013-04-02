@@ -59,7 +59,7 @@ class Model_Yml
             ->execute()->as_array();
         foreach($catsArray as $catItem)
         {
-            $cat = $dom->createElement('category', html_entity_decode($catItem['name']));
+            $cat = $dom->createElement('category', htmlspecialchars($catItem['name']));
             $cat->setAttribute('id', $catItem['id']);
             if($catItem['parent'])
                 $cat->setAttribute('parentId', $catItem['parent']);
@@ -82,8 +82,8 @@ class Model_Yml
             $p->appendChild($dom->createElement('currencyId', 'RUR'));
             $p->appendChild($dom->createElement('categoryId', $prod['cat']));
             $p->appendChild($dom->createElement('picture', $shopURL . 'images/products/' . $prod['id'] .'.jpg'));
-            $p->appendChild($dom->createElement('model', html_entity_decode($prod['name'])));
-            $p->appendChild($dom->createElement('description', html_entity_decode($prod['text'])));
+            $p->appendChild($dom->createElement('model', htmlspecialchars($prod['name'])));
+            $p->appendChild($dom->createElement('description', htmlspecialchars($prod['text'])));
 
             $offersNode->appendChild($p);
         }

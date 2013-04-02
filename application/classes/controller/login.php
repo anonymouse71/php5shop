@@ -83,18 +83,8 @@ class Controller_Login extends Controller
             }
         }
 
-
-        //Перенаправление на страницу с которой пользователь пришел (если она на этом домене)
-        $this->request->redirect(
-            (
-                isset($_SERVER['HTTP_REFERER'])
-                    && strpos($_SERVER['HTTP_REFERER'], '://' . $_SERVER['HTTP_HOST'])
-            )
-                ?
-                $_SERVER['HTTP_REFERER']
-                :
-                url::base()
-        );
+        //Перенаправление на страницу с которой пользователь пришел
+        $this->request->redirect(Session::instance()->get('lastPage', url::base()));
     }
 
     /**
@@ -203,7 +193,6 @@ class Controller_Login extends Controller
             Auth::instance()->logout(TRUE); //сессия уничтожается
         }
 
-        //в любом случае на этой странице делать больше нечего - перенаправим на главную
         $this->request->redirect(url::base());
     }
 

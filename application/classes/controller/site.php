@@ -240,5 +240,8 @@ class Controller_Site extends Controller_Template
         {
             $this->template->banner4 .= Model::factory('Benchmark')->getTime();
         }
+
+        Session::instance()->set('lastPage', $_SERVER['REQUEST_URI']);
+
     }
 }

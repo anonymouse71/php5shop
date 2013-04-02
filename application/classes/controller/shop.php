@@ -54,50 +54,65 @@ class Controller_Shop extends Controller_Site
             if (!$product['id']) //если его там нет,
             {
                 $this->request->redirect(url::base());//перенаправляем на главную
+                exit;
             }
-            else //если есть,
-            { //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
-                $product['price'] = round($curr * $product['price'] * $pct, 2);
-                $product['price'] .= ' ' . $this->currency;
-                $product['name'] = htmlspecialchars($product['name']);
-                $product['cart'] = FALSE; //по умолчанию продукт не в корзине
-                if (is_array($sessionCart)) //но если корзина записана как массив
+            //else //если есть,
+
+            //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
+            $product['price'] = round($curr * $product['price'] * $pct, 2);
+            $product['price'] .= ' ' . $this->currency;
+            $product['name'] = htmlspecialchars($product['name']);
+            $product['cart'] = FALSE; //по умолчанию продукт не в корзине
+            if (is_array($sessionCart)) //но если корзина записана как массив
+            {
+                if (in_array($product['id'], $sessionCart)) //и продукт в ней записан
                 {
-                    if (in_array($product['id'], $sessionCart)) //и продукт в ней записан
-                    {
-                        $product['cart'] = TRUE;
-                    }
-                } //передадим эту информацию в шаблон
-                $this->template->stuff = new View(TPL . 'oneProduct'); //подключаем шаблон для 1 продукта
-                $this->template->stuff->comments = $this->boolConfigs['comments'];
-                if ($this->boolConfigs['bigCart'])
+                    $product['cart'] = TRUE;
+                }
+            } //передадим эту информацию в шаблон
+            $this->template->stuff = new View(TPL . 'oneProduct'); //подключаем шаблон для 1 продукта
+            $this->template->stuff->comments = $this->boolConfigs['comments'];
+            if ($this->boolConfigs['bigCart'])
+            {
+                if (isset($bcart[$product['id']]))
                 {
-                    if (isset($bcart[$product['id']]))
+                    $product['bigcart'] = $bcart[$product['id']];
+                }
+                else
+                {
+                    if (in_array($product['id'], $sessionCart))
                     {
-                        $product['bigcart'] = $bcart[$product['id']];
-                    }
-                    else
-                    {
-                        if (in_array($product['id'], $sessionCart))
-                        {
-                            $product['bigcart'] = 1;
-                        }
+                        $product['bigcart'] = 1;
                     }
                 }
-
-                $this->template->stuff->item = $product; //вставляем в шаблон данные о продукте
-                $description = new View(TPL . 'description');
-                $description->text = ORM::factory('description', $product['id'])->__get('text');
-                if ($this->auth->logged_in('admin'))
-                {
-                    $description->id = $product['id'];
-                }
-
-                $this->template->title .= ' - ' . $product['name'];
-                $this->template->about = ''; //блок приветствия не отображаем
-
-                $this->template->oneProductPage = true;//показывать 'itemscope itemtype="http://schema.org/Product"'
             }
+
+            $this->template->stuff->item = $product; //вставляем в шаблон данные о продукте
+            $description = new View(TPL . 'description');
+            $description->text = ORM::factory('description', $product['id'])->__get('text');
+            if ($this->auth->logged_in('admin'))
+            {
+                $description->id = $product['id'];
+            }
+
+            $this->template->title .= ' - ' . $product['name'];
+            $this->template->about = ''; //блок приветствия не отображаем
+
+            $this->template->oneProductPage = true;//показывать 'itemscope itemtype="http://schema.org/Product"'
+
+            //Сохраняем просматриваемый пользователем товар для его личной страницы
+            if ($this->user)
+            {
+                try
+                {
+                    DB::insert('user_views', array('user_id', 'product_id'))
+                        ->values(array($this->user->id, $product['id']))->execute();
+
+                } catch (Database_Exception $dbEx)
+                { /* Duplicate entry */
+                }
+            }
+
         }
         elseif ($cat) //указана категория
         {
@@ -271,6 +286,22 @@ class Controller_Shop extends Controller_Site
 
         $this->template->about->user = $this->user; //подставляем данные пользователя
         $this->template->title .= ' - Личная страница ' . $this->user->username; //дополнение заголовка страницы
+
+        //Последние 30 просмотренных товаров
+        $limit = 30;
+        $this->template->about->views = DB::select('user_views.id',  'product_id', 'name')
+            ->from('user_views')
+            ->join('products')->on('product_id', '=', 'products.id')
+            ->where('user_id', '=', $this->user->id)
+            ->order_by('user_views.id', 'desc')
+            ->limit($limit)->execute()->as_array();
+        //удаляем более старые, так как они все равно не нужны
+        $len = count($this->template->about->views);
+        if($len == $limit)
+        {
+            DB::delete('user_views')->where('user_id', '=', $this->user->id)
+                ->and_where('id', '<', $this->template->about->views[$limit-1]['id'])->execute();
+        }
     }
 
 

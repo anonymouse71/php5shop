@@ -85,3 +85,32 @@ $('#ansver').click(function (){$(this).hide(1000);});
 </p>
 <?php endif;?>
 
+<?php if (count($views)): ?>
+    <style>
+        .p_views {
+            margin: 10px;
+            width: 100%;
+            border-bottom: dotted 1px #000000;
+            padding-bottom: 10px;
+        }
+    </style>
+
+    <p>&nbsp;</p>
+    <h3>Последние просмотренные товары:</h3>
+    <?php foreach ($views as $prod): ?>
+        <div class="p_views">
+            <?php
+            echo '<a href="', url::base(), 'shop/product', $prod['product_id'], '">',
+            (file_exists(
+                $_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/small/' . $prod['product_id'] . '.jpg')
+                ?
+                '<img src="' . url::base() . 'images/products/small/' . $prod['product_id'] . '.jpg" alt="" />'
+                : '<img src="' . url::base() . 'images/no-photo.jpg" alt="" />'),
+            '<br />',
+            htmlspecialchars($prod['name']),
+            '</a>';
+            ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+

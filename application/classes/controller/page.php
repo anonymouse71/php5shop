@@ -103,4 +103,5 @@ class Controller_Page extends Controller_Site
             $this->request->redirect(url::base());
         }
     }
+
 }
