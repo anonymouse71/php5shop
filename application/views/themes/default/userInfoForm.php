@@ -15,7 +15,7 @@
             <td><span>Телефон:</span></td>
             <td><input class="line" type="text" name="phone" value="<?php if(isset($val['phone'])) echo htmlspecialchars($val['phone']);?>"></td>
         </tr>
-        <?php if(isset($fields) && is_array($fields)): ?>
+        <?php if(isset($fields) && is_array($fields)):?>
         <?php foreach($fields as $field):?>
         <tr>
             <td><span><?php echo $field->name;?>:</span></td>

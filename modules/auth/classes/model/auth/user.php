@@ -614,6 +614,9 @@ class Model_Auth_User extends ORM
             ),
         );
 
+        if(!$is_admin)
+            unset($fields['username']);
+
         foreach($fields as $key => $fieldMessages)
             if ($post[$key]) // введен?
             {

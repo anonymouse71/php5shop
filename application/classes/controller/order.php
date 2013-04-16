@@ -131,6 +131,8 @@ class Controller_Order extends Controller_Site
             $this->template->about->userInfo->val = array();
             foreach($fieldNames as $key)
                 $this->template->about->userInfo->val[$key] = '';
+            foreach ($this->template->about->userInfo->fields as $field)
+                $this->template->about->userInfo->val['f' . $field->id] = '';
         }
 
 
