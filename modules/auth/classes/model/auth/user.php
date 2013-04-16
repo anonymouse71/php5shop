@@ -578,14 +578,14 @@ class Model_Auth_User extends ORM
             foreach (ORM::factory('field')->find_all() as $field)
                 if (isset($post['f' . $field->id]) && !empty($post['f' . $field->id]))
                 {
-                    if (!$readonly && ORM::factory('field')->validate($post['f' . $field->id], $field->type))
+                    if (ORM::factory('field')->validate($post['f' . $field->id], $field->type))
                         Model::factory('field_value')->set($field->id, $id, $post['f' . $field->id]);
                     else
                         $messages .= htmlspecialchars($field->name) . ': поле введено в неправильном формате. ';
                 }
                 else
                 {
-                    if (!$readonly && $field->empty)
+                    if ($field->empty)
                         Model::factory('field_value')->set($field->id, $id, '');
                     else
                         $messages .=  htmlspecialchars($field->name) . ': поле не должно быть пустым. ';
