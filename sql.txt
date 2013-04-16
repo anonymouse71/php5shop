@@ -243,9 +243,12 @@ CREATE TABLE IF NOT EXISTS `p5shp_orders` (
   `date` int(10) unsigned NOT NULL,
   `username` varchar(32) NOT NULL DEFAULT '',
   `address` varchar(200) DEFAULT NULL,
+  `contacts` TEXT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+
+ALTER TABLE `p5shp_orders` ADD
 --
 -- Дамп данных таблицы `orders`
 --
@@ -619,3 +622,4 @@ CREATE TABLE IF NOT EXISTS `php5shp_user_views` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user_id`,`product_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1
+

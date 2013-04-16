@@ -34,9 +34,23 @@ class Model_Order extends ORM
         $uid = isset($client['id']) ? $client['id'] : 0;
         $phone = $client['phone'];
 
+        $contacts = '';
+        foreach($client as $field => $field_value)
+        {
+            if(in_array($field, array('address', 'username', 'phone', 'confirm')))
+                continue;
+            if($field == 'email')
+                $contacts .= 'Email: ' . $field_value . "\r\n";
+            elseif(preg_match('|^f([0-9]+)$|', $field, $found))
+            {
+                $fieldArray = ORM::factory('field')->find($found[1])->as_array();
+                $contacts .= $fieldArray['name'] . ': ' . $field_value . "\r\n";
+            }
+        }
+
         $id = Model::factory('Tmp_Order')->new_id();
-        DB::insert('orders', array('id', 'user', 'phone', 'status', 'date', 'address', 'username'))
-            ->values(array($id, $uid, $phone, 1, time(), $client['address'], $client['username']))
+        DB::insert('orders', array('id', 'user', 'phone', 'status', 'date', 'address', 'username', 'contacts'))
+            ->values(array($id, $uid, $phone, 1, time(), $client['address'], $client['username'], $contacts))
             ->execute();
 
         Model::factory('Tmp_Order')->clean();

@@ -21,6 +21,7 @@ elseif (isset($array)): ?>
         <td>Статус заказа</td>
         <td>Дата и время заказа</td>
         <td>Адрес доставки</td>
+        <td>Дополнительные поля</td>
         <td>Прошло времени</td>
     </tr>
         <?php foreach ($array as $item): ?>
@@ -42,6 +43,7 @@ elseif (isset($array)): ?>
         </td>
         <td><?php echo $item['date'];?></td>
         <td><?php echo $item['address'];?></td>
+        <td><?php echo $item['contacts'];?></td>
         <td><?php echo $item['difference'];?></td>
     </tr>
         <?php endforeach;?>

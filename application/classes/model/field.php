@@ -16,7 +16,7 @@ class Model_Field extends ORM
         if(!$typeId)
             $typeId = $this->type;
 
-        $pattern = ORM::factory('field_type',$typeId)->__get('reg');
+        $pattern = ORM::factory('field_type', $typeId)->__get('reg');
 
         if(!$pattern)
             return FALSE;

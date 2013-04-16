@@ -94,6 +94,7 @@ class Controller_Admin extends Controller_Template
                     $this->template->body->array[$k]['address'] = nl2br(htmlspecialchars($item->address));
 
                     $this->template->body->array[$k]['phone'] = htmlspecialchars($item->phone);
+                    $this->template->body->array[$k]['contacts'] = nl2br(htmlspecialchars($item->contacts));
                     $this->template->body->array[$k]['status']
                         = isset($state[$item->status]) ? $state[$item->status] : 'название этого статуса удалено';
                     $this->template->body->array[$k]['else_status'] = array();
