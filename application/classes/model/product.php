@@ -41,12 +41,14 @@ class Model_Product extends ORM {
 /**
  * Возвращает последние $n товаров
  * @param int $n
+ * @param int $offset
  * @return array
  */
-    public function getLast($n)
+    public function getLast($n, $offset=0)
     {
         return DB::select()->from('products')
                 ->order_by('id', 'desc')
+                ->offset($offset)
                 ->limit($n)
                 ->execute()
                 ->as_array();

@@ -180,11 +180,22 @@ class Controller_Shop extends Controller_Site
         }
         else //категория не указана
         {
-            $products = self::$cache->get('LastProd');
-            if (null === $products)
+            $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1;
+            if ($page < 1)
+                $page = 1;
+            if ($page == 1)
+            { //берем 1-ю страницу из кэша
+                $products = self::$cache->get('LastProd');
+                if (null === $products)
+                {
+                    $products = Model::factory('product')->getLast($this->productsOnPage);
+                    self::$cache->set('LastProd', $products);
+                }
+            }
+            else //остальные страницы
             {
-                $products = Model::factory('product')->getLast($this->productsOnPage);
-                self::$cache->set('LastProd', $products);
+                $products = Model::factory('product')->getLast(
+                    $this->productsOnPage, ($page - 1) * $this->productsOnPage);
             }
 
             foreach ($products as $k => $p)
@@ -214,6 +225,13 @@ class Controller_Shop extends Controller_Site
             }
 
             $this->template->stuff->products = $products; //заполняем представление продуктами
+
+            $Pagination = new Pagination(
+                array( //создаем навигацию
+                    'uri_segment' => 'products/',
+                    'total_items' => ORM::factory('product')->count_all(),
+                    'items_per_page' => $this->productsOnPage,
+                ));
         }
 
         if ($this->boolConfigs['bigCart'] && is_object($this->template->stuff)) //указываем опцию из настроек
