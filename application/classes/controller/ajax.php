@@ -50,7 +50,7 @@ class Controller_Ajax extends Controller
         $admin = $auth->logged_in('admin');
 
         //массив необходимых ключей массива POST
-        $postKeys = array('phone', 'address', 'id', 'email');
+        $postKeys = array('phone', 'address', 'id', 'email', 'username');
         //POST содержит не все ключи => запрос отправлен с другого сайта
         foreach ($postKeys as $key)
             if (!isset ($_POST[$key]))
