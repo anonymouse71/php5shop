@@ -236,15 +236,15 @@ REPLACE INTO `p5shp_menuitems` (`id`, `item`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `p5shp_orders` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user` int(10) unsigned DEFAULT '0',
-  `phone` VARCHAR( 13 ) NOT NULL DEFAULT '',
-  `status` int(1) unsigned DEFAULT '1',
-  `date` int(10) unsigned NOT NULL,
-  `username` varchar(32) NOT NULL DEFAULT '',
-  `address` varchar(200) DEFAULT NULL,
-  `contacts` TEXT NOT NULL,
-  PRIMARY KEY (`id`)
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `user` int(10) unsigned DEFAULT '0',
+    `phone` varchar(13) NOT NULL DEFAULT '',
+    `status` int(1) unsigned DEFAULT '1',
+    `date` int(10) unsigned NOT NULL,
+    `address` varchar(200) NOT NULL,
+    `username` varchar(32) NOT NULL,
+    `contacts` text NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
@@ -621,5 +621,5 @@ CREATE TABLE IF NOT EXISTS `php5shp_user_views` (
   `product_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user_id`,`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
