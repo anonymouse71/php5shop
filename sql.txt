@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_orders` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-ALTER TABLE `p5shp_orders` ADD
+
 --
 -- Дамп данных таблицы `orders`
 --
