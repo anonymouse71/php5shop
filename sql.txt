@@ -615,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_comments` (
 PRIMARY KEY ( `id` )
 ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT = 'Комментарии к товарам и новостям';
 
-CREATE TABLE IF NOT EXISTS `php5shp_user_views` (
+CREATE TABLE IF NOT EXISTS `p5shp_user_views` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
