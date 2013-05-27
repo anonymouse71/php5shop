@@ -31,13 +31,10 @@ class Model_Sitemap
 
         $controllers = array(
             '',
-            'shop/',
-            'shop/register',
             'page/clients',
             'page/contacts',
             'shop/cart',
             'shop/blog',
-            'shop/forgotpassword',
             'about'
         );
         foreach( $controllers as $page)
