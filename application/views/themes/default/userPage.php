@@ -85,7 +85,7 @@ $('#ansver').click(function (){$(this).hide(1000);});
 </p>
 <?php endif;?>
 
-<?php if (count($views)): ?>
+<?php if (isset($views) && count($views)): ?>
     <style>
         .p_views {
             margin: 10px;

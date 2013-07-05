@@ -30,7 +30,7 @@
         <?php endif ?>
 
         <?php if ($last_page !== FALSE): ?>
-            <a href="<?php echo $page->url($last_page) ?>"><?php echo __('Последняя (' . $total_pages . ')') ?></a>
+            <a href="<?php echo $page->url($last_page) ?>"><?php echo __('Последняя (' . $last_page . ')') ?></a>
         <?php else: ?>
             <?php echo __('Последняя') ?>
         <?php endif ?>
