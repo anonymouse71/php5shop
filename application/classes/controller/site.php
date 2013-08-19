@@ -131,7 +131,12 @@ class Controller_Site extends Controller_Template
         {
             if ($this->boolConfigs['LastNews'])
             {//если включен блок последних новостей, вставляем в него последнюю запись из блога (200 симв.)
-                $tpl->lastNews = Model::factory('BlogPost')->last(200);
+                $lastNews = Model::factory('BlogPost')->read(1, 13)->as_array();
+                if(count($lastNews))
+                {
+                    $tpl->lastNews = new View(TPL . 'lastNews');
+                    $tpl->lastNews->data = $lastNews;
+                }
             }
         }
 

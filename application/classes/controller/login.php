@@ -52,7 +52,7 @@ class Controller_Login extends Controller
         if (isset($_POST['token']))
         {
             $s = file_get_contents(
-                'http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']
+                'http://u-login.com/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']
             );
             $user = json_decode($s, true);
 

@@ -200,6 +200,22 @@ class Controller_Order extends Controller_Site
 
         if ($way)
         {
+            $this->template->about->order_id = Session::instance()->get('order_id', 0);
+            if (!$this->template->about->order_id)
+            {
+                $this->template->about->order_id = Model::factory('Tmp_Order')->new_id();
+                Session::instance()->set('order_id', $this->template->about->order_id);
+            }
+            if ($way == 4)
+            {
+                if (isset($message))
+                {
+                    $this->template->about->amount = Session::instance()->get('order_sum', 0);
+                    Session::instance()->delete('order_sum');
+                }
+                else
+                    Session::instance()->set('order_sum', number_format(Model_Ordproduct::sum(false), 2, '.', ''));
+            }
             $this->template->about->way = ORM::factory('pay_type', $way);
             $text = $this->template->about->way->text;
             $text = str_replace('{{id}}', Model::factory('Tmp_Order')->new_id(), $text); //предварительный id заказа

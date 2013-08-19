@@ -415,10 +415,15 @@ class Controller_Admin extends Controller_Template
      */
     public function action_products($cat = 0)
     {
+        $onPage = 200;
         if(isset($_POST['add_item']))
         {   //Добавление товаров по 1
             ORM::factory('product')->set('name', $_POST['add_item'])->save();
-            $this->request->redirect($_SERVER['REQUEST_URI']);
+            $this->request->redirect(
+                url::base()
+                    . 'admin/products?page='
+                    . ceil(Model::factory('product')->count_all() / $onPage)
+                    . '#addItemForm');
             exit;
         }
 
@@ -438,7 +443,7 @@ class Controller_Admin extends Controller_Template
         $this->template->body->currency = Model_Config::get1Currency();
         $categories = new Categories();
         $this->template->body->select = $categories->select($cat);
-        $onPage = 200;
+
         $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 0; //получение GET параметра page >= 0
         if (!$page) //если он равен 0
             $page = 1; //устанавливаем в 1
@@ -657,6 +662,14 @@ class Controller_Admin extends Controller_Template
 
     public function action_paytypes($id = null)
     {
+        $page_update_url = $this->template->path . 'paytypes/' . (string)((int)$id);
+        if (isset($_POST['ik_secret_key'], $_POST['ik_shop_id']))
+        {
+            Model_Apis::set('ik_secret_key', $_POST['ik_secret_key']);
+            Model_Apis::set('ik_shop_id', $_POST['ik_shop_id']);
+            $this->request->redirect($page_update_url);
+        }
+
         if (isset($_POST['editor']) && isset($_POST['newname']))
         {
             if ($id) //редактирование
@@ -674,13 +687,13 @@ class Controller_Admin extends Controller_Template
                 $change->__set('active', 1);
                 $change->save();
             }
-            $this->request->redirect($this->template->path . 'paytypes/' . (string)((int)$id));
+            $this->request->redirect($page_update_url);
         }
 
         if (isset($_POST['del'])) //удаление
         {
-            $change = ORM::factory('pay_type', $id)->delete();
-            $this->request->redirect($this->template->path . 'paytypes/' . (string)((int)$id));
+            ORM::factory('pay_type', $id)->delete();
+            $this->request->redirect($page_update_url);
         }
         //смена статуса (вкл\выкл)
         if (isset($_POST['id']) && isset($_POST['checked']))
@@ -701,14 +714,22 @@ class Controller_Admin extends Controller_Template
             '<br> {{refpp}} - баланс в партнерской программе.' .
             '<br> {{id}} - уникальный номер заказа';
 
-
         foreach ($this->template->body->types as $type)
             if ($id == $type->id)
-                $this->template->body->Type = $type;
-
-
+            {
+                $this->template->body->type4edit = $type;
+                if ($id == 4)
+                {
+                    $this->template->body->interkassa = $info
+                        . View::factory('admin/interkassa', array(
+                            'ik_secret_key' => Model_Apis::get('ik_secret_key'),
+                            'ik_shop_id' => Model_Apis::get('ik_shop_id')
+                        ));
+                    return;
+                }
+                break;
+            }
         $this->template->body .= $info;
-
     }
 
     //удаление комментария

@@ -54,7 +54,7 @@ setlocale(LC_ALL, 'ru_RU.utf-8');
 /**
  * Версия php5shop
  */
-define('VERSION', '1.5.5');
+define('VERSION', '1.6');
 
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
@@ -114,137 +114,131 @@ Kohana::modules(
 //маршрут для установки курса валюты
 Route::set('curr', 'shop/currency/<code>', array('code' => '[A-Z]{3}'))
     ->defaults(
-    array(
-        'controller' => 'shop',
-        'action' => 'currency',
-        'param' => 'code'
-    )
-);
+        array(
+            'controller' => 'shop',
+            'action' => 'currency',
+            'param' => 'code'
+        )
+    );
 
 //маршрут для блога
 Route::set('blog', 'blog(/<id>)', array('id' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'page',
-        'action' => 'blog',
-        'param' => 'id'
-    )
-);
+        array(
+            'controller' => 'page',
+            'action' => 'blog',
+            'param' => 'id'
+        )
+    );
 Route::set('blog_news', 'blog')
     ->defaults(
-    array(
-        'controller' => 'page',
-        'action' => 'blog',
-        'param' => ''
-    )
-);
-
-/* //маршрут для заказа по номеру телефона (без регистрации)
-Route::set('phone order', 'shop/order/<code>', array('code' => '\+?[0-9\s+\-]{1,}'))
-    ->defaults(
-    array(
-         'controller' => 'shop',
-         'action'     => 'order',
-         'param'      => 'id'
-    )
-);*/
+        array(
+            'controller' => 'page',
+            'action' => 'blog',
+            'param' => ''
+        )
+    );
 
 //маршрут для добавления продуктов в корзину
 Route::set('addtocart', 'ajax/add_to_cart/<id>(/<count>)', array('id' => '[0-9]+', 'count' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'ajax',
-        'action' => 'add_to_cart',
-    )
-);
-//маршрут для добавления восстановления пароля
-//Route::set('email pass', 'login/emailpass(/<id>)', array('id' => '[0-9]+'))
-//        ->defaults(array(
-//            'controller' => 'login',
-//            'action' => 'emailpass',
-//        ));
+        array(
+            'controller' => 'ajax',
+            'action' => 'add_to_cart',
+        )
+    );
 
 //маршрут для голосования
 Route::set('poll', 'ajax/vote<id>', array('id' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'ajax',
-        'action' => 'vote'
-    )
-);
+        array(
+            'controller' => 'ajax',
+            'action' => 'vote'
+        )
+    );
 
 //маршрут для поиска
 Route::set('searchproducts', 'ajax/search/<string>', array('string' => '[^/]+'))
     ->defaults(
-    array(
-        'controller' => 'ajax',
-        'action' => 'search',
-    )
-);
+        array(
+            'controller' => 'ajax',
+            'action' => 'search',
+        )
+    );
 
 //маршрут категорий
 Route::set('cat', 'shop/category<catid>', array('catid' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'shop',
-        'action' => 'index'
-    )
-);
+        array(
+            'controller' => 'shop',
+            'action' => 'index'
+        )
+    );
 
 //маршрут товаров
 Route::set('product', 'shop/product<product>', array('product' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'shop',
-        'action' => 'index'
-    )
-);
+        array(
+            'controller' => 'shop',
+            'action' => 'index'
+        )
+    );
 
 //маршрут для установки статуса заказов
 Route::set('changestatus', 'ajax/changestatus/<id>/<status>', array('id' => '[0-9]+', 'status' => '[^/]+'))
     ->defaults(
-    array(
-        'controller' => 'ajax',
-        'action' => 'changestatus',
-    )
-);
+        array(
+            'controller' => 'ajax',
+            'action' => 'changestatus',
+        )
+    );
 
 //маршрут для отображения сообщения о php5shop
 Route::set('version', 'about')
     ->defaults(
-    array(
-        'controller' => 'error',
-        'action' => 'version',
-    )
-);
+        array(
+            'controller' => 'error',
+            'action' => 'version',
+        )
+    );
 
 //маршрут партнерской программы
 Route::set('pp', '<id>', array('id' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'shop',
-        'action' => 'referral',
-    )
-);
+        array(
+            'controller' => 'shop',
+            'action' => 'referral',
+        )
+    );
 
 
 //стандартный маршрут
 Route::set('default', '(<controller>(/<action>(/<id>)))', array('id' => '[0-9]+'))
     ->defaults(
-    array(
-        'controller' => 'shop',
-        'action' => 'index',
-    )
-);
+        array(
+            'controller' => 'shop',
+            'action' => 'index',
+        )
+    );
 
 //страница index.php
 Route::set('index', '(index.php)')
     ->defaults(
-    array(
-        'controller' => 'shop',
-        'action' => 'indexphp',
-    )
-);
+        array(
+            'controller' => 'shop',
+            'action' => 'indexphp',
+        )
+    );
+
+//interkassa Status URL
+Route::set('interkassa_status', 'interkassa/status/<hash>', array('hash' => '[^/]*'))
+    ->defaults(
+        array(
+            'controller' => 'interkassa',
+            'action' => 'status',
+            'param' => 'hash'
+        )
+    );
 
 //маршрут для обработки ошибки 404
 Route::set('files', '(<file>)', array('file' => '.+'))

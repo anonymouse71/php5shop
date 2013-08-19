@@ -14,7 +14,7 @@
 
     <div style="float: left;margin-right: 12px; margin-top: 9px;">Войти:</div>
 
-    <script src="//ulogin.ru/js/ulogin.js"></script>
+    <script src="//u-login.com/js/ulogin.js"></script>
 
 
     <div id="uLogin"

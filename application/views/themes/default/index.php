@@ -40,8 +40,12 @@
 <link rel="shortcut icon" type="image/ico" href="images/favicon.gif">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <?php echo $css;?>
-<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+<!--<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>-->
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.simplemodal.js"></script>
+<?php if(isset($lastNews)):?>
+    <script type="text/javascript" src="js/jquery.slides.min.js"></script>
+<?php endif;?>
 <!-- 
 php5shop - CMS интернет-магазина
 Copyright (C) 2010-2014 phpdreamer, php5shop.com
@@ -153,21 +157,8 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
                 <?php echo $topBlock3;?>
 
-                <?php if(isset($lastNews['title'])):?>
-
-                    <!-- Послендяя запись в блоге-->
-                    <img src="images/top_bg.gif" alt="" width="218" height="12">
-                    <div id="lastNews">
-                        <h3><?php echo $lastNews['title'];?></h3>
-                            <?php echo $lastNews['code'];?>
-                        <div class="right" align="right" >
-                            <a href="blog/<?php echo $lastNews['id'];?>">читать...</a>
-                        </div>
-                    </div>
-                    <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
-                    <!-- /Послендяя запись в блоге-->
-
-                <?php endif;?>
+                <?php if(isset($lastNews))
+                    echo $lastNews;?>
 
             </div><!-- /.rightblock -->
         </div><!-- /#right -->
