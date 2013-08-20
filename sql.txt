@@ -244,7 +244,8 @@ CREATE TABLE IF NOT EXISTS `p5shp_orders` (
     `address` varchar(200) NOT NULL,
     `username` varchar(32) NOT NULL,
     `contacts` text NOT NULL,
-    `paid` FLOAT NOT NULL DEFAULT '0',
+    `pay_type` int(10) unsigned NOT NULL,
+    `paid` float(10,2) NOT NULL DEFAULT '0.00',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -565,7 +566,7 @@ REPLACE  INTO `p5shp_pay_types` (`id`, `name`, `text`, `active`) VALUES
 (1, 'Оплата наличными при получении', 'Ваш номер заказа {{id}}. <br>\r\nВы можете заказать по телефону (icq, email) доставку (Доставка по Украине 180 грн.) или подъехать к нам в офис и получить заказ по его номеру ({{id}}).', 1),
 (2, 'Оплата через webmoney', '<p>Наши кошельки:</p>\n<p>Z000000000000<br>\n	R000000000000<br>\n	U000000000000</p>\n<p>перевидите указанную сумму на любой из кошельков (по курсу savechange.ru ) с комментарием &quot;Заказ номер <small>{{id}}</small>&quot;</p>\n', 1),
 (3, 'Оплата банковским переводом', '<p>расчетный счет: 00000000000000000000<br>\n	ИНН: 000000000<br>\n	КПП: 000000000<br>\n	банк получателя: ООО Банк &quot;Банк&quot;<br>\n	корреспондентский счет: 00000000000000000000<br>\n	БИК 000000000<br>\n	назначение платежа: Заказ номер {{id}}</p>\n<p>Сумма перевода <small>{{sum}}</small></p>\n', 1),
-(4, 'Оплата через interkassa', '',0);
+(4, 'Оплата через interkassa', '<p>Оплата через interkassa.com.</p>\n<p>После нажатия на кнопку &quot;Подтвердить заказ&quot; появится кнопка &quot;Оплатить&quot; для оплаты через интеркассу одним из способов на выбор.</p>\n',0);
 --
 --
 CREATE TABLE IF NOT EXISTS `p5shp_votes` (
@@ -625,3 +626,8 @@ CREATE TABLE IF NOT EXISTS `p5shp_user_views` (
   UNIQUE KEY `user` (`user_id`,`product_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+--
+-- Ограничения внешнего ключа таблицы `p5shp_orders`
+--
+ALTER TABLE `p5shp_orders`
+  ADD CONSTRAINT `p5shp_orders_ibfk_2` FOREIGN KEY (`pay_type`) REFERENCES `p5shp_pay_types` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;

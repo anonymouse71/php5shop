@@ -49,8 +49,10 @@ class Model_Order extends ORM
         }
 
         $id = Model::factory('Tmp_Order')->new_id();
-        DB::insert('orders', array('id', 'user', 'phone', 'status', 'date', 'address', 'username', 'contacts'))
-            ->values(array($id, $uid, $phone, 1, time(), $client['address'], $client['username'], $contacts))
+        DB::insert('orders', array(
+            'id', 'user', 'phone', 'status', 'date', 'address', 'username', 'contacts', 'pay_type'))
+            ->values(array(
+                $id, $uid, $phone, 1, time(), $client['address'], $client['username'], $contacts, $way))
             ->execute();
 
         Model::factory('Tmp_Order')->clean();

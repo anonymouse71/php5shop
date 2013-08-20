@@ -23,6 +23,7 @@ elseif (isset($array)): ?>
         <td>Адрес доставки</td>
         <td>Дополнительные поля</td>
         <td>Прошло времени</td>
+
     </tr>
         <?php foreach ($array as $item): ?>
     <tr>
@@ -64,6 +65,7 @@ else: ?>
     $('.actOrder').click(function () {
         $.get("<?php echo url::base();?>ajax/orderinfo/" + $(this).html(), function (data) {
             $('#infoOrder').html(data);
+            document.location.hash = 'info';
         });
     });
     $('.actOrderClean').click(function () {

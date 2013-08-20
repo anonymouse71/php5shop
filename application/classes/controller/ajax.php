@@ -226,17 +226,29 @@ class Controller_Ajax extends Controller
 
         }
         echo '</ul>';
-        $user = ORM::factory('order', $id)->__get('user');
-        if ($user)
+        $order = ORM::factory('order', $id);
+        if ($order->user)
         {
-            $pct = Model::factory('Group')->get_pct($user);
+            $pct = Model::factory('Group')->get_pct($order->user);
             if ($pct != 1)
             {
                 $sumAll *= $pct;
-                echo 'Скидка ' . round((1 - $pct) * 100, 2) . '%<br>';
+                echo 'Скидка ', round((1 - $pct) * 100, 2), '%<br>';
             }
         }
-        echo 'Итого к оплате: ' . round($sumAll, 2) . ' ' . $curr;
+        echo 'Итого к оплате: ', round($sumAll, 2), ' ', $curr, '<br>';
+        if ($order->pay_type == 4)
+            echo 'Выбрана оплата через interkassa. Оплачено: ',
+            round($order->paid * $currency, 2), ' ', $curr;
+        else
+        {
+            echo 'Выбран способ оплаты: ';
+            $pType = ORM::factory('pay_type', $order->pay_type);
+            if ($pType->id)
+                echo htmlspecialchars($pType->name);
+            else
+                echo '[удален]';
+        }
     }
 
     /**

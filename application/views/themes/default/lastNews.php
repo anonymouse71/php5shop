@@ -18,13 +18,18 @@
 <?php if (count($data) > 1): ?>
     <script>
         $(function () {
+            var maxH = 100;
+            $('#lastNews').children().each(function (i, v) {
+                if ($(v).height() > maxH)
+                    maxH = $(v).height();
+            });
             $('#lastNews').slidesjs({
                 width: 200,
-                height: 200,
+                height: maxH,
                 play: {
                     active: true,
                     auto: true,
-                    interval: 4000,
+                    interval: 15000,
                     swap: true
                 }
             });

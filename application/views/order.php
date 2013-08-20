@@ -45,12 +45,15 @@ if (!$message): /*заказ еще не сохранен*/
 
 <script type="text/javascript">
     function submitForm(i) {
-        $.each($('#formway' + i).find('p,div'), function (i, e) {
-            $(e).hide();
-        });
+        if (i == 1) {
+            $('#userForm').append('<input type="hidden" name="way" value="' + $('#way').val() + '">');
+        } else {
+            $.each($('#formway' + i).find('p,div'), function (i, e) {
+                $(e).hide();
+            });
 
-        $('#userForm').append($('#formway' + i).html());
-
+            $('#userForm').append($('#formway' + i).html());
+        }
         $('#userForm').submit();
     }
 </script>
