@@ -93,9 +93,7 @@ if (!$message): /*заказ еще не сохранен*/
             echo 'Исправьте контактные данные и нажмите:';
         else
             echo 'Чтобы подтвердить свое согласие, нажмите:';?>
-        </p>
 
-        <p style="float: right;">
             <input type="button" name="confirm" value="Подтвердить заказ" onclick="submitForm(2);"
                    style="font-size: large;">
         </p>
