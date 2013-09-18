@@ -12,7 +12,8 @@
                         </select>
 		</div>
 <script type="text/javascript">
-    $("#sortset option:[value='<?php echo $type; ?>']").attr('selected', 'selected');
+    $('#sortset').val('<?php echo $type; ?>');
+
     $('#sortset').change(function() {   
         document.location.href = $('base').attr('href') + 'shop/sortset/' + $('#sortset').val();
         }
