@@ -25,6 +25,7 @@
  * prod1                                - товар для сравнения 1
  * prod2                                - товар для сравнения 2
  * oneProductPage                       - метка о том, что это страница одного товара (для микроразметки)
+ * breadcrumbs                          - навигационная цепочка
  */
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -39,11 +40,11 @@
 <meta name="cmsmagazine" content="f36b4b17fe8e41ffb1bc9b164f77b732" >
 <link rel="shortcut icon" type="image/ico" href="images/favicon.gif">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
-<?php echo $css;?>
-<!--<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>-->
+<link rel="stylesheet" href="style.css">
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 <script type="text/javascript" src="js/jquery.simplemodal.js"></script>
+<?php echo $css;?>
 <?php if(isset($lastNews)):?>
     <script type="text/javascript" src="js/jquery.slides.min.js"></script>
 <?php endif;?>
@@ -130,6 +131,8 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
         <div id="center" class="column">
             <?php echo $banner1;?>
             <div id="content">
+                <div id="breadcrumbs"><?php echo $breadcrumbs;?></div>
+
                 <?php echo $about;?>
                 <div class="stuff" <?php if(isset($oneProductPage)) echo 'itemscope itemtype="http://schema.org/Product"';?>>
                     <?php echo @$stuff;?>

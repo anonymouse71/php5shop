@@ -23,6 +23,8 @@ class Controller_Page extends Controller_Site
     {
         $id = $this->request->param('id', 0);
 
+        $this->template->breadcrumbs[] = array('Новости', url::base() . 'blog');
+
         $is_admin = Auth::instance()->logged_in('admin');
         if ($id) //если он установлен
         {
@@ -41,6 +43,7 @@ class Controller_Page extends Controller_Site
             {
                 $this->template->about .= Model_Comment::form($id, FALSE);
             }
+            $this->template->breadcrumbs[] = array($view->post->title, url::base() . 'blog/' . $id);
         }
         else //id не установлен
         {

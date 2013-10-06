@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
-<div class="post">
+<div class="post" style="margin-top: 20px;">
     <h2>
         <a href="blog/<?php echo $post->id;?>"><?php echo $post->title;?></a>
     </h2>

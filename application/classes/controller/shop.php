@@ -58,6 +58,9 @@ class Controller_Shop extends Controller_Site
             }
             //else //если есть,
 
+            $this->navigation_cat($product['cat']);
+            $this->template->breadcrumbs[] = array($product['name'], url::base() . 'shop/product' . $product['id']);
+
             //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
             $product['price'] = round($curr * $product['price'] * $pct, 2);
             $product['price'] .= ' ' . $this->currency;
@@ -123,6 +126,8 @@ class Controller_Shop extends Controller_Site
             {
                 $this->request->redirect(url::base() . 'error/404');
             }
+
+            $this->navigation_cat($cat);
 
             $products = Model::factory('product')->byCategory($categories, $page, $this->productsOnPage);
             $productsCount = ORM::factory('product')->where('cat', 'in', $categories)->count_all();
@@ -428,55 +433,27 @@ class Controller_Shop extends Controller_Site
         exit;
     }
 
-    /*
-    public function action_register()
+    protected function navigation_cat($cat)
     {
-        $this->template->title .= ' - Регистрация'; //дополнение заголовка страницы
-        if ($this->auth->get_user()) //если пользователь уже авторизован,
+        if ($cat && isset($this->categoriesObject->categories['names'][$cat]))
         {
-            exit($this->request->redirect(url::base()));//перенаправим на главную страницу.
-        }
-
-        $captcha = Captcha::instance(); //инициализируем механизм проверочного изображения
-        $this->template->about = new View(TPL . 'registerForm'); //подключение формы
-        $this->template->about->captcha = $captcha; //подстановка в форму captcha
-        $this->template->about->fields = ORM::factory('field')->find_all()->as_array();
-        if ($this->boolConfigs['invite']) //если включена система инвайтов
-        {
-            $fieldInvite = ORM::factory('field'); //создаем дополнительное регистрационное поле
-            $fieldInvite->__set('id', 'invite'); //(в HTML) тэг name = finvite
-            $fieldInvite->__set('name', 'Код приглашения, если есть'); //имя
-            $fieldInvite->__set('type', 2); //тип "числа, буквы, пробелы"
-            $fieldInvite->__set('empty', 1); //может быть пустым
-
-            $this->template->about->fields += array(-1 => $fieldInvite); //добавляем поле в представление
-        }
-        $this->template->about->errors = ''; //объявление переменной для ошибок
-        $errors = Session::instance()->get('register_errors'); //получение информации об ошибках из сессии
-        $errStr = '';
-        if (is_array($errors)) //если есть ошибки
-        { //записываем в переменную
-            $errStr = 'При заполнении были допущены ошибки! ';
-            foreach ($errors as $key => $value)
+            $tmp_cat = $cat;
+            $parent_cats = array();
+            while ($this->categoriesObject->categories['parents'][$tmp_cat])
             {
-                $errStr .= $key . $value . '. ';//вместе с ключами массива
+                $tmp_cat = $this->categoriesObject->categories['parents'][$tmp_cat];
+                $parent_cats[] = array(
+                    $this->categoriesObject->categories['names'][$tmp_cat],
+                    url::base() . 'shop/category' . $tmp_cat
+                );
             }
+            for ($ind = count($parent_cats) - 1; $ind >= 0; $ind--)
+                $this->template->breadcrumbs[] = $parent_cats[$ind];
+
+            $this->template->breadcrumbs[] = array(
+                $this->categoriesObject->categories['names'][$cat],
+                url::base() . 'shop/category' . $cat
+            );
         }
-
-        //подключение в шаблон данных, которые были введены в прошлый раз (если тогда были ошибки)
-        $this->template->about->val = Session::instance()->get('register_post');
-
-        Session::instance()->delete('register_errors'); //удаление полученых данных из сессии
-        Session::instance()->delete('register_post');
-        //замена ключей массива на русский текст, чтобы не пугать пользоватей, абсолютно не знающих английского
-        if (strlen($errStr))
-        {
-            $errStr = str_replace('username', 'Имя', $errStr);
-            $errStr = str_replace('password', 'Пароль', $errStr);
-            $errStr = str_replace('Пароль_confirm', 'Пароль повторно', $errStr);
-            $errStr = str_replace('phone', 'Телефон', $errStr);
-        }
-        $this->template->about->errors = $errStr;
-
-    }*/
+    }
 }

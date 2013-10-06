@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') or die('No direct script access.'); ?>
-<style type="text/css">
 * {
     margin: 0px;
     padding: 0px
@@ -228,7 +226,6 @@ body {
     font-size: 12px;
     font-weight: normal;
     color: #272727;
-    background-image: url(images/date.gif);
     background-position: top left;
     background-repeat: no-repeat;
 }
@@ -487,12 +484,12 @@ body {
     float: left
 }
 
-    /*Modal*/
+/*Modal*/
 #modal-content {
     display: none;
 }
 
-    /* IE 6 hacks */
+/* IE 6 hacks */
 #simplemodal-container a.modalCloseImg {
     background: none;
     right: -14px;
@@ -501,13 +498,13 @@ body {
     filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'images/x.png', sizingMethod = 'scale');
 }
 
-    /* Overlay */
+/* Overlay */
 #simplemodal-overlay {
     background-color: #000;
     cursor: wait;
 }
 
-    /* Container */
+/* Container */
 #simplemodal-container {
     height: 220px;
     width: 300px;
@@ -706,7 +703,7 @@ input.count{
     left: -100px;
 }
 
-    /* slideshow */
+/* slideshow */
 #slides {
     display: none
 }
@@ -809,4 +806,18 @@ a:hover.slidesjs-stop {
 #slides a:active {
     color: #9e2020
 }
-</style>
+
+#breadcrumbs a{
+    background: #ddd;
+    padding: 4px 6px;
+    text-decoration: none;
+    color: #444;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    position: relative;
+
+    border-radius: 5px 5px 5px 5px;
+}
+#breadcrumbs{
+    margin-bottom: 10px;
+}
+

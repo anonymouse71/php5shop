@@ -60,9 +60,6 @@ class Controller_Site extends Controller_Template
             self::$cache->set('htmlBlocks', $htmlBlocks);
         }
 
-        //подключение CSS
-        $tpl->css = new View(TPL . 'css');
-
         $this->apis = self::$cache->get('apis');
         if (null === $this->apis)
         {
@@ -73,7 +70,7 @@ class Controller_Site extends Controller_Template
         $googleAnalytics = new View('analytics'); //подключение представления для кода google analistics
         $googleAnalytics->set('account', $this->apis['analytics']); //подстановка кода аккаунта google analistics
 
-        $tpl->css .= $googleAnalytics; //добавление кода между <head> и </head>
+        $tpl->css = $googleAnalytics; //добавление кода между <head> и </head>
         $tpl->topBlock3 = $htmlBlocks['headerWidg']; //подстановка переменных в шаблон
         $tpl->keywords = htmlspecialchars($htmlBlocks['keywords']); //переменная с ключевыми словами для SEO оптимизации
         $tpl->banner1 = $htmlBlocks['banner1']; //HTML код 4 баннеров или пользовательских блоков
@@ -235,6 +232,8 @@ class Controller_Site extends Controller_Template
             $tpl->topBlock3 .= $pollV;
         }
 
+        $tpl->breadcrumbs = array(array('Главная', '/'));
+
     }
 
     public function after()
@@ -248,5 +247,17 @@ class Controller_Site extends Controller_Template
 
         Session::instance()->set('lastPage', $_SERVER['REQUEST_URI']);
 
+        $breadcrumbs_a = array();
+        foreach($this->template->breadcrumbs as $breadcrumb)
+        {
+            $uri = $breadcrumb[1];
+            $label = htmlspecialchars($breadcrumb[0]);
+            $breadcrumbs_a[] = "<a href='$uri' title='$label'>$label</a>";
+        }
+
+        if(count($breadcrumbs_a) > 1)
+            $this->template->breadcrumbs = implode(' → ', $breadcrumbs_a);
+        else
+            $this->template->breadcrumbs = '';
     }
 }

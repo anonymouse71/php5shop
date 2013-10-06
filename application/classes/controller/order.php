@@ -22,6 +22,7 @@ class Controller_Order extends Controller_Site
     public function action_cart()
     {
         $this->template->title .= ' - Покупки';
+        $this->template->breadcrumbs[] = array('Корзина', url::base() . 'order/cart');
         $cart = Session::instance()->get('cart');
         if (!is_array($cart))
         {
@@ -80,6 +81,9 @@ class Controller_Order extends Controller_Site
         {   //если продуктов там нет - перенаправление
             $this->request->redirect(url::base());
         }
+
+        $this->template->breadcrumbs[] = array('Корзина', url::base() . 'order/cart');
+        $this->template->breadcrumbs[] = array('Оформление заказа', url::base() . 'order');
 
         $way = null; //способ заказа
         if (isset($_POST['way']) && ORM::factory('pay_type', $_POST['way']))
