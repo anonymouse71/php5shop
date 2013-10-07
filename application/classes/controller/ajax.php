@@ -696,6 +696,7 @@ class Controller_Ajax extends Controller
                 {
                     Model_Product::deleteProduct($_POST['id']);
                     echo 'Удалено';
+                    Model::factory('sitemap')->update();
                 }
                 exit;
             default:

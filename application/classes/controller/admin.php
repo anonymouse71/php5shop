@@ -424,6 +424,7 @@ class Controller_Admin extends Controller_Template
                     . 'admin/products?page='
                     . ceil(Model::factory('product')->count_all() / $onPage)
                     . '#addItemForm');
+            Model::factory('sitemap')->update();
             exit;
         }
 
@@ -617,8 +618,12 @@ class Controller_Admin extends Controller_Template
 
                     }
                     else
+                    {
+                        Model::factory('BlogPost')->updateFeed('/rss.xml');
                         $this->template->body->errors = '<a href="' . url::base() .
                             'blog/' . $edit . '">Обновлено!</a>';
+                    }
+
                 }
                 $this->template->body->post = ORM::factory('BlogPost', $edit)->as_array();
                 if (!isset($this->template->body->post['title']))
@@ -629,6 +634,8 @@ class Controller_Admin extends Controller_Template
             {
                 ORM::factory('BlogPost', $edit)->delete();
                 $this->request->redirect(url::base() . 'blog/');
+                Model::factory('sitemap')->update();
+                Model::factory('BlogPost')->updateFeed('/rss.xml');
             }
         }
     }
