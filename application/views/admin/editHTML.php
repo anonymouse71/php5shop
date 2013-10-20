@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');?>
-<style type="text/css">a{color: #000;}</style>
+
 <h2>Редактирование дополнительных блоков магазина</h2>
 <ul>    
     <li>

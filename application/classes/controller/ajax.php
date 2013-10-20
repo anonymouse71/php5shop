@@ -195,12 +195,10 @@ class Controller_Ajax extends Controller
             $curr = DEFAULT_CURRENCY;
         $currency = Model::factory('Config')->getCurrency($curr);
 
-        echo '<hr><div>Заказ номер ' . ((int)$id) .
-            ' <img align="right" style="cursor:pointer;" src="' . url::base() . //картинка, которая чистит содержимое родительского тэга (jQuery need)
-            'images/x.png" alt="hide" title="Спрятать" onclick="$(this).parent().parent().html(\'\');"></div><ul>';
+        echo 'Заказ номер ' . ((int)$id) . ' содержит:<ul class="list-group">';
         foreach ($products as $p)
         {
-            echo '<li>';
+            echo '<li class="list-group-item">';
             $product = ORM::factory('product', $p->product);
             if (!$p->whs)
                 echo '<s>';

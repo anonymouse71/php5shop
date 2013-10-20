@@ -1,7 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
 <style type="text/css">a{color: #000;}</style>
-<div id="errorlogplace"></div>
-<table border="0">
+<h2>Настройки магазина</h2>
+<a class="btn btn-info button-lg" href="admin/edit/">Редактирование рекламных блоков и дополнительных страниц магазина</a>
+<a class="btn btn-info button-lg"  href="admin/paytypes">Редактирование способов оплаты</a>
+<br>
+<table border="0" style="margin-top: 10px">
     <tr>
         <td>
             <form action="" method="post" id="userForm">
@@ -120,7 +123,7 @@
                 </table>
                 <div>
                     <br>
-                    <h4 id="ansver" style="background-color: #F0F0F0; padding: 10px; display: none; cursor: pointer;"></h4>
+                    <h4 id="ansver" style="display: none; cursor: pointer;" class="alert alert-info"></h4>
                 </div>
             </form>
         </td>
@@ -209,9 +212,5 @@ $("#datalog").css('display','none');
 
 $('#turnOnInvites').click(function(){$('#turnOnInvites').css('background-color','white');});
 </script>
-<ul>
-<li><a href="admin/edit/">Редактирование рекламных блоков и дополнительных страниц магазина</a></li>
 
-<li><a href="admin/paytypes">Редактирование способов оплаты</a></li>
-
-</ul>
+<div id="errorlogplace"></div>

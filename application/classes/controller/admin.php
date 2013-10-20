@@ -52,7 +52,6 @@ class Controller_Admin extends Controller_Template
     public function action_index()
     {
         $this->template->title .= '- Активные заказы';
-        $this->template->head = new View('admin/table/head');
         $this->template->body = new View('admin/table/activeOrders');
 
         if (isset($_GET['set_order_desc']))
@@ -429,7 +428,7 @@ class Controller_Admin extends Controller_Template
         }
 
         $this->template->title .= '- Товары';
-        $this->template->head = new View('admin/table/head');
+
         $this->template->body = new View('admin/table/products');
         $info = new View('admin/info');
         $info->info = 'Вы можите добавлять продукты используя электронные таблицы xls (Microsoft Office Excel или OpenOffice) <br>
