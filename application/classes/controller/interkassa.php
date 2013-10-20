@@ -58,7 +58,7 @@ class Controller_Interkassa extends Controller_Site
                      'ik_fees_payer') as $key)
             $params[] = isset($_POST[$key]) ? $_POST[$key] : '';
         $params[] = Model_Apis::get('ik_secret_key');
-        if ($_POST['ik_sign_hash'] != md5(strtoupper(join(':', $params))))
+        if ($_POST['ik_sign_hash'] != strtoupper(md5(join(':', $params))))
         {
             $this->request->status = 400;
             return;
