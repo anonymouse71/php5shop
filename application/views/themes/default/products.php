@@ -9,7 +9,7 @@
     
     <img align="left" src="<?php echo file_exists($pathImg)? $urlImg : 'images/no-photo.jpg';?>" alt="<?php echo $item['name'];?>" >
     <div style="display:none">
-        <img align="left" src="<?php echo file_exists($_SERVER['DOCUMENT_ROOT'].url::base().'images/products/'.$item['id'].'.jpg')?'images/products/' . $item['id'] . '.jpg' : 'images/no-photo.jpg';?>" alt="<?php echo $item['name'];?>" >
+        <img align="center" src="<?php echo file_exists($_SERVER['DOCUMENT_ROOT'].url::base().'images/products/'.$item['id'].'.jpg')?'images/products/' . $item['id'] . '.jpg' : 'images/no-photo.jpg';?>" alt="<?php echo $item['name'];?>" >
         <div style="display:none"><?php
             $n = 0;
             while(file_exists($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $item['id'] . '-' . (1+$n) . '.jpg'))
