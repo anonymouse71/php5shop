@@ -171,9 +171,20 @@ class Controller_Ajax extends Controller
         $state = ORM::factory('state_order')->where('name', '=', urldecode($status))->find();
         if ($state) //если такой статус найден
         {
-            $object = ORM::factory('order', $id); //находим id покупки
-            $object->__set('status', $state); //устанавливаем id статуса
-            $object->save(); //сохраняем
+            DB::update('orders')->set(array('status' => $state->id))
+                ->where('id', '=', $id)->limit(1)->execute();
+
+            if ($state->id == 4)
+            {
+                //Ложный заказ: возвращаем товар на склад
+                foreach (DB::select()->from('ordproducts')->where('id', '=', $id)
+                             ->and_where('whs', '=', 1)
+                             ->execute()->as_array() as $item)
+                    DB::update('products')->set(array('whs' => DB::expr('whs + ' . $item['count'])))
+                        ->where('id', '=', $item['product'])->limit(1)->execute();
+
+                Cache::instance()->delete('LastProd');
+            }
         }
     }
 
