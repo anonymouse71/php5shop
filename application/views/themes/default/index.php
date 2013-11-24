@@ -103,15 +103,14 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
         <!-- Верхнее меню-->
         <ul id="menu">
-            <li><img src="images/li.gif" alt="меню" width="19" height="29"></li>
-            <?php if($menu[1]):?><li><a href=""><img src="images/main.jpg" alt="Главная страница магазина"></a></li><?php endif;?>
-            <?php if($menu[2]):?><li><a href="blog"><img src="images/blog.jpg" width="121" height="29" alt="Новости магазина"></a></li><?php endif;?>
-            <?php if($menu[3]):?><li><a href="page/contacts"><img src="images/contact.jpg" alt="Контакты и адреса" ></a></li><?php endif;?>
-            <?php if($menu[4]):?><li><a href="page/clients"><img src="images/clients.jpg" alt="Наши клиенты" ></a></li><?php endif;?>
-            <?php if($menu[5]):?><li><a href="admin/"><img src="images/admin.jpg" alt="Панель управления администратора" width="121" height="29"/></a></li><?php endif;?>
-            <?php if($menu[6]):?><li><a href="shop/user"><img src="images/user.jpg" alt="Личный аккаунт в системе скидок"></a></li><?php endif;?>
-            <?php if($menu[7]):?><li><a href="order/cart"><img src="images/cart.jpg" alt="Покупки"></a></li><?php endif;?>
-            <?php if($menu[8]):?><li><a href="rss.xml"><img src="images/rss.gif" alt="Лента новостей" ></a></li><?php endif;?>
+            <?php if($menu[1]):?><li><a href="">Витрина</a></li><?php endif;?>
+            <?php if($menu[2]):?><li><a href="blog">Новости</a></li><?php endif;?>
+            <?php if($menu[3]):?><li><a href="page/contacts">Контакты</a></li><?php endif;?>
+            <?php if($menu[4]):?><li><a href="page/clients">Доставка и оплата</a></li><?php endif;?>
+            <?php if($menu[5]):?><li><a href="admin/">Панель управления</a></li><?php endif;?>
+            <?php if($menu[6]):?><li><a href="shop/user">Личный кабинет</a></li><?php endif;?>
+            <?php if($menu[7]):?><li><a href="order/cart">Корзина</a></li><?php endif;?>
+            <?php if($menu[8]):?><li><a href="rss.xml">RSS</a></li><?php endif;?>
         </ul>
         <!-- /меню-->
     </div>
@@ -122,8 +121,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 	$("ul#menu").find("a").each(function(){
 		path2 = $(this).attr('href');
 		if(path == "/" + path2 || path2=="" && path=="/"){
-			var img = $(this).children('img:first');
-			$(img).attr("src",add + $(img).attr("src").split("/")[1]);
+			$(this).parent().addClass('active');
 	}});
     </script>
     <div id="container">
@@ -140,13 +138,13 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
             </div>
         </div>
         <div id="left" class="column">
-            <div class="block">
-                <div id="navigation">
-                    <img src="images/title1.gif" alt="Категории" width="168" >
-                    <div style="padding: 15px; padding-top: 0px;">
-                        <?php echo $cats;?>
-                    </div>
+
+            <div id="navigation">
+                <span id="cat-header">Категории товаров:</span>
+                <div style="padding: 15px; padding-top: 0px;">
+                    <?php echo $cats; ?>
                 </div>
+
             </div>
             <?php echo $banner2;?>
         </div>

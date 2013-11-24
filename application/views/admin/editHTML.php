@@ -18,7 +18,7 @@
         <a href="<?php echo url::base();?>admin/edit/5">Footer (низ страницы)</a>
     </li>
     <li>
-        <a href="<?php echo url::base();?>admin/edit/6">Страница про клиентов магазина</a>
+        <a href="<?php echo url::base();?>admin/edit/6">Страница &quot;Доставка и оплата&quot;</a>
     </li>
     <li>
         <a href="<?php echo url::base();?>admin/edit/7">Страница контактов</a>
