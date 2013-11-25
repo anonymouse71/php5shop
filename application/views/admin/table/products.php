@@ -32,8 +32,10 @@
     Показывать только товары категории <?php echo $select; ?> <input type="button" id="changeGlobalCat" value="да!">
     <br>
     <?php if (count($cats)): ?>
-        <div align="right">
+        <div class="text-right">
             <a href="admin/products#chPrice" style="color:black; text-decoration: none; ">повлиять на все цены ▼</a>
+            &nbsp;&nbsp;&nbsp;
+            <button onclick="save_all_products();"><img alt="Сохранить" src="images/save.png"> Сохранить все</button>
         </div>
     <?php endif;
 endif;?>
@@ -77,6 +79,8 @@ endif;?>
 
 </script>
 <?php if (count($cats)): ?>
+
+
 
     <table id="playlist" cellspacing="0">
         <tbody>
@@ -123,6 +127,9 @@ endif;?>
 
         </tbody>
     </table>
+    <p class="text-right">
+        <button onclick="save_all_products();"><img alt="Сохранить" src="images/save.png" > Сохранить все</button>
+    </p>
     <script type="text/javascript">
 
         $('.saveIt').css('cursor', 'pointer');
@@ -148,8 +155,92 @@ endif;?>
             $.post('ajax/products/3', { id: $(this).parent().parent().children().html() });
         });
 
+        function save_all_products(){
+            $("#saving_info1").html('Происходит сохранение товаров <img src="images/loading.gif" alt="Загрузка...">');
+            $("#saving_info2").html("");
+            $('#modalSaving').modal({});
+
+            var count_all = $('.saveIt').length;
+            var count_saved = 0;
+            var error_prods = [];
+            var post_resp = 0;
+
+            $("#saving_info2").html("0 из " + count_all);
+
+            function saved_plus_one(){
+                count_saved += 1;
+
+                if(count_saved == count_all){
+                    $("#saving_info1").html("Товары успешно сохранены.");
+                    $("#saving_info2").html("Это окно можно закрыть.");
+                }else {
+                    $("#saving_info2").html(count_saved + ' из ' + count_all);
+                }
+            }
+
+            $('.saveIt').each(function () {
+                myP = $(this).parent().parent().children();
+                pcat = 0;
+                val = $(myP[2]).children().val();
+                chldr = $('select').children();
+                for (var k in chldr)
+                    if ($(chldr[k]).val() == val) {
+                        pcat = $(chldr[k]).attr('id');
+                        break;
+                    }
+                var data2save = {
+                    id: $(myP[0]).html(),
+                    name: $(myP[1]).children().val(),
+                    price: $(myP[3]).children().val(),
+                    whs: $(myP[4]).children().val(),
+                    cat: pcat
+                };
+                $.post('ajax/products/2', data2save, function (data) {
+                    post_resp += 1;
+                    if(data == 'Успешно сохранено!'){
+                        saved_plus_one();
+                    }else {
+                        error_prods.push(data2save);
+                    }
+                });
+            });
+
+            var intervalID = setInterval(function () {
+                if(post_resp == count_all){
+                    clearInterval(intervalID);
+                    if(error_prods.length){
+                        $.each(error_prods, function(i, data2save){
+                            $.post('ajax/products/2', data2save, function (data) {
+                                if(data == 'Успешно сохранено!'){
+                                    saved_plus_one();
+                                }
+                            });
+                        });
+                    }
+                }
+            }, 500);
+        }
+
 
     </script>
+
+    <div class="modal fade" id="modalSaving" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Сохранение</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="saving_info1"></div>
+                    <div id="saving_info2"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть окно</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php else: ?>
     <p>В категории товаров нет</p>
 <?php endif; ?>
