@@ -159,7 +159,7 @@ REPLACE INTO `p5shp_html` (`name`, `code`) VALUES
 ('banner4', '<div class="vcard">\n	<div><span class="category">CMS</span> <span class="fn org">php5shop</span> <span class="adr">(<span class="locality">Украина, Россия</span>) </span></div>\n	<div>Телефон: <span class="tel">+8 (093) 908-14-77</span> Мы работаем <span class="workhours">с 13:00 до 22:00</span> кроме выходных<span class="url"> <span class="value-title" title="http://php5shop.com"> </span> </span></div>\n</div>\n'),
 ('headerWidg', ''),
 ('keywords', 'php shop, магазин, скрипт магазина'),
-('logo', '<img src="/images/logo.jpg" alt="shop logo" width="171" height="73">'),
+('logo', '<p><img alt="shop logo" height="73" src="/images/logo.jpg" width="211"></p>'),
 ('topTitle', '<h2>Магазин на php5shop CMS</h2>'),
 ('shopName', 'Магазин на движке php5shop');
 
