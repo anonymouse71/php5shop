@@ -3,7 +3,7 @@
 <div id="votingDiv">
     <img src="images/top_bg.gif" alt="" width="218" height="12">
 
-    <div style="padding: 10px; margin: 0px;" class="blocks">
+    <div style="padding: 10px;" class="blocks">
         <b><?php echo $q;?></b><br>
         <ul style="padding-left: 12px; " type="circle">
             <?php if (!$cookie): ?>

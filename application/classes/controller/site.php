@@ -183,9 +183,10 @@ class Controller_Site extends Controller_Template
 
 
         if (!$this->auth->logged_in('admin')) //если пользователь не авторизован как администратор,
-        {
-            $tpl->menu[5] = FALSE;
-        } //убераем из меню кнопку панели управления
+            $tpl->menu[5] = FALSE;            //убераем из меню кнопку панели управления
+
+        if (!filesize('rss.xml'))
+            $tpl->menu[8] = FALSE;
 
         //получение всех категорий
         $catsArray = self::$cache->get('cats');

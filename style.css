@@ -94,6 +94,7 @@ body {
     -webkit-transition: color 450ms ease-in-out 0s, background-color 450ms ease-in-out 0s;
     transition: color 450ms ease-in-out 0s, background-color 450ms ease-in-out 0s;
     white-space: normal;
+    height: 42px;
 }
 #menu > li > a {
     color: #333333;
@@ -290,7 +291,7 @@ body {
     background-image: url(images/bg.gif);
     background-position: top left;
     background-repeat: repeat-y;
-    margin: 0 0 2px 0;
+    margin: -2px 0;
 }
 
 .line {
@@ -333,6 +334,7 @@ body {
 #lastNews{
     padding: 10px;
     background: url(images/bg.gif) repeat-y top left;
+    margin: -2px 0;
 }
 
 #news {
