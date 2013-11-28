@@ -98,7 +98,7 @@
                         <td><input type="checkbox" name="menu3" <?php if($menu[3])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Наши клиенты</span></td>
+                        <td><span>Доставка и оплата</span></td>
                         <td><input type="checkbox" name="menu4" <?php if($menu[4])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
