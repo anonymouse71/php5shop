@@ -144,30 +144,29 @@ class Model_Product extends ORM {
     }
 
     /**
-    * Удаление товара по id
-    * @param int $id
-    */
+     * Удаление товара по id
+     * @param int $id
+     */
     public static function deleteProduct($id)
     {
-         $id = (int) $id;
-         $p = ORM::factory('product',$id);
-         $p->delete();
-         $description = ORM::factory('description',$id);
-         $description->delete();
-         $imagePath1 = $_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '.jpg';
-         $imagePath2 = $_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/small/' . $id . '.jpg';
-         if(file_exists($imagePath1))
-             unlink($imagePath1);
-         if(file_exists($imagePath2))
-             unlink($imagePath2);
-         $n = 1;
-         while(file_exists($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '-' . $n . '.jpg') && $n < 100)
-         {
-             unlink($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '-' . $n . '.jpg');
-             $n++;
-         }
-         ORM::factory('rating_user')->where('product','=',$id)->delete_all();
-         ORM::factory('rating_value',$id)->delete();
+        $id = (int)$id;
+        $imagePath1 = $_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '.jpg';
+        $imagePath2 = $_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/small/' . $id . '.jpg';
+        if (file_exists($imagePath1))
+            unlink($imagePath1);
+        if (file_exists($imagePath2))
+            unlink($imagePath2);
+        $n = 1;
+        while (file_exists($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '-' . $n . '.jpg') && $n < 100)
+        {
+            unlink($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '-' . $n . '.jpg');
+            $n++;
+        }
+        DB::delete('user_views')->where('product_id', '=', $id)->execute();
+        ORM::factory('rating_user')->where('product', '=', $id)->delete_all();
+        ORM::factory('rating_value', $id)->delete();
+        ORM::factory('product')->where('id', '=', $id)->delete_all();
+        ORM::factory('description')->where('id', '=', $id)->delete_all();
     }
     
     /**
@@ -190,37 +189,37 @@ class Model_Product extends ORM {
     public static function importXls($sheets)
     {
         $imgObj = ORM::factory('saveImage');
-        
-        $i = 0;                                                         //счетчик добавленных товаров
-        foreach($sheets as $page)
-            if(isset($page['cells']))
-                foreach($page['cells'] as $cell)
-                {
-                    $catId = isset($cell[2]) ? $cell[2] : 0;            //номер категории
-                    $productId = isset($cell[1]) ? $cell[1] : 0;        //номер товара
-                    $prodName = isset($cell[3]) ? $cell[3] : '';        //название
-                    $prodDescr = isset($cell[4]) ? $cell[4] : '';       //полное описание
 
-                    $prodPrice = isset($cell[5]) ? $cell[5] : 0;        //цена
+        $i = 0; //счетчик добавленных товаров
+        foreach ($sheets as $page)
+            if (isset($page['cells']))
+                foreach ($page['cells'] as $cell)
+                {
+                    $productId = isset($cell[1]) ? $cell[1] : 0; //номер товара
+                    $catId = isset($cell[2]) ? $cell[2] : 0; //номер категории
+                    $prodName = isset($cell[3]) ? $cell[3] : ''; //название
+                    $prodDescr = isset($cell[4]) ? $cell[4] : ''; //полное описание
+
+                    $prodPrice = isset($cell[5]) ? $cell[5] : 0; //цена
                     $prodPrice = str_replace(',', '.', $prodPrice);
                     $prodPrice = str_replace(' ', '', $prodPrice);
 
-                    $imgs = isset($cell[6]) ? $cell[6] : '';            //изображения
-                    $availability = isset($cell[7]) ? $cell[7] : 1;     //наличие на складе (кол-во)
+                    $imgs = isset($cell[6]) ? $cell[6] : ''; //изображения
+                    $availability = isset($cell[7]) ? $cell[7] : 1; //наличие на складе (кол-во)
 
-                    if(!$catId)                                         // категория не указана
-                    {                                                   //товар будет удален
-                        if($productId)
+                    if (!$catId) // категория не указана
+                    { //товар будет удален
+                        if ($productId)
                             Model_Product::deleteProduct($productId);
                     }
-                    elseif( $prodName && $prodPrice )
-                    {                                                   //добавление через ORM
-                        if($productId)                                  //если в 6-м столбце есть id, работаем с товаром из БД
+                    elseif ($prodName && $prodPrice)
+                    { //добавление через ORM
+                        if ($productId) //если в 1-м столбце есть id, работаем с товаром из БД
                         {
                             $product = ORM::factory('product', $productId);
 
-                            if(!$product->id)
-                            {                    
+                            if (!$product->id)
+                            {
                                 $product->__set('id', $productId);
                             }
                         }
@@ -230,28 +229,28 @@ class Model_Product extends ORM {
                         }
 
                         $product->set('cat', $catId)
-                                ->set('name', $prodName)
-                                ->set('price', $prodPrice)
-                                ->set('whs', $availability)
-                                ->save();
+                            ->set('name', $prodName)
+                            ->set('price', $prodPrice)
+                            ->set('whs', $availability)
+                            ->save();
 
-                        $id = $productId? $productId : $product->__get('id');
+                        $id = $productId ? $productId : $product->__get('id');
 
-                        if($imgs)                                       //обработка изображения
+                        if ($imgs) //обработка изображения
                         {
-                            $images = explode(' ', $imgs);              //разбиваем на массив ссылок
-                            foreach($images as $i_img => $img)          //$i_img - номер ссылки, $img - URL
-                                if($i_img < 100)                        //сохраняем только первые 99 изображений одного товара (ограничено полем в БД)
-                                    $imgObj->saveit( $img, $id, $i_img);
+                            $images = explode(' ', $imgs); //разбиваем на массив ссылок
+                            foreach ($images as $i_img => $img) //$i_img - номер ссылки, $img - URL
+                                if ($i_img < 100) //сохраняем только первые 99 изображений одного товара (ограничено полем в БД)
+                                    $imgObj->saveit($img, $id, $i_img);
                         }
 
-                        if($prodDescr)                                  //обработка полного описания
+                        if ($prodDescr) //обработка полного описания
                         {
-                            $description = $productId?
-                                ORM::factory('description',$productId)
+                            $description = $productId ?
+                                ORM::factory('description', $productId)
                                 :
                                 ORM::factory('description');
-                            if(!$description->id)
+                            if (!$description->id)
                                 $description->__set('id', $id);
 
                             $description->__set('text', $prodDescr);
@@ -263,14 +262,4 @@ class Model_Product extends ORM {
                 }
         return $i;
     }
-    
-//    public static function whsById($productId)
-//    {
-//        $whs = DB::select('whs')->from('products')
-//                ->where('id', '=', $productId)
-//                ->limit(1)
-//                ->execute()
-//                ->as_array(null, 'whs');
-//        return (isset($whs[0])? $whs[0] : 0);        
-//    }
 }
