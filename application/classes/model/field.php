@@ -11,14 +11,14 @@ class Model_Field extends ORM
      * @param int $typeId
      * @return bool
      */
-    public function validate($value, $typeId=null)
+    public function validate($value, $typeId = null)
     {
-        if(!$typeId)
+        if (!$typeId)
             $typeId = $this->type;
 
         $pattern = ORM::factory('field_type', $typeId)->__get('reg');
 
-        if(!$pattern)
+        if (!$pattern)
             return FALSE;
         else
             return preg_match($pattern, $value);
@@ -26,7 +26,7 @@ class Model_Field extends ORM
 
     public function del($id)
     {
-        ORM::factory('field',$id)->delete();
-        DB::delete('field_values')->where('id','=',$id)->execute();
+        ORM::factory('field', $id)->delete();
+        DB::delete('field_values')->where('id', '=', $id)->execute();
     }
 }

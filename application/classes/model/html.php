@@ -15,12 +15,13 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
- 
+
 /*
  * Модель для получения HTML блоков из БД и установку содержимого этих блоков
  */
 
-class Model_Html{
+class Model_Html
+{
 
     /**
      * Получает html коды основных блоков сайта
@@ -29,9 +30,9 @@ class Model_Html{
     public static function getblocks()
     {
         return DB::select()
-                ->from('html')
-                ->execute()
-                ->as_array('name','code');
+            ->from('html')
+            ->execute()
+            ->as_array('name', 'code');
     }
 
     /**
@@ -42,11 +43,11 @@ class Model_Html{
     public static function getblock($name)
     {
         $email = DB::select('code')
-                ->from('html')
-                ->where('name', '=', $name)
-                ->limit(1)
-                ->execute();
-        if(isset($email[0]['code']))
+            ->from('html')
+            ->where('name', '=', $name)
+            ->limit(1)
+            ->execute();
+        if (isset($email[0]['code']))
             return $email[0]['code'];
     }
 
@@ -56,13 +57,13 @@ class Model_Html{
      * @param string $value
      * @return bool
      */
-    public function setblock($name,$value)
+    public function setblock($name, $value)
     {
         return DB::update('html')
-                ->value('code', $value)
-                ->where('name', '=', $name)
-                ->limit(1)
-                ->execute();
+            ->value('code', $value)
+            ->where('name', '=', $name)
+            ->limit(1)
+            ->execute();
     }
 
     /**
@@ -74,12 +75,12 @@ class Model_Html{
     public static function getHtml($id)
     {
         $array = DB::select('html')
-                ->from('htmlpgs')
-                ->where('id', '=', $id)
-                ->limit(1)
-                ->execute()
-                ->as_array();
-        if(!is_array($array))
+            ->from('htmlpgs')
+            ->where('id', '=', $id)
+            ->limit(1)
+            ->execute()
+            ->as_array();
+        if (!is_array($array))
             return '';
         return $array[0]['html'];
     }
@@ -94,9 +95,9 @@ class Model_Html{
     public static function setHtml($id, $value)
     {
         return DB::update('htmlpgs')
-                ->value('html', $value)
-                ->where('id', '=', $id)
-                ->limit(1)
-                ->execute();
+            ->value('html', $value)
+            ->where('id', '=', $id)
+            ->limit(1)
+            ->execute();
     }
 }

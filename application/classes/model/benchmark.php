@@ -15,12 +15,13 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
- 
+
 /*
  * Модель для создания блока со статистической информацией о работе скрипта
  */
 
-class Model_Benchmark {
+class Model_Benchmark
+{
 
     /**
      * Возвращает строку с информацией о времени загрузки страниц
@@ -28,11 +29,11 @@ class Model_Benchmark {
      */
     public static function getTime()
     {
-        $benchmark = Profiler::application();      
-        return  'Страница подготовлена за ' .
-                round($benchmark['current']['time'],5) .
-                ' сек. На ' . $benchmark['count'] . ' загрузок страниц затрачено ' .
-                round($benchmark['total']['time']) . ' сек.';
+        $benchmark = Profiler::application();
+        return 'Страница подготовлена за ' .
+        round($benchmark['current']['time'], 5) .
+        ' сек. На ' . $benchmark['count'] . ' загрузок страниц затрачено ' .
+        round($benchmark['total']['time']) . ' сек.';
     }
 
     /**
@@ -43,17 +44,18 @@ class Model_Benchmark {
     {
         $benchmark = Profiler::application();
         return 'Минимальное время загрузки страницы ' .
-                $benchmark['min']['time'] . ' сек. (' .
-                $benchmark['min']['memory'] . ' байт). ' .
-                'Текущая страница подготовлена за ' .
-                $benchmark['current']['time'] . ' сек. (' .
-                $benchmark['current']['memory'] . ' байт). ' .
-                'Максимальное время ' . $benchmark['max']['time'] . ' сек. (' .
-                $benchmark['max']['memory'] . ' байт). ' .
-                'Страницы загружались ' .  $benchmark['count'] . ' раз (' .
-                $benchmark['total']['time'] . ' сек. ' .
-                $benchmark['total']['memory'] . ' байт).';
+        $benchmark['min']['time'] . ' сек. (' .
+        $benchmark['min']['memory'] . ' байт). ' .
+        'Текущая страница подготовлена за ' .
+        $benchmark['current']['time'] . ' сек. (' .
+        $benchmark['current']['memory'] . ' байт). ' .
+        'Максимальное время ' . $benchmark['max']['time'] . ' сек. (' .
+        $benchmark['max']['memory'] . ' байт). ' .
+        'Страницы загружались ' . $benchmark['count'] . ' раз (' .
+        $benchmark['total']['time'] . ' сек. ' .
+        $benchmark['total']['memory'] . ' байт).';
     }
+
     /**
      * Возвращает время загрузки страницы
      * @return float
@@ -61,6 +63,6 @@ class Model_Benchmark {
     public static function getTimeSec()
     {
         $benchmark = Profiler::application();
-        return round($benchmark['current']['time'],3);
+        return round($benchmark['current']['time'], 3);
     }
 }

@@ -27,19 +27,19 @@ class Model_Yml
         $currency = 'RUB';
 
         $xml = '<?xml version="1.0" encoding="utf-8"?>'
-            . "\r\n". '<!DOCTYPE yml_catalog SYSTEM "shops.dtd">'
-            . "\r\n". '<yml_catalog date="'. date('Y-m-d'). ' '. date('H:i'). '">'
-            . "\r\n". '    <shop>'
-            . "\r\n". '        <name></name>'
-            . "\r\n". '        <company></company>'
-            . "\r\n". '        <url></url>'
-            . "\r\n". '        <currencies>'
-            . "\r\n". '            <currency id="RUR" rate="1" plus="0"/>'
-            . "\r\n". '        </currencies>'
-            . "\r\n". '        <categories></categories>'
-            . "\r\n". '        <offers></offers>'
-            . "\r\n". '    </shop>'
-            . "\r\n". '</yml_catalog>';
+            . "\r\n" . '<!DOCTYPE yml_catalog SYSTEM "shops.dtd">'
+            . "\r\n" . '<yml_catalog date="' . date('Y-m-d') . ' ' . date('H:i') . '">'
+            . "\r\n" . '    <shop>'
+            . "\r\n" . '        <name></name>'
+            . "\r\n" . '        <company></company>'
+            . "\r\n" . '        <url></url>'
+            . "\r\n" . '        <currencies>'
+            . "\r\n" . '            <currency id="RUR" rate="1" plus="0"/>'
+            . "\r\n" . '        </currencies>'
+            . "\r\n" . '        <categories></categories>'
+            . "\r\n" . '        <offers></offers>'
+            . "\r\n" . '    </shop>'
+            . "\r\n" . '</yml_catalog>';
 
         $dom = new DomDocument;
         $dom->loadXML($xml);
@@ -57,11 +57,11 @@ class Model_Yml
         $catsNode = $dom->getElementsByTagName('categories')->item(0);
         $catsArray = DB::select()->from('categories')->order_by('id')
             ->execute()->as_array();
-        foreach($catsArray as $catItem)
+        foreach ($catsArray as $catItem)
         {
             $cat = $dom->createElement('category', htmlspecialchars($catItem['name']));
             $cat->setAttribute('id', $catItem['id']);
-            if($catItem['parent'])
+            if ($catItem['parent'])
                 $cat->setAttribute('parentId', $catItem['parent']);
             $catsNode->appendChild($cat);
         }
@@ -71,17 +71,17 @@ class Model_Yml
             ->join('descriptions', 'left')->on('products.id', '=', 'descriptions.id')
             ->execute()
             ->as_array();
-        foreach($prodArray as $prod)
+        foreach ($prodArray as $prod)
         {
             $p = $dom->createElement('offer');
             $p->setAttribute('id', $prod['id']);
             $p->setAttribute('type', 'vendor.model');
-            $p->setAttribute('available', $prod['whs']? 'true' : 'false');
+            $p->setAttribute('available', $prod['whs'] ? 'true' : 'false');
             $p->appendChild($dom->createElement('url', $shopURL . 'shop/product' . $prod['id']));
             $p->appendChild($dom->createElement('price', round($curr * $prod['price'], 2)));
             $p->appendChild($dom->createElement('currencyId', 'RUR'));
             $p->appendChild($dom->createElement('categoryId', $prod['cat']));
-            $p->appendChild($dom->createElement('picture', $shopURL . 'images/products/' . $prod['id'] .'.jpg'));
+            $p->appendChild($dom->createElement('picture', $shopURL . 'images/products/' . $prod['id'] . '.jpg'));
             $p->appendChild($dom->createElement('model', htmlspecialchars($prod['name'])));
             $p->appendChild($dom->createElement('description', htmlspecialchars($prod['text'])));
 
@@ -94,7 +94,7 @@ class Model_Yml
     protected static function setNodeVal($dom, $key, $value)
     {
         $node = $dom->getElementsByTagName($key);
-        if($node->length > 0)
+        if ($node->length > 0)
             $node->item(0)->nodeValue = $value;
     }
 }

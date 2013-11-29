@@ -21,10 +21,10 @@ class Model_Order extends ORM
     /**
      * Создает заказ и оповещает менеджера
      * @param array $products - массив с id продуктов в заказе
-     * @param array $client   - массив с данными о клиенте
-     * @param array $to       - массив с email и\или jabber менеджера
-     * @param int   $way      - id способа оплаты
-     * @param array $counts   - в массиве ключи - id продуктов, а значения - их количество в заказе
+     * @param array $client - массив с данными о клиенте
+     * @param array $to - массив с email и\или jabber менеджера
+     * @param int $way - id способа оплаты
+     * @param array $counts - в массиве ключи - id продуктов, а значения - их количество в заказе
      * @return string $message2user
      */
     public static function create($products, $client, $to, $way, $counts = null)
@@ -35,13 +35,13 @@ class Model_Order extends ORM
         $phone = $client['phone'];
 
         $contacts = '';
-        foreach($client as $field => $field_value)
+        foreach ($client as $field => $field_value)
         {
-            if(in_array($field, array('address', 'username', 'phone', 'confirm')))
+            if (in_array($field, array('address', 'username', 'phone', 'confirm')))
                 continue;
-            if($field == 'email')
+            if ($field == 'email')
                 $contacts .= 'Email: ' . $field_value . "\r\n";
-            elseif(preg_match('|^f([0-9]+)$|', $field, $found))
+            elseif (preg_match('|^f([0-9]+)$|', $field, $found))
             {
                 $fieldArray = ORM::factory('field')->find($found[1])->as_array();
                 $contacts .= $fieldArray['name'] . ': ' . $field_value . "\r\n";
@@ -71,11 +71,11 @@ class Model_Order extends ORM
             {
                 DB::insert('ordproducts', array('id', 'product', 'count', 'whs'))
                     ->values(array(
-                    $id, //id заказа
-                    $product, //id товара
-                    $count, //кол-во в заказе
-                    ($whs >= $count) //достаточно в наличии
-                ))->execute();
+                        $id, //id заказа
+                        $product, //id товара
+                        $count, //кол-во в заказе
+                        ($whs >= $count) //достаточно в наличии
+                    ))->execute();
 
                 $count = $whs - $count; //сколько станет доступно на складе
             }
@@ -84,18 +84,18 @@ class Model_Order extends ORM
                 if ($whs > 0) //Если хоть что-то есть
                     DB::insert('ordproducts', array('id', 'product', 'count', 'whs'))
                         ->values(array(
-                        $id, //id заказа
-                        $product, //id товара
-                        $whs, //покупаем сколько есть
-                        1
-                    ))->execute();
+                            $id, //id заказа
+                            $product, //id товара
+                            $whs, //покупаем сколько есть
+                            1
+                        ))->execute();
                 DB::insert('ordproducts', array('id', 'product', 'count', 'whs'))
                     ->values(array(
-                    $id, //id заказа
-                    $product, //id товара
-                    $count - ($whs > 0 ? $whs : 0), //сколько не хватает
-                    0
-                ))->execute();
+                        $id, //id заказа
+                        $product, //id товара
+                        $count - ($whs > 0 ? $whs : 0), //сколько не хватает
+                        0
+                    ))->execute();
 
                 $count = 0; //сколько станет доступно на складе
                 $noWhs[] = $product;

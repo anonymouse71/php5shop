@@ -21,10 +21,10 @@ class Model_LastInsert
      */
     public static function id_from_orm($model)
     {
-        $obj = ORM::factory($model)->order_by('id','desc')->find();
-        if(isset($obj->id))
+        $obj = ORM::factory($model)->order_by('id', 'desc')->find();
+        if (isset($obj->id))
             return $obj->id;
         else
-            return 0; 
+            return 0;
     }
 }

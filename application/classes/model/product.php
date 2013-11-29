@@ -15,130 +15,136 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
- 
-class Model_Product extends ORM {
-    
-/**
- * Возвращает товары из категорий $categories
- * в количестве $onPage начиная со страницы $page
- * @param array $categories
- * @param int $page
- * @param int $onPage
- * @return array
- */
-    public function byCategory($categories,$page,$onPage)
+
+class Model_Product extends ORM
+{
+
+    /**
+     * Возвращает товары из категорий $categories
+     * в количестве $onPage начиная со страницы $page
+     * @param array $categories
+     * @param int $page
+     * @param int $onPage
+     * @return array
+     */
+    public function byCategory($categories, $page, $onPage)
     {
         $orderBy = self::getSort(self::getSort());
         return DB::select()->from('products')
-                    ->order_by($orderBy[0], $orderBy[1])
-                    ->limit($onPage )
-                    ->offset(($page - 1) * $onPage)
-                    ->where('cat', 'in', $categories)
-                    ->execute()
-                    ->as_array();
+            ->order_by($orderBy[0], $orderBy[1])
+            ->limit($onPage)
+            ->offset(($page - 1) * $onPage)
+            ->where('cat', 'in', $categories)
+            ->execute()
+            ->as_array();
     }
 
-/**
- * Возвращает последние $n товаров
- * @param int $n
- * @param int $offset
- * @return array
- */
-    public function getLast($n, $offset=0)
+    /**
+     * Возвращает последние $n товаров
+     * @param int $n
+     * @param int $offset
+     * @return array
+     */
+    public function getLast($n, $offset = 0)
     {
         return DB::select()->from('products')
-                ->order_by('id', 'desc')
-                ->offset($offset)
-                ->limit($n)
-                ->execute()
-                ->as_array();
+            ->order_by('id', 'desc')
+            ->offset($offset)
+            ->limit($n)
+            ->execute()
+            ->as_array();
     }
 
-/**
- * Обновляет файл rss ленты
- * Пример вызова: Model::factory('product')->updateFeed('/rss.xml');
- * @param string $filename - адрес файла от корня сервера, например "/rss.xml"
- * @return bool
- */
+    /**
+     * Обновляет файл rss ленты
+     * Пример вызова: Model::factory('product')->updateFeed('/rss.xml');
+     * @param string $filename - адрес файла от корня сервера, например "/rss.xml"
+     * @return bool
+     */
     public function updateFeed($filename)
     {
-            if(!is_writable($_SERVER['DOCUMENT_ROOT'] . $filename))
-                return FALSE;
-            $i = 0;            
-            foreach(self::getLast(10) as $item)
-            {
-                $posts[$i]['title'] = $item['name'];
-                $posts[$i]['link'] = 'http://' . $_SERVER['HTTP_HOST'] .
-                                     url::base() . 'shop/product' . $item['id'];
+        if (!is_writable($_SERVER['DOCUMENT_ROOT'] . $filename))
+            return FALSE;
+        $i = 0;
+        foreach (self::getLast(10) as $item)
+        {
+            $posts[$i]['title'] = $item['name'];
+            $posts[$i]['link'] = 'http://' . $_SERVER['HTTP_HOST'] .
+                url::base() . 'shop/product' . $item['id'];
 
-                $posts[$i]['description'] = strip_tags(ORM::factory('description', $item['id'])->__get('text'));
+            $posts[$i]['description'] = strip_tags(ORM::factory('description', $item['id'])->__get('text'));
 
-                $posts[$i]['pubDate'] = date('r');
-                $posts[$i]['guid'] = $posts[$i]['link'];
-                $i++;
-            }
-            $email = Model::factory('html')->getblock('email');
-            $shopName = Model::factory('html')->getblock('shopName');
-            $about = Model::factory('html')->getblock('about');
-            if(!$email)
-                $email = 'webmaster@site.ru (webmaster)';
-            if(!$shopName)
-                $shopName = 'shop';
-            if(!$about)
-                $about = 'shop';
+            $posts[$i]['pubDate'] = date('r');
+            $posts[$i]['guid'] = $posts[$i]['link'];
+            $i++;
+        }
+        $email = Model::factory('html')->getblock('email');
+        $shopName = Model::factory('html')->getblock('shopName');
+        $about = Model::factory('html')->getblock('about');
+        if (!$email)
+            $email = 'webmaster@site.ru (webmaster)';
+        if (!$shopName)
+            $shopName = 'shop';
+        if (!$about)
+            $about = 'shop';
 
-            $feed = Model::factory('rss')->feed(
-                        $shopName,
-                        'http://' . $_SERVER['HTTP_HOST'] . $filename,
-                        $about,
-                        $email . ' (webmaster)',
-                        $posts
-                    );
-            file_put_contents($_SERVER['DOCUMENT_ROOT'] . $filename, $feed);
-            return TRUE;
+        $feed = Model::factory('rss')->feed(
+            $shopName,
+            'http://' . $_SERVER['HTTP_HOST'] . $filename,
+            $about,
+            $email . ' (webmaster)',
+            $posts
+        );
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] . $filename, $feed);
+        return TRUE;
     }
 
-/*
- * Влияние на все цены
- * @param double $persent - процент который нужно добавить
- * @param array $exceptionCats - массив id категорий, которые исключаем
- */
-    public static function changePrice($persent, $exceptionCats = array() )
+    /*
+     * Влияние на все цены
+     * @param double $persent - процент который нужно добавить
+     * @param array $exceptionCats - массив id категорий, которые исключаем
+     */
+    public static function changePrice($persent, $exceptionCats = array())
     {
-        $update = DB::update('products');                                       //создаем запрос
-        
-        foreach($exceptionCats as $exc)                                         //добавляем условия
-            $update->where('cat', '!=', (int) $exc);
+        $update = DB::update('products'); //создаем запрос
 
-        $sql = str_replace(                                                     //дополняем запрос
-                'SET',
-                'SET price = price + price * ' . number_format((double) $persent/100,10,'.',''),
-                $update->__toString()                                           //предварительно конвертировав его из объекта в строку
-                );
-        
-        DB::query('', $sql)->execute();                                         //выполняем полученый запрос
-        
+        foreach ($exceptionCats as $exc) //добавляем условия
+            $update->where('cat', '!=', (int)$exc);
+
+        $sql = str_replace( //дополняем запрос
+            'SET',
+            'SET price = price + price * ' . number_format((double)$persent / 100, 10, '.', ''),
+            $update->__toString() //предварительно конвертировав его из объекта в строку
+        );
+
+        DB::query('', $sql)->execute(); //выполняем полученый запрос
+
     }
 
-    public static function getSort($id=0)
+    public static function getSort($id = 0)
     {
-        if($id == 0)
-        {        
+        if ($id == 0)
+        {
             $sort = Session::instance()->get('sort');
-            if(!$sort)
+            if (!$sort)
                 $sort = 2;
             return $sort;
         }
-        
-        switch($id)
+
+        switch ($id)
         {
-            case 1: return array('id','ASC');
-            case 2: return array('id','DESC');
-            case 3: return array('name','ASC');
-            case 4: return array('name','DESC');
-            case 6: return array('price','DESC');
-            
-            default://5
+            case 1:
+                return array('id', 'ASC');
+            case 2:
+                return array('id', 'DESC');
+            case 3:
+                return array('name', 'ASC');
+            case 4:
+                return array('name', 'DESC');
+            case 6:
+                return array('price', 'DESC');
+
+            default: //5
                 return array('price', 'ASC');
         }
     }
@@ -168,22 +174,23 @@ class Model_Product extends ORM {
         ORM::factory('product')->where('id', '=', $id)->delete_all();
         ORM::factory('description')->where('id', '=', $id)->delete_all();
     }
-    
+
     /**
      * Устанавливает значение, в отличии от __set возвращает объект
      * @param string $column
      * @param string $value
-     * @return Model_Product 
+     * @return Model_Product
      */
     public function set($column, $value)
     {
         $this->__set($column, $value);
         return $this;
     }
+
     /**
      * Импорт из xls - передается массив, прочитанный через xlsreader
      * Возвращает колич. обработанных
-     * @param array $sheets 
+     * @param array $sheets
      * @return int
      */
     public static function importXls($sheets)

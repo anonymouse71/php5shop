@@ -15,12 +15,13 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
- 
+
 /**
  * Класс получения и редактирования конфигурации
  */
 
-class Model_Config{
+class Model_Config
+{
 
     /**
      * Возвращает массив с содержимым таблицы 'configBool'
@@ -29,8 +30,8 @@ class Model_Config{
     public function getBool()
     {
         return DB::select()->from('configBool')
-                ->execute()
-                ->as_array('name','value');
+            ->execute()
+            ->as_array('name', 'value');
     }
 
     /**
@@ -41,12 +42,12 @@ class Model_Config{
      */
     public function setBool($name, $value)
     {
-        if(is_array($name) && $value == null)
+        if (is_array($name) && $value == null)
         {
-            $query = 'UPDATE ' . Kohana::config('database')->default['table_prefix'] . 'configBool SET value = CASE ' ;
-            foreach($name as $key => $value)
+            $query = 'UPDATE ' . Kohana::config('database')->default['table_prefix'] . 'configBool SET value = CASE ';
+            foreach ($name as $key => $value)
             {
-                $query .= 'WHEN name="' . mysql_real_escape_string($key) . '" THEN ' . ($value? '1' : '0') . ' ';
+                $query .= 'WHEN name="' . mysql_real_escape_string($key) . '" THEN ' . ($value ? '1' : '0') . ' ';
             }
             $query .= 'END;';
 
@@ -54,7 +55,7 @@ class Model_Config{
 
         }
         else
-            DB::update('configBool')->value('value', ($value? 1 : 0) )
+            DB::update('configBool')->value('value', ($value ? 1 : 0))
                 ->where('name', '=', $name)
                 ->limit(1)
                 ->execute();
@@ -67,51 +68,51 @@ class Model_Config{
      * @return array       - массив всех валют, если $code не указан
      * @return bool        - FALSE если код не найден
      */
-    public static function getCurrency($code=null)
+    public static function getCurrency($code = null)
     {
-        if(!$code)
+        if (!$code)
             return DB::select()->from('currency')
                 ->execute()
-                ->as_array('name','value');
+                ->as_array('name', 'value');
         else
         {
             $array = DB::select()->from('currency')
-                    ->where('name', '=', $code)
-                    ->limit(1)
-                    ->execute()
-                    ->as_array('name','value');
+                ->where('name', '=', $code)
+                ->limit(1)
+                ->execute()
+                ->as_array('name', 'value');
 
-            return isset($array[$code])? (float) $array[$code] : FALSE;
+            return isset($array[$code]) ? (float)$array[$code] : FALSE;
         }
-           
+
     }
 
     /**
      * Устанавливает курс валют
      * @param string $name - банковский код валюты (например UAH)
-     * @param float $value - значение курса 
-     * @return bool        
+     * @param float $value - значение курса
+     * @return bool
      */
-    public static function setCurrency($name,$value)
+    public static function setCurrency($name, $value)
     {
         return DB::update('currency')
-                ->value('value', (float) $value)
-                ->where('name', '=', $name)
-                ->limit(1)
-                ->execute();
+            ->value('value', (float)$value)
+            ->where('name', '=', $name)
+            ->limit(1)
+            ->execute();
     }
 
-     /**
+    /**
      * Добавляет курс валют
      * @param string $name - банковский код валюты (например UAH)
      * @param float $value - значение курса
      * @return bool
      */
-    public static function addCurrency($name,$value)
+    public static function addCurrency($name, $value)
     {
         return DB::insert('currency')
-                ->values(array($name,$value))
-                ->execute();
+            ->values(array($name, $value))
+            ->execute();
     }
 
     /**
@@ -122,10 +123,11 @@ class Model_Config{
     public static function delCurrency($name)
     {
         return DB::delete('currency')
-                ->where('name', '=', $name)
-                ->limit(1)
-                ->execute();
+            ->where('name', '=', $name)
+            ->limit(1)
+            ->execute();
     }
+
     /**
      * Находит название курса валют со значением 1
      * @return string
@@ -133,11 +135,11 @@ class Model_Config{
     public static function get1Currency()
     {
         $array = DB::select('name')->from('currency')
-                    ->where('value', '=', 1)
-                    ->limit(1)
-                    ->execute()
-                    ->as_array();
-        if(isset($array[0]['name']))
+            ->where('value', '=', 1)
+            ->limit(1)
+            ->execute()
+            ->as_array();
+        if (isset($array[0]['name']))
             return ($array[0]['name']);
         else
             return '';

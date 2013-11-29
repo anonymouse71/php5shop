@@ -2,5 +2,6 @@
 /**
  * Description - подробное описание продукта
  */
-class Model_Description extends ORM {
+class Model_Description extends ORM
+{
 }

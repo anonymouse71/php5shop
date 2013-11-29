@@ -15,12 +15,13 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
- 
+
 /*
  * Модель для работы с комментариями к товарам и новостям
  */
 
-class Model_Comment extends ORM{
+class Model_Comment extends ORM
+{
 
     /*
      * Поля таблицы:
@@ -34,22 +35,22 @@ class Model_Comment extends ORM{
      */
 
 
-    private static function save_comment($id,$is_product=1)
+    private static function save_comment($id, $is_product = 1)
     {
-        if(isset($_POST['yourName']) && isset($_POST['comText']))
+        if (isset($_POST['yourName']) && isset($_POST['comText']))
         {
-            if(!Auth::instance()->logged_in())
+            if (!Auth::instance()->logged_in())
             {
                 return 'Вы не авторизованы!';
             }
             $user = Auth::instance()->get_user();
 
-            if(mb_strlen($_POST['comText'],'utf-8') > 2000)
+            if (mb_strlen($_POST['comText'], 'utf-8') > 2000)
                 return 'Слишком длинное сообщение!';
-            if(mb_strlen($_POST['comText'],'utf-8') < 3)
+            if (mb_strlen($_POST['comText'], 'utf-8') < 3)
                 return 'Слишком короткое сообщение!';
 
-            if(isset($_POST['captcha']) && Captcha::valid($_POST['captcha']))       //если проверочное изображение введено верно,
+            if (isset($_POST['captcha']) && Captcha::valid($_POST['captcha'])) //если проверочное изображение введено верно,
             {
                 $obj = ORM::factory('comment');
                 $obj->__set('object', $id);
@@ -57,47 +58,47 @@ class Model_Comment extends ORM{
                 $obj->__set('text', $_POST['comText']);
                 $obj->__set('rate', $_POST['rate']);
                 $obj->__set('is_product', $is_product);
-                $obj->__set('username', $_POST['yourName']? $_POST['yourName'] : 'Аноним');
+                $obj->__set('username', $_POST['yourName'] ? $_POST['yourName'] : 'Аноним');
                 $obj->save();
                 header('Location: ' . $_SERVER['REQUEST_URI']);
                 return '';
             }
             return 'Проверочное изображение введено неверно';
-            
+
         }
     }
 
-    public static function form($id,$is_product=1)
+    public static function form($id, $is_product = 1)
     {
         $form = new View('commentForm');
         $form->captcha = Captcha::instance();
-        $form->errors = self::save_comment($id,$is_product);
-        $form->auth = Auth::instance()->logged_in();       
-      
-        return 
-            self::last10($id,$is_product)
+        $form->errors = self::save_comment($id, $is_product);
+        $form->auth = Auth::instance()->logged_in();
+
+        return
+            self::last10($id, $is_product)
             . $form->render();
     }
 
-    public static function last10($id,$is_product=1)
+    public static function last10($id, $is_product = 1)
     {
-        $page = isset($_GET['comments-page'])? abs((int)$_GET['comments-page']) : 1;//номер страницы
-        if(!$page)                                                              // > 0
+        $page = isset($_GET['comments-page']) ? abs((int)$_GET['comments-page']) : 1; //номер страницы
+        if (!$page) // > 0
             $page++;
 
         $data = ORM::factory('comment')
-            ->where('object','=',$id)
-            ->and_where('is_product','=',$is_product)
+            ->where('object', '=', $id)
+            ->and_where('is_product', '=', $is_product)
             ->limit(10)
             ->offset(($page - 1) * 10)
             ->find_all()->as_array();
 
         $count_all = ORM::factory('comment')
-            ->where('object','=',$id)
-            ->and_where('is_product','=',$is_product)
+            ->where('object', '=', $id)
+            ->and_where('is_product', '=', $is_product)
             ->count_all();
 
-        if(!count($data))
+        if (!count($data))
             return '';
 
         $comments = new View('comments');
@@ -105,14 +106,14 @@ class Model_Comment extends ORM{
         $comments->admin = Auth::instance()->logged_in('admin');
         $comments->rate = $is_product;
 
-        $Pagination = new Pagination(array(                             //создаем навигацию
-                    'uri_segment'    => 'comments-page',
-                    'total_items'    => $count_all,
-                    'items_per_page' => 10,
-                    'current_page'   => array('source' => 'query_string', 'key' => 'comments-page'),
-                ));
+        $Pagination = new Pagination(array( //создаем навигацию
+            'uri_segment' => 'comments-page',
+            'total_items' => $count_all,
+            'items_per_page' => 10,
+            'current_page' => array('source' => 'query_string', 'key' => 'comments-page'),
+        ));
 
         return $comments->render() . $Pagination->render();
     }
-    
+
 }

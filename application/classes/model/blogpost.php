@@ -51,7 +51,7 @@ class Model_BlogPost extends ORM
     /**
      * Добавляет новую запись в блог. Проводит валидацию и возвращает массив ошибок.
      * Заполняет поле даты.
-     * @param array $array     - массив с 'title' и 'html' (заголовок и html код записи)
+     * @param array $array - массив с 'title' и 'html' (заголовок и html код записи)
      * @return array           - массив ошибок
      */
     public function __add($array)
@@ -77,7 +77,7 @@ class Model_BlogPost extends ORM
     /**
      * Обновляет записи. Проводит валидацию и возвращает массив ошибок.
      * Обновляет поле даты.
-     * @param array $array     - массив с 'title' и 'html' (заголовок и html код записи)
+     * @param array $array - массив с 'title' и 'html' (заголовок и html код записи)
      * @return array           - массив ошибок
      */
     public function __update($array)

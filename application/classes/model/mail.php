@@ -15,9 +15,10 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
- 
+
 /**
  * В mails хранятся email и jabber администратора или менеджера
  */
-class Model_Mail extends ORM {
+class Model_Mail extends ORM
+{
 }

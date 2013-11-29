@@ -22,49 +22,52 @@
  *      $img = ORM::factory('saveImage');
  *      $img->saveit($url_1,$id_1); //Сначало создается очередь изображений
  *      $img->saveit($url_2,$id_2);
- * 
+ *
  *      $img->init();               //а затем запускается обработка очереди в фоновом режиме
  */
-class Model_SaveImage extends ORM{
+class Model_SaveImage extends ORM
+{
 
-    public $ImgSize      = 500;    //размер изображений
-    public $ImgSizeSmall = 150;    //размер превью 
+    public $ImgSize = 500; //размер изображений
+    public $ImgSizeSmall = 150; //размер превью
 
     /**
      * Сохраняет изображения во временную очередь
      * @param string $url
      * @param int $id
+     * @param int $n
      */
-    public function saveit($url,$id,$n=0)
+    public function saveit($url, $id, $n = 0)
     {
         $img = ORM::factory('saveImage');
-        $img->__set('id', (int) $id);
+        $img->__set('id', (int)$id);
         $img->__set('url', $url);
-        $img->__set('n', (int) $n);
-        $img->save();        
+        $img->__set('n', (int)$n);
+        $img->save();
     }
 
     /**
      * Сохраняет изображения на диске. Добавляет watermark и уменьшает до нужного размера
      * @param string $url
      * @param string $id
+     * @return bool
      */
-    public function gd($url,$id)
-    {                                                                           //если можно использовать file_get_contents
-        if(0 === strpos($url, $_SERVER['DOCUMENT_ROOT']))
+    public function gd($url, $id)
+    { //если можно использовать file_get_contents
+        if (0 === strpos($url, $_SERVER['DOCUMENT_ROOT']))
             $conents = file_get_contents($url);
-        else                                                                    //если нельзя, используем curl
+        else //если нельзя, используем curl
         {
             $curl = curl_init($url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             $conents = curl_exec($curl);
             curl_close($curl);
         }
-        if(!$conents)
+        if (!$conents)
             return FALSE;
-        $filename = APPPATH . 'cache/' . text::random('alnum',12) . '.jpg';
+        $filename = APPPATH . 'cache/' . text::random('alnum', 12) . '.jpg';
         file_put_contents($filename, $conents);
         unset($conents);
 
@@ -73,22 +76,23 @@ class Model_SaveImage extends ORM{
         unlink($filename);
     }
 
-    public function gdFile($filename,$id)
+    public function gdFile($filename, $id)
     {
-        $smallImg = DOCROOT . 'images/products/small/'.$id.'.jpg';
-        $bigImg = DOCROOT . 'images/products/'.$id.'.jpg';
+        $smallImg = DOCROOT . 'images/products/small/' . $id . '.jpg';
+        $bigImg = DOCROOT . 'images/products/' . $id . '.jpg';
 
-        try {
+        try
+        {
             $image = new Kohana_Image_GD($filename);
-        }
-        catch(Kohana_Exception $ke){
+        } catch (Kohana_Exception $ke)
+        {
             return FALSE;
         }
         $image->resize($this->ImgSize, $this->ImgSize);
         $img = imagecreatefromstring($image->render());
         $mask = imagecreatefrompng(DOCROOT . 'images/watermark.png');
-        imagecopy ($img,$mask,0,0,0,0,$this->ImgSize,$this->ImgSize);
-        imagejpeg($img,$bigImg,95);
+        imagecopy($img, $mask, 0, 0, 0, 0, $this->ImgSize, $this->ImgSize);
+        imagejpeg($img, $bigImg, 95);
 
 //        if((string)$id == (string)(int)$id)                                     //маленькие изображения сохраняем только для главной фотографии
 //        {
@@ -108,10 +112,10 @@ class Model_SaveImage extends ORM{
     public function init()
     {
         $curl = curl_init('http://' . $_SERVER['HTTP_HOST'] . url::base() . 'save/img');
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 1); 
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
         curl_exec($curl);
         curl_close($curl);
-        
+
     }
 }

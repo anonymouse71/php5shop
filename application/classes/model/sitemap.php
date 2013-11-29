@@ -37,27 +37,27 @@ class Model_Sitemap
             'shop/blog',
             'about'
         );
-        foreach( $controllers as $page)
+        foreach ($controllers as $page)
             $urls .= $this->url($site . $page);
 
-        foreach( ORM::factory('product')->find_all() as $product)
+        foreach (ORM::factory('product')->find_all() as $product)
             $urls .= $this->url($site . 'shop/product' . $product->id);
-        foreach( DB::select('id')->from('categories')->execute()->as_array('id','id') as $catid)
+        foreach (DB::select('id')->from('categories')->execute()->as_array('id', 'id') as $catid)
             $urls .= $this->url($site . 'shop/category' . $catid);
-        foreach( ORM::factory('blogPost')->find_all() as $blog)
+        foreach (ORM::factory('blogPost')->find_all() as $blog)
             $urls .= $this->url($site . 'blog/' . $blog);
-        
-        return  '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
-                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n" .
-                $urls .
-                '</urlset>';
+
+        return '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n" .
+        $urls .
+        '</urlset>';
     }
-    
+
     private function url($loc)
     {
-        return  '   <url>' . "\n" .
-                '       <loc>' . $loc . '</loc>' . "\n" .
-                '   </url>' . "\n";
+        return '   <url>' . "\n" .
+        '       <loc>' . $loc . '</loc>' . "\n" .
+        '   </url>' . "\n";
     }
 
     private function pingIt()
@@ -67,11 +67,11 @@ class Model_Sitemap
             'http://webmaster.yandex.ru/wmconsole/sitemap_list.xml?host=',
             'http://webmaster.live.com/ping.aspx?siteMap='
         );
-        
-        foreach($urls as $url)
+
+        foreach ($urls as $url)
         {
             $curl = curl_init($url . 'http://' . $_SERVER['HTTP_HOST'] . url::base() . 'sitemap.xml');
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_TIMEOUT, 2);
             curl_exec($curl);
             curl_close($curl);
