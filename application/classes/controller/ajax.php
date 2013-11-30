@@ -242,22 +242,61 @@ class Controller_Ajax extends Controller
             if ($pct != 1)
             {
                 $sumAll *= $pct;
-                echo 'Скидка ', round((1 - $pct) * 100, 2), '%<br>';
+                echo '<div>Скидка ', round((1 - $pct) * 100, 2), '%</div><br>';
             }
         }
-        echo 'Итого к оплате: ', round($sumAll, 2), ' ', $curr, '<br>';
+        echo '<div>Итого к оплате: ', round($sumAll, 2), ' ', $curr, '</div>';
         if ($order->pay_type == 4)
-            echo 'Выбрана оплата через interkassa. Оплачено: ',
-            round($order->paid * $currency, 2), ' ', $curr;
+            echo '<div>Выбрана оплата через interkassa. Оплачено: ',
+            round($order->paid * $currency, 2), ' ', $curr, '</div>';
         else
         {
-            echo 'Выбран способ оплаты: ';
+            echo '<div>Выбран способ оплаты: ';
             $pType = ORM::factory('pay_type', $order->pay_type);
             if ($pType->id)
                 echo htmlspecialchars($pType->name);
             else
                 echo '[удален]';
+            echo '</div>';
         }
+
+        $status = ORM::factory('state_order', $order->status);
+        if ($status)
+            echo '<div>Статус заказа: ' . $status->name . '</div>';
+
+        $phone = $order->phone ? '<div>Телефон: ' . $order->phone . '</div>' : '';
+
+        if ($order->user)
+        {
+            $user = ORM::factory('user', $order->user);
+            if ($user)
+            {
+                echo '<div>Email: ' . htmlspecialchars($user->email) . '</div>';
+                echo '<div>Имя: ' . htmlspecialchars($user->username) . '</div>';
+                echo $phone, '<div>Телефон в профиле: ' . htmlspecialchars($user->phone) . '</div>';
+                $phone = '';
+                if ($user->last_login)
+                    echo '<div>Последний вход: ' . date('Y-m-d H:i', $user->last_login) . '</div>';
+                if ($user->identity)
+                    echo '<div>Профиль в соц.сети: <a href="' . htmlspecialchars($user->identity) . '">'
+                        . $user->identity . '</a></div>';
+
+                if (ORM::factory('field')->count_all())
+                {
+                    $fields = ORM::factory('field')->find_all();
+                    $fieldORM = ORM::factory('field_value');
+                    foreach ($fields as $field)
+                    {
+                        $val = $fieldORM->get($field->id, $user->id);
+                        if ($val)
+                            echo '<div>', htmlspecialchars($field->name), ': ',
+                            htmlspecialchars($val), '</div>';
+                    }
+                }
+            }
+        }
+        if ($phone)
+            echo $phone;
     }
 
     /**
