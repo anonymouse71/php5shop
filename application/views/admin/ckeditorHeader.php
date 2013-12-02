@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');?>
-<script type="text/javascript" src="<?php echo url::base();?>js/ckedit/ckeditor.js"></script>
+<script type="text/javascript" src="<?php echo url::base();?>js/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $("<div/>", {"class": "errorCkeditor"}).appendTo("form");
