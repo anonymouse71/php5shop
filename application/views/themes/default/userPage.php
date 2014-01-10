@@ -86,7 +86,7 @@ $('#ansver').click(function (){$(this).hide(1000);});
 <?php endif;?>
 
 <?php
-if (count($orders)): ?>
+if (isset($orders) && count($orders)): ?>
 
     <p>&nbsp;</p>
     <h3>Ваши заказы:</h3>

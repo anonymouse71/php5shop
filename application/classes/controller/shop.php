@@ -226,6 +226,12 @@ class Controller_Shop extends Controller_Site
         if (!$this->user)
             exit($this->request->redirect(url::base()));
 
+        if (isset($_POST['cancel_order']))
+        {
+            Model_Order::cancel_order_by_user($this->user->id, $_POST['cancel_order']);
+            $this->request->redirect($_SERVER['REQUEST_URI']);
+        }
+
         $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки
         $curr = Model::factory('config')->getCurrency($this->currency); //получение курса валют
         if (!$curr) //если в сессию попал поддельный или уже не существующих в БД курс

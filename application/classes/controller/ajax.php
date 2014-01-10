@@ -174,7 +174,7 @@ class Controller_Ajax extends Controller
             DB::update('orders')->set(array('status' => $state->id))
                 ->where('id', '=', $id)->limit(1)->execute();
 
-            if ($state->id == 4)
+            if ($state->id == 4 || $state->id == 6)
             {
                 //Ложный заказ: возвращаем товар на склад
                 foreach (DB::select()->from('ordproducts')->where('id', '=', $id)

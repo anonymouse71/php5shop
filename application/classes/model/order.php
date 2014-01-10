@@ -182,7 +182,8 @@ class Model_Order extends ORM
      */
     public static function get_users_order_history($user_id, $pct, $curr)
     {
-        $orders = DB::select('orders.id', 'paid', 'date', 'address', array('state_orders.name', 'status'))
+        $orders = DB::select('orders.id', 'date',
+            array('state_orders.name', 'status'), array('state_orders.id', 'status_id'))
             ->from('orders')->where('user', '=', $user_id)
             ->order_by('date', 'DESC')
             ->join('state_orders', 'LEFT')->on('status', '=', 'state_orders.id')
@@ -192,6 +193,7 @@ class Model_Order extends ORM
         {
             $products = DB::select('products.name', 'products.price', 'ordproducts.*')->from('ordproducts')
                 ->where('ordproducts.id', '=', $order['id'])
+                ->and_where('ordproducts.whs', '>', 0)
                 ->join('products')->on('products.id', '=', 'product')
                 ->order_by('price', 'DESC')
                 ->execute()->as_array();
@@ -199,21 +201,40 @@ class Model_Order extends ORM
             $orders[$i]['sum'] = 0;
             foreach ($products as $k => $p)
             {
-                $products[$k]['count'] = min($p['count'], $p['whs']);
                 if($products[$k]['count'] == 0)
                 {
                     unset($products[$k]);
                     continue;
                 }
                 $products[$k]['price'] = round($curr * $p['price'] * $pct, 2);
-                $orders[$i]['sum'] += $products[$k]['price'] * $products[$k]['count'];
-
+                $products[$k]['sum'] = $products[$k]['price'] * $products[$k]['count'];
+                $orders[$i]['sum'] += $products[$k]['sum'];
                 $products[$k]['name'] = htmlspecialchars($p['name']);
             }
             $orders[$i]['products'] = $products;
-            $orders[$i]['address'] = nl2br(htmlspecialchars($order['address']));
             $orders[$i]['date'] = date('d.m.y', $order['date']);
         }
         return $orders;
+    }
+
+    public static function cancel_order_by_user($user_id, $order_id)
+    {
+        if (0 == DB::update('orders')->set(array('status' => 6))
+                ->where('status', 'NOT IN', array(4, 5, 6))
+                ->and_where('user', '=', $user_id)
+                ->and_where('id', '=', $order_id)
+                ->limit(1)->execute()
+        )
+            return;
+
+        // если операция изменения статуса произошла (запросом затронута одна строка)
+        // возвращаем товары этого заказа в наличие на склад
+        foreach (DB::select()->from('ordproducts')
+                     ->where('id', '=', $order_id)
+                     ->and_where('whs', '=', 1)
+                     ->execute()->as_array() as $item)
+            DB::update('products')->set(array('whs' => DB::expr('whs + ' . $item['count'])))
+                ->where('id', '=', $item['product'])->limit(1)->execute();
+
     }
 }
