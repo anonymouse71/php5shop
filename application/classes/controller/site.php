@@ -19,16 +19,28 @@
 
 class Controller_Site extends Controller_Template
 {
-    public $theme = 'default'; //тема
-    public $template = 'themes/default/index'; //свойство класса Controller_Template
+    public $theme = 'default2'; //тема по умолчанию
     public static $cache; //объект модуля кэширования
-
+    protected $themes; // массив всех тем, которые есть в каталоге views/themes
     protected $currency = DEFAULT_CURRENCY; //валюта
     protected $blogLimit = 5; //записей на 1 странице блога
     protected $productsOnPage = 10; //продуктов на странице
     protected $categoriesObject; //массив с категориями (сохранен после pre() для уменьшения количества запросов к БД)
     protected $user; //объект с данными о пользователе
     protected $apis; //массив данных для интеграции с сторонними сервисами
+
+    public function __construct(Kohana_Request $request)
+    {
+        $this->themes = array_slice(scandir(APPPATH . 'views/themes'), 2);
+        $session_theme = Session::instance()->get('theme', $this->theme);
+        if (in_array($session_theme, $this->themes))
+            $this->theme = $session_theme;
+        elseif($this->theme != $session_theme)
+            Session::instance()->delete('theme');
+        $this->request = $request;
+        // базовый шаблон страницы
+        $this->template = 'themes/' . $this->theme . '/index';
+    }
 
     /**
      * Получение настроек, подготовка блоков страницы, инициализация
@@ -87,30 +99,6 @@ class Controller_Site extends Controller_Template
         $tpl->topBlock2->items = 0; //количество товаров в корзине
         $tpl->topTitle = $htmlBlocks['topTitle']; //заголовок магазина вверху в виде html
 
-        $tpl->prod1 = Session::instance()->get('prod1'); //получение номеров товаров для сравнения
-        $tpl->prod2 = Session::instance()->get('prod2');
-
-        if (!isset($tpl->prod1)) //в сессии нет id товара
-        {
-            $tpl->prod1 = '';
-        }
-        else //товар найден, получаем его название
-        {
-            $p = ORM::factory('product', $tpl->prod1)->as_array();
-            $tpl->prod1 = ($p['name']) ? $p['name'] : ''; //название найдено? подставляем в шаблон
-        }
-
-        if (!isset($tpl->prod2)) //в сессии нет id товара
-        {
-            $tpl->prod2 = '';
-        }
-        else //товар найден, получаем его название
-        {
-            $p = ORM::factory('product', $tpl->prod2)->as_array();
-            $tpl->prod2 = ($p['name']) ? $p['name'] : ''; //название найдено? подставляем в шаблон
-        }
-
-
         if (is_array(Session::instance()->get('cart')))
         {
             $cart = array_unique(Session::instance()->get('cart')); //удаление повторов
@@ -121,30 +109,43 @@ class Controller_Site extends Controller_Template
         $this->boolConfigs = Model::factory('config')->getbool(); //получение пользовательских настроек
 
         if (!$this->boolConfigs['ShowBlog']) //если функция блога отключена
-        {
             $tpl->menu[2] = FALSE; //прячем кнопку "Новости" из меню
-        }
-        else //иначе
+        elseif ($this->boolConfigs['LastNews'])
         {
-            if ($this->boolConfigs['LastNews'])
-            {//если включен блок последних новостей, вставляем в него последнюю запись из блога (200 симв.)
-                $lastNews = Model::factory('BlogPost')->read(1, 13)->as_array();
-                if(count($lastNews))
-                {
-                    $tpl->lastNews = new View(TPL . 'lastNews');
-                    $tpl->lastNews->data = $lastNews;
-                }
-            }
+            //если включен блок последних новостей, вставляем в него последнюю запись из блога (200 симв.)
+            $lastNews = Model::factory('BlogPost')->read(1, 13)->as_array();
+            if(count($lastNews))
+                $tpl->lastNews = View::factory(TPL . 'lastNews', array('data' => $lastNews));
         }
 
-        //если в сессии есть 3-буквенный банковский код, устанавливаем его как валюту
-        if (strlen(Session::instance()->get('currency')) === 3)
+        $tpl->theme = $this->theme;
+
+        if ($this->boolConfigs['theme_ch'])
         {
-            $this->currency = Session::instance()->get('currency');
+            // разрешено изменение темы
+            if (isset($_POST['theme']))
+            {
+                // запрос на изменение темы
+                Session::instance()->set('theme', $_POST['theme']);
+                $this->request->redirect($_SERVER['REQUEST_URI']);
+            }
+            $tpl->themes = $this->themes;
         }
-        $currency = Model::factory('config')->getCurrency(); //получение валют из БД
+        else
+        {
+            if (Session::instance()->get('theme'))
+                Session::instance()->delete('theme');
+            $tpl->themes = array();
+        }
+
+
+        //если в сессии есть 3-буквенный банковский код, устанавливаем его как валюту
+        if (strlen(Session::instance()->get('currency')) === 3) //иначе останется валюта по умолчанию
+            $this->currency = Session::instance()->get('currency');
+
         if ($this->boolConfigs['currency']) //согласно настройкам
         {
+            $currency = Model::factory('config')->getCurrency(); //получение валют из БД
             //подключение шаблона блока выбора валюты
             $tpl->topBlock1 = new View(TPL . 'currency');
             //подстановка выбранной валюты
@@ -154,7 +155,6 @@ class Controller_Site extends Controller_Template
         }
 
         $this->auth = Auth::instance(); //инициализация механизма авторизации
-
 
         $tpl->loginForm = new View(TPL . 'loginForm'); //подключаем шаблон формы авторизации.
         //если пользователь уже пробовал авторизоваться и допустил ошибку, о которой свидетельствует COOKIES
@@ -171,16 +171,13 @@ class Controller_Site extends Controller_Template
         }
 
         if (!$this->auth->logged_in()) //если пользователь все равно не авторизован
-        {
             $tpl->menu[6] = FALSE; //прячем кнопку "Аккаунт" из меню
-        }
         else //авторизован?
         { //получаем данные о пользователе и вместо формы авторизации показываем имя и кнопку выхода
             $tpl->loginForm = new View(TPL . 'exitForm');
             $this->user = $this->auth->get_user();
             $tpl->loginForm->user = $this->user->username;
         }
-
 
         if (!$this->auth->logged_in('admin')) //если пользователь не авторизован как администратор,
             $tpl->menu[5] = FALSE;            //убераем из меню кнопку панели управления
@@ -200,19 +197,15 @@ class Controller_Site extends Controller_Template
         $this->categoriesObject = new Categories($catsArray);
 
         if (MENU2 === TRUE)
-        {
             $tpl->cats = $this->categoriesObject->menu2( //подстановка дерева категорий в представление
                 url::base() . 'shop/category',
                 $this->request->param('catid')
             );
-        }
         else
-        {
             $tpl->cats = $this->categoriesObject->menu(
                 url::base() . 'shop/category',
                 $this->request->param('catid')
             );
-        }
 
         if ($this->boolConfigs['poll'])
         {
@@ -227,14 +220,11 @@ class Controller_Site extends Controller_Template
             $pollV->count = $countV;
             $pollV->cookie = Session::instance()->get('voted');
             if ($this->user)
-            {
                 $pollV->cookie = Model_Vote::is_voted($this->user->id);
-            }
             $tpl->topBlock3 .= $pollV;
         }
 
         $tpl->breadcrumbs = array(array('Главная', '/'));
-
     }
 
     public function after()

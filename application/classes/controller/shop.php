@@ -38,25 +38,18 @@ class Controller_Shop extends Controller_Site
 
         $product = $this->request->param('product'); //получение GET переменных
         $cat = $this->request->param('catid');
-        $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 0; //номер страницы >=0
+        $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1; //номер страницы >0
         if (!$page)
-        {
-            $page++;
-        }
+            $page = 1;
+
         if (isset($this->user->id)) //если пользователь зарегистрирован
-        {
             $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки для пользователя
-        }
 
         if ($product) //указан продукт
         {
             $product = ORM::factory('product', $product)->as_array(); //находим продукт в БД
             if (!$product['id']) //если его там нет,
-            {
-                $this->request->redirect(url::base());//перенаправляем на главную
-                exit;
-            }
-            //else //если есть,
+                $this->request->redirect(url::base()); //перенаправляем на главную
 
             $this->navigation_cat($product['cat']);
             $this->template->breadcrumbs[] = array($product['name'], url::base() . 'shop/product' . $product['id']);
@@ -66,42 +59,52 @@ class Controller_Shop extends Controller_Site
             $product['price'] .= ' ' . $this->currency;
             $product['name'] = htmlspecialchars($product['name']);
             $product['cart'] = FALSE; //по умолчанию продукт не в корзине
-            if (is_array($sessionCart)) //но если корзина записана как массив
-            {
-                if (in_array($product['id'], $sessionCart)) //и продукт в ней записан
-                {
-                    $product['cart'] = TRUE;
-                }
-            } //передадим эту информацию в шаблон
+            if (is_array($sessionCart) && in_array($product['id'], $sessionCart))
+                $product['cart'] = TRUE;
+
             $this->template->stuff = new View(TPL . 'oneProduct'); //подключаем шаблон для 1 продукта
             $this->template->stuff->comments = $this->boolConfigs['comments'];
             if ($this->boolConfigs['bigCart'])
             {
                 if (isset($bcart[$product['id']]))
-                {
                     $product['bigcart'] = $bcart[$product['id']];
-                }
-                else
-                {
-                    if (in_array($product['id'], $sessionCart))
-                    {
+                elseif (in_array($product['id'], $sessionCart))
                         $product['bigcart'] = 1;
-                    }
-                }
             }
 
             $this->template->stuff->item = $product; //вставляем в шаблон данные о продукте
             $description = new View(TPL . 'description');
             $description->text = ORM::factory('description', $product['id'])->__get('text');
             if ($this->auth->logged_in('admin'))
-            {
                 $description->id = $product['id'];
+            if (strlen($this->apis['vkcomments']))
+            {
+                $this->template->css .= View::factory('vk')->set('apiId', $this->apis['vkcomments']);
+                $description->set('vk_on', TRUE);
             }
+            else
+                $description->set('vk_on', FALSE);
+
+            if (strlen($this->apis['disqus']))
+                $description->set('disqus_shortname', $this->apis['disqus']);
+
+            $rating = new View(TPL . 'rating');
+            $r = ORM::factory('rating_value', $product['id']);
+            $rating->val = $r->__get('val');
+            $rating->disable = !$this->user;
+
+            if ($this->boolConfigs['comments'])
+                $this->template->stuff->set('comments', Model_Comment::form($product['id'], TRUE));
+            else
+                $this->template->stuff->set('comments', '');
+
+            $this->template->stuff->set('rating', $rating);
+            $this->template->stuff->set('description', $description);
 
             $this->template->title .= ' - ' . $product['name'];
             $this->template->about = ''; //блок приветствия не отображаем
 
-            $this->template->oneProductPage = true;//показывать 'itemscope itemtype="http://schema.org/Product"'
+            $this->template->oneProductPage = TRUE; //показывать 'itemscope itemtype="http://schema.org/Product"'
 
             //Сохраняем просматриваемый пользователем товар для его личной страницы
             if ($this->user)
@@ -123,18 +126,14 @@ class Controller_Shop extends Controller_Site
             $categories = $this->categoriesObject->getCatChilds($cat);
 
             if (!count($categories) || !isset($this->categoriesObject->categories['names'][$cat]))
-            {
                 $this->request->redirect(url::base() . 'error/404');
-            }
 
             $this->navigation_cat($cat);
 
             $products = Model::factory('product')->byCategory($categories, $page, $this->productsOnPage);
             $productsCount = ORM::factory('product')->where('cat', 'in', $categories)->count_all();
             if (!$productsCount) //нет товаров в категории
-            {
                 $this->template->stuff = 'В этой категории сейчас нет товаров.';
-            } //вставляем сообщение
             else
             {
                 $sortSelect = new View(TPL . 'sort');
@@ -144,32 +143,19 @@ class Controller_Shop extends Controller_Site
                 { //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
                     $products[$k]['price'] = round($curr * $p['price'] * $pct, 2) . ' ' . $this->currency;
                     $products[$k]['cart'] = FALSE; //добавляем информацию
-                    if (is_array($sessionCart)) //о наличии или отсутствии продукта в корзине
-                    {
-                        if (in_array($products[$k]['id'], $sessionCart))
-                        {
-                            $products[$k]['cart'] = TRUE;
-                        }
-                    }
+                    if (is_array($sessionCart) && in_array($products[$k]['id'], $sessionCart)) //о наличии или отсутствии продукта в корзине
+                        $products[$k]['cart'] = TRUE;
                     if ($this->boolConfigs['bigCart']) //если в настройках пользователю разрешено выбирать количество товаров
                     {
                         if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
-                        {
                             $products[$k]['bigcart'] = $bcart[$p['id']];
-                        } //вставляем колич. ед. в массив
-                        else //иначе если
-                        {
-                            if (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
-                            {
-                                $products[$k]['bigcart'] = 1;
-                            }
-                        } //записываем колич. 1
+                        elseif (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
+                            $products[$k]['bigcart'] = 1;
                     }
-
                 }
                 $this->template->stuff->products = $products; //заполняем его продуктами
                 $Pagination = new Pagination(
-                    array ( //создаем навигацию
+                    array( //создаем навигацию
                         'uri_segment' => 'page',
                         'total_items' => $productsCount,
                         'items_per_page' => $this->productsOnPage,
@@ -197,11 +183,9 @@ class Controller_Shop extends Controller_Site
                     self::$cache->set('LastProd', $products);
                 }
             }
-            else //остальные страницы
-            {
+            else
                 $products = Model::factory('product')->getLast(
                     $this->productsOnPage, ($page - 1) * $this->productsOnPage);
-            }
 
             foreach ($products as $k => $p)
             { //учитываем курс валют, скидку и добавляем к цене банковский код валюты:
@@ -209,26 +193,17 @@ class Controller_Shop extends Controller_Site
                 $products[$k]['cart'] = FALSE; //добавляем информацию
                 $products[$k]['name'] = htmlspecialchars($products[$k]['name']);
                 if (in_array($products[$k]['id'], $sessionCart)) //о наличии или отсутствии продукта в корзине
-                {
                     $products[$k]['cart'] = TRUE;
-                }
+
 
                 if ($this->boolConfigs['bigCart']) //если в настройках пользователю разрешено выбирать количество товаров
                 {
                     if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
-                    {
                         $products[$k]['bigcart'] = $bcart[$p['id']];
-                    } //вставляем колич. ед. в массив
-                    else //иначе если
-                    {
-                        if (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
-                        {//записываем колич. 1
+                    elseif (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
                             $products[$k]['bigcart'] = 1;
-                        }
-                    }
                 }
             }
-
             $this->template->stuff->products = $products; //заполняем представление продуктами
 
             $Pagination = new Pagination(
@@ -240,91 +215,51 @@ class Controller_Shop extends Controller_Site
         }
 
         if ($this->boolConfigs['bigCart'] && is_object($this->template->stuff)) //указываем опцию из настроек
-        {
             $this->template->stuff->bigcart = 1;
-        }
-
-        if (isset($description))
-        {
-            if (strlen($this->apis['vkcomments']))
-            {
-                $this->template->css .= View::factory('vk')->set('apiId', $this->apis['vkcomments']);
-                $description->__set('vk_on', TRUE);
-            }
-            else
-            {
-                $description->__set('vk_on', FALSE);
-            }
-            if (strlen($this->apis['disqus']))
-            {
-                $description->__set('disqus_shortname', $this->apis['disqus']);
-            }
-            $rating = new View('rating');
-            $rating->val = 0;
-            $r = ORM::factory('rating_value', $product['id']);
-            $rating->val = $r->__get('val');
-            $rating->disable = !(bool)$this->user;
-
-            //если страница 1 товара и можно комментировать
-            if (isset($this->template->stuff->comments) && $this->template->stuff->comments && isset($product['id']))
-            {
-                $description .= Model_Comment::form($product['id'], TRUE);
-            }
-            $this->template->stuff .= $rating . $description;
-        }
 
         if (isset($Pagination))
-        {
             $this->template->stuff .= $Pagination;
-        }
     }
 
     public function action_user()
     {
-        if (!$this->user) //если пользователь не авторизован,
-        {
+        if (!$this->user)
             exit($this->request->redirect(url::base()));
-        } //перенаправим на главную страницу.
-        $this->template->about = new View(TPL . 'userPage');
+
         $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки
-        if ($pct != 1) //если он не равен 1
+        $curr = Model::factory('config')->getCurrency($this->currency); //получение курса валют
+        if (!$curr) //если в сессию попал поддельный или уже не существующих в БД курс
         {
-            $this->template->about->pct = (100 * (1 - $pct)) . '%';
-        } //подставляем в представление
-        if (Auth::instance()->logged_in('admin'))
-        {
-            $this->template->about->adm = 1;
+            Session::instance()->delete('currency'); //удаляем его из сессии
+            $this->request->redirect($_SERVER['REQUEST_URI']); //и обновляем страницу
         }
 
+        $fields = null;
+        $fieldVals = null;
         if (ORM::factory('field')->count_all())
         {
-            $this->template->about->fields = ORM::factory('field')->find_all();
+            $fields = ORM::factory('field')->find_all();
             $fieldORM = ORM::factory('field_value');
-            foreach ($this->template->about->fields as $field)
-            {
+            foreach ($fields as $field)
                 $fieldVals[$field->id] = $fieldORM->get($field->id, $this->user->id);
-            }
-            $this->template->about->fieldVals = $fieldVals;
+            $fieldVals = $fieldVals;
         }
 
-        $this->template->about->user = $this->user; //подставляем данные пользователя
         $this->template->title .= ' - Личная страница ' . $this->user->username; //дополнение заголовка страницы
-
-        //Последние 30 просмотренных товаров
-        $limit = 30;
-        $this->template->about->views = DB::select('user_views.id',  'product_id', 'name')
-            ->from('user_views')
-            ->join('products')->on('product_id', '=', 'products.id')
-            ->where('user_id', '=', $this->user->id)
-            ->order_by('user_views.id', 'desc')
-            ->limit($limit)->execute()->as_array();
-        //удаляем более старые, так как они все равно не нужны
-        $len = count($this->template->about->views);
-        if($len == $limit)
-        {
-            DB::delete('user_views')->where('user_id', '=', $this->user->id)
-                ->and_where('id', '<', $this->template->about->views[$limit-1]['id'])->execute();
-        }
+        $this->template->about = View::factory(TPL . 'userPage', array(
+                // Последние 30 просмотренных товаров
+                'views' => Model::factory('Views')->last_products($this->user->id, 30),
+                //подставляем данные пользователя
+                'user' => $this->user,
+                'fields' => $fields,
+                'fieldVals' => $fieldVals,
+                'adm' => Auth::instance()->logged_in('admin') ? 1 : null,
+                'pct' => $pct != 1 ? (100 * (1 - $pct)) . '%' : null,
+                // История заказов пользователя
+                'orders' => Model::factory('Order')->get_users_order_history(
+                        $this->user->id, $pct, $curr, $this->currency),
+                'currency' => $this->currency
+            ));
     }
 
 
@@ -336,7 +271,7 @@ class Controller_Shop extends Controller_Site
     { //в настройках машрутизации регулярное выражение [A-Z]{3}
         if ($code) //если параметр <code> установлен
         {
-            Session::instance()->set('currency', $code);//записываем в сессию
+            Session::instance()->set('currency', $code); //записываем в сессию
         }
 
         if (!Request::$referrer)
@@ -380,7 +315,7 @@ class Controller_Shop extends Controller_Site
      */
     public function action_blog($id = 0)
     {
-        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : '' ));
+        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : ''));
     }
 
     /**
@@ -422,7 +357,7 @@ class Controller_Shop extends Controller_Site
      */
     public function action_indexphp()
     {
-        if(strpos(url::base(),'index.php') === FALSE)
+        if (strpos(url::base(), 'index.php') === FALSE)
             $this->request->redirect(url::base());
     }
 

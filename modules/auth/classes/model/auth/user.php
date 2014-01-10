@@ -43,8 +43,8 @@ class Model_Auth_User extends ORM
             'phone'    => array
             (
                 'not_empty'       => NULL,
-                'max_length'      => array(12),
-                'validate::phone' => NULL
+                'max_length'      => array(14),
+                'regex'      => array('/^\+?[0-9]+$/uiD'),
             ),
             'address'  => array
             (

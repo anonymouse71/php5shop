@@ -140,3 +140,4 @@ $('.count').keyup(function(){
 -->
 </script>
 
+<?php echo $rating, $description, $comments;

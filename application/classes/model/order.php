@@ -172,4 +172,48 @@ class Model_Order extends ORM
 
         return $message2user;
     }
+
+    /**
+     * Возвращает полную историю заказов пользователя
+     * @param int $user_id
+     * @param float $pct
+     * @param float $curr
+     * @return array
+     */
+    public static function get_users_order_history($user_id, $pct, $curr)
+    {
+        $orders = DB::select('orders.id', 'paid', 'date', 'address', array('state_orders.name', 'status'))
+            ->from('orders')->where('user', '=', $user_id)
+            ->order_by('date', 'DESC')
+            ->join('state_orders', 'LEFT')->on('status', '=', 'state_orders.id')
+            ->execute()->as_array();
+
+        foreach ($orders as $i => $order)
+        {
+            $products = DB::select('products.name', 'products.price', 'ordproducts.*')->from('ordproducts')
+                ->where('ordproducts.id', '=', $order['id'])
+                ->join('products')->on('products.id', '=', 'product')
+                ->order_by('price', 'DESC')
+                ->execute()->as_array();
+
+            $orders[$i]['sum'] = 0;
+            foreach ($products as $k => $p)
+            {
+                $products[$k]['count'] = min($p['count'], $p['whs']);
+                if($products[$k]['count'] == 0)
+                {
+                    unset($products[$k]);
+                    continue;
+                }
+                $products[$k]['price'] = round($curr * $p['price'] * $pct, 2);
+                $orders[$i]['sum'] += $products[$k]['price'] * $products[$k]['count'];
+
+                $products[$k]['name'] = htmlspecialchars($p['name']);
+            }
+            $orders[$i]['products'] = $products;
+            $orders[$i]['address'] = nl2br(htmlspecialchars($order['address']));
+            $orders[$i]['date'] = date('d.m.y', $order['date']);
+        }
+        return $orders;
+    }
 }

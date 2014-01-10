@@ -44,6 +44,11 @@
                     </tr>
 
                     <tr>
+                        <td><span>Пользователи могут переключать дизайн сайта</span></td>
+                        <td><input type="checkbox" name="theme_ch" <?php if($bool['theme_ch']) echo 'checked="1"';?>></td>
+                    </tr>
+
+                    <tr>
                         <td><span>Голосование включено</span></td>
                         <td><input type="checkbox" name="poll" <?php if($bool['poll'])echo 'checked="1"';?>></td>
                     </tr>
@@ -136,7 +141,11 @@
                 <p>
                     <input id="g<?php echo $item->id;?>" type="text" size="23" value="<?php echo $item->name;?>">
                     <img class="saveIt" alt="Сохранить" src="<?php echo url::base();?>images/save.png" title="Сохранить">
-                    <img class="removeIt" alt="Удалить" src="<?php echo url::base();?>images/delete.png" title="Удалить">
+                    <?php // нельзя удалять статусы "Клиент ожидает звонка", "Ложный заказ", "Выполнен" и "Отменен"
+                    if (!in_array($item->id, array(1, 4, 5, 6))): ?>
+                        <img class="removeIt" alt="Удалить" src="<?php echo url::base(); ?>images/delete.png"
+                             title="Удалить">
+                    <?php endif ?>
                 </p>
             </div>
             <?php endforeach;?>

@@ -2,7 +2,7 @@
 <div class="topblock1">
     Валюта:<br>
     <select id="currency">
-        <option value="<?php echo $currency;?>"><?php echo $currency;?></option>
+        <option selected value="<?php echo $currency;?>"><?php echo $currency;?></option>
         <?php foreach ($array as $curr): ?><?php if ($curr != $currency): ?>
         <option value="<?php echo $curr;?>"><?php echo $curr;?></option>
         <?php endif; ?><?php endforeach;?>

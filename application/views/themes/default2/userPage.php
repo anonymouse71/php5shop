@@ -37,7 +37,8 @@
         <?php endif;?>
         <tr>
             <td><span>Адрес доставки:</span> </td>
-            <td><textarea class="line" cols="18" rows="2" name="address"><?php echo (htmlspecialchars($user->address));?></textarea></td>
+            <td><textarea class="line" cols="18" rows="4" name="address"><?php
+                    echo htmlspecialchars($user->address);?></textarea></td>
         </tr>
         <?php if(isset($adm) && isset($groups)):?>
         <tr>
@@ -50,9 +51,9 @@
             <td><select name="is_admin"><?php if($is_admin):?><option value="1">да</option><option value="2">нет</option><?php else:?><option value="2">нет</option><option value="1">да</option><?php endif;?></select></td>
         </tr><?php endif;?>
 
-        <tr align="center">
-            <td>&nbsp;</td>
+        <tr align="right">
             <td><input type="button" id="submit" value="сохранить"></td>
+            <td>&nbsp;</td>
         </tr>
     </table>
     <br><br>
@@ -90,7 +91,7 @@ if (count($orders)): ?>
 
     <p>&nbsp;</p>
     <h3>Ваши заказы:</h3>
-    <table id="my_orders">
+    <table border="1" id="my_orders">
         <thead>
         <tr>
             <th>ID</th>
@@ -132,20 +133,12 @@ if (count($orders)): ?>
                 <td><?php echo $order['sum'] ?></td>
                 <td><?php echo $order['status'] ?></td>
             </tr>
-        <?php endforeach; ?>
+    <?php endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>
 
 <?php if (isset($views) && count($views)): ?>
-    <style>
-        .p_views {
-            margin: 10px;
-            width: 100%;
-            border-bottom: dotted 1px #000000;
-            padding-bottom: 10px;
-        }
-    </style>
 
     <p>&nbsp;</p>
     <h3>Последние просмотренные товары:</h3>

@@ -26,6 +26,8 @@
  * prod2                                - товар для сравнения 2
  * oneProductPage                       - метка о том, что это страница одного товара (для микроразметки)
  * breadcrumbs                          - навигационная цепочка
+ * themes                               - массив со списком доступных для применения шаблонов дизайна
+ * theme                                - выбранный шаблон дизайна
  */
 ?><!DOCTYPE html>
 <html>
@@ -40,7 +42,7 @@
     <meta name="cmsmagazine" content="f36b4b17fe8e41ffb1bc9b164f77b732">
     <link rel="shortcut icon" type="image/ico" href="images/favicon.gif">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="template1.css">
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
     <script type="text/javascript" src="js/jquery.simplemodal.js"></script>
@@ -179,18 +181,34 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
         <?php echo $banner2; ?>
     </div>
     <div id="right" class="column">
+
         <?php echo $banner3; ?>
 
         <div class="rightblock">
 
             <?php echo $topBlock2; ?>
-
             <?php echo @$topBlock1; ?>
-
             <?php echo $topBlock3; ?>
 
             <?php if (isset($lastNews))
                 echo $lastNews;?>
+
+            <!-- change design button -->
+            <?php if(count($themes) > 1):?>
+                <form action="" method="post">
+                    <input type="submit" value="Переключить на другой дизайн" id="change_design_button">
+                    <?php
+                    $else_theme = $themes[0];
+                    //по нажатию на кнопку выбираем следующую за текущей тему
+                    foreach($themes as $tpl)
+                        if($tpl != $theme):
+                            $else_theme = $tpl;
+                            break;
+                        endif;
+                    ?>
+                    <input type="hidden" name="theme" value="<?php echo $else_theme ?>">
+                </form>
+            <?php endif;?>
 
         </div>
         <!-- /.rightblock -->
@@ -200,8 +218,8 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 <!-- /#container -->
 <div id="footer">
     <?php echo $banner4; ?>
-    <div>
-        <small>Разработка: <a href="http://phpdreamer.ru/" target="_blank">phpdreamer.ru</a>.</small>
+    <div style="font-size: x-small;">
+        Разработка: <a href="http://phpdreamer.ru/" target="_blank">phpdreamer.ru</a>.
     </div>
 </div>
 <!-- кнопка "Вверх" -->

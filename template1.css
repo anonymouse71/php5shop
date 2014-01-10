@@ -445,7 +445,7 @@ body {
 .topblock1 select {
     width: 128px;
     margin: 1px 0;
-    border: 2px inset #CDCDCD;
+
     font-size: 11px
 }
 
@@ -955,4 +955,31 @@ a:hover.slidesjs-stop {
     font-family: Tahoma;
     color: #323232;
     line-height: 25px;
+}
+
+#my_orders th, #my_orders td {
+    border: solid 1px;
+    padding: 4px;
+}
+
+#my_orders {
+    border-collapse: collapse;
+}
+
+#change_design_button
+{
+    margin: 15px;
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-border-top-right-radius: 0;
+    -moz-border-radius: 5px;
+    -moz-border-radius-topright: 0;
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    background-color: #ffffff;
+    cursor: pointer;
+
+}
+#left ul li{
+    margin-left: 20px;
 }

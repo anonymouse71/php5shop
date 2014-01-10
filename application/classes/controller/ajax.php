@@ -319,7 +319,7 @@ class Controller_Ajax extends Controller
 
         //установка bool настроек
         $boolConfigs = array(
-            'bigCart', 'currency', 'LastNews', 'ordJabb', 'ordMail',
+            'bigCart', 'currency', 'LastNews', 'ordJabb', 'ordMail', 'theme_ch',
             'ShowBlog', 'timeFooter', 'poll', 'regOrder', 'comments'
         );
         $boolConfigsSave = array();
@@ -800,7 +800,12 @@ class Controller_Ajax extends Controller
                 Model_Vote::clear_all();
             }
 
-        $pollV = new View('themes/default/poll');
+        if (isset($_POST['template'])
+            && is_file(APPPATH . 'views/themes/' . str_replace('/', '', $_POST['template']) . '/poll.php')
+        )
+            $pollV = View::factory('themes/' . str_replace('/', '', $_POST['template']) . '/poll');
+        else
+            $pollV = new View('themes/default/poll');
         $pollV->q = Model::factory('poll')->get();
         $pollV->a = ORM::factory('poll_answer')->find_all();
         $countV = 0;

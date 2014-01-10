@@ -34,6 +34,7 @@ class Controller_Page extends Controller_Site
             {
                 exit($this->request->redirect(url::base() . 'error/404'));
             } //перенаправление на страницу 404
+            $this->template->breadcrumbs[] = array($view->post->title, url::base() . 'blog/' . $id);
             $view->post->title = htmlspecialchars($view->post->title);
             $view->is_admin = $is_admin;
             $this->template->about = $view; //запись есть? вставляем в страницу
@@ -43,7 +44,7 @@ class Controller_Page extends Controller_Site
             {
                 $this->template->about .= Model_Comment::form($id, FALSE);
             }
-            $this->template->breadcrumbs[] = array($view->post->title, url::base() . 'blog/' . $id);
+
         }
         else //id не установлен
         {

@@ -75,18 +75,10 @@
     }
     .commentaryForm input[type=button]{
         float: right;
-        background: #f8f8f8;
-        border: 1px solid #f0f0f0;
-        color:#aaa;
-        width: 108px;
-        height: 20px;
-        font-size:13px;
-        padding-bottom: 2px;
+
     }
-    .commentaryForm input[type=button]:hover{
-        border-color: #000;
-        background: #cfcfcf;
-        color:#fff;
+    #submitCommentForm {
+        padding: 5px;
     }
 </style>
 <br>
@@ -107,7 +99,7 @@
         </div>
             <?php echo $captcha;?>
         
-        <input value="отправить" type="button" id="submitCommentForm">
+        <input value="Отправить" type="button" id="submitCommentForm">
         <?php else: ?>
         Внимание! Перед тем как добавить коментарий необходимо авторизоваться!
         <?php endif; ?>
