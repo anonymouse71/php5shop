@@ -32,11 +32,11 @@ class Controller_Site extends Controller_Template
     public function __construct(Kohana_Request $request)
     {
         $this->themes = array_slice(scandir(APPPATH . 'views/themes'), 2);
-        $session_theme = Session::instance()->get('theme', $this->theme);
+        $session_theme = Cookie::get('theme', $this->theme);
         if (in_array($session_theme, $this->themes))
             $this->theme = $session_theme;
         elseif($this->theme != $session_theme)
-            Session::instance()->delete('theme');
+            Cookie::delete('theme');
         $this->request = $request;
         // базовый шаблон страницы
         $this->template = 'themes/' . $this->theme . '/index';
@@ -126,15 +126,15 @@ class Controller_Site extends Controller_Template
             if (isset($_POST['theme']))
             {
                 // запрос на изменение темы
-                Session::instance()->set('theme', $_POST['theme']);
+                Cookie::set('theme', $_POST['theme'], Date::YEAR);
                 $this->request->redirect($_SERVER['REQUEST_URI']);
             }
             $tpl->themes = $this->themes;
         }
         else
         {
-            if (Session::instance()->get('theme'))
-                Session::instance()->delete('theme');
+            if (Cookie::get('theme'))
+                Cookie::delete('theme');
             $tpl->themes = array();
         }
 
