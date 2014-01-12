@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.'); ?>
 
 <script>
-    $(".menu").hide();
+    $("nav.navbar-default").hide();
     
     function bigSmall(a,big,small){
         var host = '<?php echo 'http://' . $_SERVER['HTTP_HOST'];?>';
