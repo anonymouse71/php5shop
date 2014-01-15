@@ -143,7 +143,7 @@
         var parent =  $(this).parent().parent().parent().parent().parent();
         var id = parent.attr('id').split('n')[1];
         $.post('ajax/add_to_cart/' + id);
-        $(this).hide(500);
+        $(this).hide();
         $('#CartItems').html($('#CartItems').html() - 1 + 2);
         $(this).next().show().val('1').next().show();
     });

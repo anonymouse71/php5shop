@@ -103,7 +103,7 @@ $('.nextphoto').click(function(){
 $('.imgcart').click(function(){
     var id = $(this).parents('.item').attr('id').split('n')[1];
     $.post('ajax/add_to_cart/' + id);
-    $(this).hide(500);
+    $(this).hide();
     $('#CartItems').html($('#CartItems').html() -1 + 2);
     $(this).next().show().val('1');
 });
