@@ -51,7 +51,6 @@ CREATE TABLE IF NOT EXISTS `p5shp_configBool` (
 --
 
 REPLACE INTO `p5shp_configBool` (`name`, `value`) VALUES
-('bigCart', 1),
 ('currency', 1),
 ('LastNews', 1),
 ('ordJabb', 0),

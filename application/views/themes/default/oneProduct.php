@@ -37,21 +37,21 @@
     <img src="images/viewmag.png" alt="Масштаб изображения" title="Смотреть фото" class="imgzoom">
     <?php endif;?>
 
-    <?php if($item['whs'] && !$item['cart']): ?>
-    <a href="javascript:void(0);">
-        <img src="images/carts.gif" alt="Добавить в корзину" class="imgcart" title="Добавить в корзину" >
-    </a>
-    <?php endif;?>
+    <?php if ($item['whs']): ?>
+        <a href="javascript:void(0);" class="imgcart <?php if ($item['cart']) echo 'hdn' ?>" title="Добавить в корзину">
+            <img src="images/carts.gif" alt="Добавить в корзину" title="Добавить в корзину">
+        </a>
 
-    <?php if(isset($item['bigcart']) && $item['cart'] && $item['whs']): ?>
-    <input type="text" size="1" value="<?php echo $item['bigcart'];?>" class="count">
-    <?php elseif(isset($bigcart) && $item['whs']):?>
-    <input type="text" size="1" value="1" class="count hdn">
-    <?php endif;?>
+        <?php if ($item['cart'] && isset($item['bigcart'])): ?>
+            <input type="text" size="1" value="<?php echo $item['bigcart']; ?>" class="count">
+        <?php else: ?>
+            <input type="text" size="1" value="1" class="count hdn">
+        <?php endif; ?>
 
-    <img alt="loading" src="images/loading.gif" class="hdn load">
-    
-    <div id="whsError<?php echo $item['id'];?>" class="whsError"></div>
+        <img alt="loading" src="images/loading.gif" class="hdn load">
+
+        <div id="whsError<?php echo $item['id']; ?>" class="whsError"></div>
+    <?php endif; ?>
 
     <link itemprop="itemCondition" href="http://schema.org/NewCondition" />
     <span style="display: none">ID: <span itemprop="productID"><?php echo $item['id']?></span></span>
@@ -105,37 +105,49 @@ $('.nextphoto').click(function(){
 
 });
 $('.imgcart').click(function(){
-    var id = $(this).parent().parent().attr('id').split('n')[1];
+    var id = $(this).parents('.item').attr('id').split('n')[1];
     $.post('ajax/add_to_cart/' + id);
     $(this).hide(500);
     $('#CartItems').html($('#CartItems').html() -1 + 2);
-<?php if(isset($bigcart)):?>
-    elems = $(this).parent().parent().children();
-    for(var i=0; i<elems.length; i++)if($(elems[i]).attr('class') == 'count hdn') elems[i].style.display = 'block';
-<?php endif;?>
+    $(this).next().show().val('1');
 });
-<?php if(isset($bigcart)):?>
 
 $('.count').keyup(function(){
-    var prodId = $(this).parent().attr('id').split('n')[1];
-    var whs = $("#whs" + prodId).val();   
+    var t = $(this);
+    var prodId = t.parents('.item').attr('id').split('n')[1];
+    var whs = $("#whs" + prodId).val();
+    if(t.val().length == 0){
+        return;
+    }
+    var user_want_count = parseInt(t.val());
 
-    if(parseInt($(this).val()) > parseInt(whs)){
-        $(this).val(whs);
+    if (user_want_count > parseInt(whs)) {
+        t.val(whs);
+        user_want_count = whs;
         $("#whsError" + prodId).html("Сейчас на складе только " + whs);        
         $("#whsError" + prodId).bind('click',function(){ $(this).html("") });
     }else{
         $("#whsError" + prodId).html("");        
-    }    
-    $.post('ajax/add_to_cart/' + prodId + '/' + $(this).val());
-    elems = $(this).parent().children();
-    for(var i=elems.length-1;i>0;i--)if($(elems[i]).attr('alt') =='loading'){elems[i].style.display='block'; break;}
-
-    setTimeout( function(){$(elems[i]).hide()} ,3000);
+    }
+    $.post('ajax/add_to_cart/' + prodId + '/' + user_want_count);
+    var elems = t.parent().children();
+    for (var i = elems.length - 1; i > 0; i--)
+        if ($(elems[i]).attr('alt') == 'loading') {
+            elems[i].style.display = 'block';
+            break;
+        }
+    setTimeout( function(){
+        $(elems[i]).hide();
+        if(user_want_count == 0){
+            var CartItems = parseInt($('#CartItems').html());
+            if(CartItems > 0){
+                $('#CartItems').html(CartItems -1);
+            }
+            t.prev().css('display', 'block');
+            t.hide();
+        }
+    } ,1500);
 });
-
-
-<?php endif;?>
 
 -->
 </script>

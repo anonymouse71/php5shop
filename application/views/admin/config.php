@@ -10,10 +10,6 @@
             <form action="" method="post" id="userForm">
                 <table border="0">
                     <tr>
-                        <td><span>В корзину можно добавить больше 1 еденицы товара</span></td>
-                        <td><input type="checkbox" name="bigCart" <?php if($bool['bigCart'])echo 'checked="1"';?>></td>
-                    </tr>
-                    <tr>
                         <td><span>Показывать блок выбора валюты</span></td>
                         <td><input type="checkbox" name="currency" <?php if($bool['currency'])echo 'checked="1"';?>></td>
                     </tr>

@@ -64,13 +64,11 @@ class Controller_Shop extends Controller_Site
 
             $this->template->stuff = new View(TPL . 'oneProduct'); //подключаем шаблон для 1 продукта
             $this->template->stuff->comments = $this->boolConfigs['comments'];
-            if ($this->boolConfigs['bigCart'])
-            {
-                if (isset($bcart[$product['id']]))
-                    $product['bigcart'] = $bcart[$product['id']];
-                elseif (in_array($product['id'], $sessionCart))
-                        $product['bigcart'] = 1;
-            }
+
+            if (isset($bcart[$product['id']]))
+                $product['bigcart'] = $bcart[$product['id']];
+            elseif (in_array($product['id'], $sessionCart))
+                    $product['bigcart'] = 1;
 
             $this->template->stuff->item = $product; //вставляем в шаблон данные о продукте
             $description = new View(TPL . 'description');
@@ -145,13 +143,12 @@ class Controller_Shop extends Controller_Site
                     $products[$k]['cart'] = FALSE; //добавляем информацию
                     if (is_array($sessionCart) && in_array($products[$k]['id'], $sessionCart)) //о наличии или отсутствии продукта в корзине
                         $products[$k]['cart'] = TRUE;
-                    if ($this->boolConfigs['bigCart']) //если в настройках пользователю разрешено выбирать количество товаров
-                    {
-                        if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
-                            $products[$k]['bigcart'] = $bcart[$p['id']];
-                        elseif (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
-                            $products[$k]['bigcart'] = 1;
-                    }
+
+                    if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
+                        $products[$k]['bigcart'] = $bcart[$p['id']];
+                    elseif (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
+                        $products[$k]['bigcart'] = 1;
+
                 }
                 $this->template->stuff->products = $products; //заполняем его продуктами
                 $Pagination = new Pagination(
@@ -195,14 +192,11 @@ class Controller_Shop extends Controller_Site
                 if (in_array($products[$k]['id'], $sessionCart)) //о наличии или отсутствии продукта в корзине
                     $products[$k]['cart'] = TRUE;
 
+                if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
+                    $products[$k]['bigcart'] = $bcart[$p['id']];
+                elseif (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
+                        $products[$k]['bigcart'] = 1;
 
-                if ($this->boolConfigs['bigCart']) //если в настройках пользователю разрешено выбирать количество товаров
-                {
-                    if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
-                        $products[$k]['bigcart'] = $bcart[$p['id']];
-                    elseif (in_array($p['id'], $sessionCart)) //товар выбран в количестве 1 ед.
-                            $products[$k]['bigcart'] = 1;
-                }
             }
             $this->template->stuff->products = $products; //заполняем представление продуктами
 
@@ -213,10 +207,6 @@ class Controller_Shop extends Controller_Site
                     'items_per_page' => $this->productsOnPage,
                 ));
         }
-
-        if ($this->boolConfigs['bigCart'] && is_object($this->template->stuff)) //указываем опцию из настроек
-            $this->template->stuff->bigcart = 1;
-
         if (isset($Pagination))
             $this->template->stuff .= $Pagination;
     }

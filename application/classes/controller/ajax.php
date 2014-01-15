@@ -104,23 +104,39 @@ class Controller_Ajax extends Controller
      * @param int $id
      * @param int $count
      */
-    public function action_add_to_cart($id = 0, $count = 0)
+    public function action_add_to_cart($id = 0, $count = null)
     {
-        if ($id)
+        if (!$id || !ORM::factory('product', $id)->__get('id'))
+            return;
+
+        $cart = Session::instance()->get('cart', array());
+        if (is_null($count))
         {
-            if (ORM::factory('product', $id)->__get('id'))
-            {
-                $cart = Session::instance()->get('cart');
-                $cart[] = $id;
-                Session::instance()->set('cart', $cart);
-                if ($count)
-                {
-                    $bigCart = Session::instance()->get('bigCart');
-                    $bigCart[$id] = $count;
-                    Session::instance()->set('bigCart', $bigCart);
-                }
-            }
+            $cart[] = $id;
         }
+        else
+        {
+            $bigCart = Session::instance()->get('bigCart', array());
+            if ($count > 0)
+            {
+                if (!in_array($id, $cart))
+                    $cart[] = $id;
+                $bigCart[$id] = $count;
+            }
+            else
+            {
+                if (isset($bigCart[$id]))
+                    unset($bigCart[$id]);
+                foreach ($cart as $index => $prod_id)
+                    if ($prod_id == $id)
+                    {
+                        unset($cart[$index]);
+                        break;
+                    }
+            }
+            Session::instance()->set('bigCart', $bigCart);
+        }
+        Session::instance()->set('cart', $cart);
     }
 
     /**
@@ -319,7 +335,7 @@ class Controller_Ajax extends Controller
 
         //установка bool настроек
         $boolConfigs = array(
-            'bigCart', 'currency', 'LastNews', 'ordJabb', 'ordMail', 'theme_ch',
+            'currency', 'LastNews', 'ordJabb', 'ordMail', 'theme_ch',
             'ShowBlog', 'timeFooter', 'poll', 'regOrder', 'comments'
         );
         $boolConfigsSave = array();
