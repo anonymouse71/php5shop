@@ -5,24 +5,11 @@ function replaseIt($string, $name, $value)
 {
     $name = str_replace("'", "\'", strip_tags($name));
     $value = str_replace("'", "\'", strip_tags($value));
-
-    return preg_replace(
-            "#'$name'\s*=>\s*'[^']*',#",
-            "'$name'    =>    '$value',",
-            $string,
-            1
-    );
+    return preg_replace("#'$name'\s*=>\s*'[^']*',#", "'$name'    =>    '$value',", $string, 1);
 }
+
 //если отправлен запрос на редактирование конфигурации БД
-if (
-    isset($_POST['hostname'])
-        &&
-    isset($_POST['username'])
-        &&
-    isset($_POST['password'])
-        &&
-    isset($_POST['database'])
-)
+if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['database']))
 {
     $file = file_get_contents('modules/database/config/database.php');
     $file = replaseIt($file, 'hostname', $_POST['hostname']);
@@ -32,22 +19,19 @@ if (
     //сохраняем настройки
     file_put_contents('modules/database/config/database.php', $file);
     //если установлен чекбокс "Создать в базе структуру таблиц"
-    if(isset($_POST['importSQL']) && file_exists('sql.txt'))
+    if (isset($_POST['importSQL']) && file_exists('sql.txt'))
     {
         $dbh = mysql_connect($_POST['hostname'], $_POST['username'], $_POST['password']) or die('Не могу соединиться с MySQL.');
         mysql_select_db($_POST['database']) or die('Не могу подключиться к базе ' . htmlspecialchars($_POST['database']));
         mysql_query("SET NAMES 'utf8';");
         $sql = explode(";\n", preg_replace('|(--[^\n]*\n)|', '', file_get_contents('sql.txt')));
         foreach ($sql as $key => $val)
-            if($val)
-                if(!mysql_query($val))
-                    if('Query was empty' !== mysql_error())
-                        die(mysql_error() .'<br>'.$val);
-
+            if ($val && !mysql_query($val) && 'Query was empty' !== mysql_error())
+                die(mysql_error() . '<br>' . $val);
         mysql_close($dbh);
-        @rename('install.php','install.php_1');
-        header('Location: ' . ($_SERVER['REQUEST_URI']));
-       
+        @rename('install.php', 'install.php_1');
+        header('Location: ' . $_SERVER['REQUEST_URI']);
+        exit;
     }
 }
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
