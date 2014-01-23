@@ -3,17 +3,14 @@
 
 <?php if ($message): /*заказ успешно сохранен*/
     echo '<br><p style="font-size: 20px">', $message, '</p>';
-    if (isset($way, $amount, $order_id) && $way->id == 4) //interkassa
-        echo '<form name="payment" action="https://www.interkassa.com/lib/payment.php" method="post"
-                    enctype="application/x-www-form-urlencoded" accept-charset="utf-8">
-            <input type="hidden" name="ik_shop_id" value="', Model_Apis::get('ik_shop_id'), '">
-            <input type="hidden" name="ik_payment_amount" value="', $amount, '">
-            <input type="hidden" name="ik_payment_id" value="', $order_id, '">
-            <input type="hidden" name="ik_baggage_fields" value="', $order_id, '">
-            <input type="hidden" name="ik_payment_desc" value="Заказ номер ', $order_id, '">
-            <input type="submit" name="process" value="Оплатить">
-            </form>';
-    else {}
+    if (isset($way, $ik_payment)): //interkassa ?>
+        <form action="<?php echo $ik_payment->getFormAction(); ?>" method="post">
+            <?php foreach ($ik_payment->getFormValues() as $field => $value): ?>
+                <input type="hidden" name="<?php echo $field; ?>" value="<?php echo $value; ?>"/>
+            <?php endforeach; ?>
+            <input type="submit" value="Оплатить" />
+        </form>
+    <?php endif;
 
 elseif (!$stop): /* регистрация не обязательна */
     ?>

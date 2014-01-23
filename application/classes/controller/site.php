@@ -230,23 +230,27 @@ class Controller_Site extends Controller_Template
     public function after()
     {
         parent::after();
+
+        Session::instance()->set('lastPage', $_SERVER['REQUEST_URI']);
+
+        if (!is_object($this->template))
+            return;
+
         //если в настройках это включено, в footer добавляется Benchmark
         if ($this->boolConfigs['timeFooter'] && isset($this->template->banner4))
         {
             $this->template->banner4 .= Model::factory('Benchmark')->getTime();
         }
 
-        Session::instance()->set('lastPage', $_SERVER['REQUEST_URI']);
-
         $breadcrumbs_a = array();
-        foreach($this->template->breadcrumbs as $breadcrumb)
+        foreach ($this->template->breadcrumbs as $breadcrumb)
         {
             $uri = $breadcrumb[1];
             $label = htmlspecialchars($breadcrumb[0]);
             $breadcrumbs_a[] = "<a href='$uri' title='$label'>$label</a>";
         }
 
-        if(count($breadcrumbs_a) > 1)
+        if (count($breadcrumbs_a) > 1)
             $this->template->breadcrumbs = implode(' → ', $breadcrumbs_a);
         else
             $this->template->breadcrumbs = '';

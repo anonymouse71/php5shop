@@ -44,33 +44,32 @@ class Controller_Interkassa extends Controller_Site
             return;
         }
 
-        if (!isset($_POST['ik_baggage_fields'], $_POST['ik_sign_hash'], $_POST['ik_payment_amount'])
-            || !isset($_POST['ik_payment_state']) || $_POST['ik_payment_state'] != 'success')
-        {
-            $this->request->status = 503;
-            return;
-        }
+        $shop = Model_Interkassa_Shop::factory(array(
+            'id' => Model_Apis::get('ik_shop_id'),
+            'secret_key' => Model_Apis::get('ik_secret_key')
+        ));
 
-        $params = array();
-        foreach (array('ik_shop_id', 'ik_payment_amount', 'ik_payment_id',
-                     'ik_paysystem_alias', 'ik_baggage_fields',
-                     'ik_payment_state', 'ik_trans_id', 'ik_currency_exch',
-                     'ik_fees_payer') as $key)
-            $params[] = isset($_POST[$key]) ? $_POST[$key] : '';
-        $params[] = Model_Apis::get('ik_secret_key');
-        if ($_POST['ik_sign_hash'] != strtoupper(md5(join(':', $params))))
+        try
         {
+            $status = $shop->receiveStatus($_POST);
+        } catch (Model_Interkassa_Exception $e)
+        {
+            // The signature was incorrect, send a 400 error to interkassa
+            // They should resend payment status request until they receive a 200 status
             $this->request->status = 400;
+            Kohana_Log::instance()->add('Interkassa Error', $e->getMessage());
             return;
         }
 
-        $order = ORM::factory('order')->find($_POST['ik_baggage_fields']);
+        $payment = $status->getPayment();
+        $order = ORM::factory('order')->find($payment->getBaggage());
         if (!$order->id)
         {
-            $this->request->status = 503;
+            $this->request->status = 400;
+            Kohana_Log::instance()->add('Interkassa Error', 'Order not found');
             return;
         }
-        $order->paid += $_POST['ik_payment_amount'];
+        $order->paid += $payment->getAmount();
         $order->save();
         $this->request->status = 200;
     }

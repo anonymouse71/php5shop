@@ -204,17 +204,41 @@ class Controller_Order extends Controller_Site
 
         if ($way)
         {
-            $this->template->about->order_id = Session::instance()->get('order_id', 0);
-            if (!$this->template->about->order_id)
+            $order_id = Session::instance()->get('order_id', 0);
+            $this->template->about->order_id = $order_id;
+            if (!$order_id)
             {
-                $this->template->about->order_id = Model::factory('Tmp_Order')->new_id();
-                Session::instance()->set('order_id', $this->template->about->order_id);
+                $order_id = $this->template->about->order_id = Model::factory('Tmp_Order')->new_id();
+                Session::instance()->set('order_id', $order_id);
             }
             if ($way == 4)
             {
+                // оплата через interkassa
                 if (isset($message))
                 {
-                    $this->template->about->amount = Session::instance()->get('order_sum', 0);
+                    $shop = Model_Interkassa_Shop::factory(array(
+                        'id' => Model_Apis::get('ik_shop_id'),
+                        'secret_key' => 'not_set' // we don't need it now
+                    ));
+                    $currency = DB::select('name')->from('currency')->where('value', '=', 1)->limit(1)
+                        ->execute()->as_array(null, 'name');
+                    if (count($currency))
+                        $currency = $currency[0];
+                    else
+                        $currency = DEFAULT_CURRENCY;
+
+                    $description = 'Заказ #' . $order_id . ' в магазине ' . $_SERVER['HTTP_HOST'];
+                    $payment = $shop->createPayment(array(
+                        'id' => $order_id,
+                        'amount' => Session::instance()->get('order_sum', 0),
+                        'description' => $description,
+                        'locale' => 'ru',
+                        'currency' => $currency
+                    ));
+                    $payment->setBaggage($order_id);
+
+                    $this->template->about->ik_payment = $payment;
+
                     Session::instance()->delete('order_sum');
                 }
                 else

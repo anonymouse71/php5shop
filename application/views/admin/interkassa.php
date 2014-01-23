@@ -21,19 +21,22 @@
         </span>
     </p>
     <div>Данные для указания в личном кабинете интеркассы:</div>
+    <small><i>Настройки кассы - Интерфейс</i></small>
     <p>
-        Success URL: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/interkassa/success</strong>
+        URL успешной оплаты: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/interkassa/success</strong>
         <br />
-        Fail URL: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/interkassa/fail</strong>
+        URL неуспешной оплаты: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/interkassa/fail</strong>
         <br />
-        Status URL: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/interkassa/status/<?php
+        URL ожидания проведения платежа: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/</strong>
+        <br />
+        URL взаимодействия: <strong>http://<?php echo $_SERVER['HTTP_HOST'];?>/interkassa/status/<?php
             echo Controller_Interkassa::getStatusPageId() ?></strong>
-        <br /> Метод передачи Success URL: <strong>POST</strong>
+        <br /> Тип запроса: <strong>POST</strong>
 
     </p>
-    <div style="padding: 20px; width: 60%"><i>Внимание! Помните, что Success URL изменится
+    <div style="padding: 20px; width: 60%"><i>Внимание! Помните, что &quot;URL взаимодействия&quot; изменится
             при удалении первого администратора или изменении его email!
-            В таком случае нужно будет изменить Success URL и в кабинете интеркассы.
+            В таком случае нужно будет изменить &quot;URL взаимодействия&quot; и в кабинете интеркассы.
         </i></div>
 
 
