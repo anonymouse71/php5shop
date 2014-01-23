@@ -346,19 +346,25 @@ class Controller_Admin extends Controller_Template
      */
     public function action_curr()
     {
+        if (isset($_POST['update_from_cbr']) && FALSE === Model::factory('cbr')->update_local_currencies())
+        {
+            Session::instance()->set('error_adm', 'Обновить не удалось. Попробуйте позже или сообщите разработчику.');
+            $this->request->redirect($_SERVER['REQUEST_URI']);
+        }
+
         $this->template->title .= '- Валюты';
-        $this->template->body = new View('admin/editCurr');
-        $this->template->body->array = Model_Config::getCurrency();
-        $this->template->body->errors = Session::instance()->get('error_adm');
+        $this->template->body = View::factory('admin/info', array(
+                'info' => 'Валюта по умолчанию - ' . DEFAULT_CURRENCY .
+                    '.<br> Изменить ее можно в ' . APPPATH . 'bootstrap.php ' .
+                    'в строке ' . (LINE_CURR_CHANGE - 1) . '<br>' .
+                    'Слева код валюты, а справа число,
+                         на которую будут умножатся цены при выборе этой валюты. <br>
+                         Если множитель валюты равен 1 - все цены сохранены в этой валюте.'))
+            . View::factory('admin/editCurr', array(
+                'array' => Model_Config::getCurrency(),
+                'errors' => Session::instance()->get('error_adm', '')
+            ));
         Session::instance()->delete('error_adm');
-        $info = new View('admin/info');
-        $info->info = 'Валюта по умолчанию - ' . DEFAULT_CURRENCY .
-            '.<br> Изменить ее можно в<br>' . APPPATH . 'bootstrap.php<br>' .
-            'в строке ' . (LINE_CURR_CHANGE - 1) . '<br><br>' .
-            'Слева код валюты, а справа число,
-                 на которую будут умножатся цены при выборе этой валюты. <br>
-                 Если множитель валюты равен 1 - все цены сохранены в этой валюте.';
-        $this->template->body = $info . $this->template->body;
     }
 
     /**
