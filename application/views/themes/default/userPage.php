@@ -130,7 +130,14 @@ if (isset($orders) && count($orders)): ?>
                 </td>
                 <td><?php echo $order['date'] ?></td>
                 <td><?php echo $order['sum'] ?></td>
-                <td><?php echo $order['status'] ?></td>
+                <td><?php echo $order['status'] ?>
+                    <?php if(!in_array($order['status_id'], array(4,5,6))): ?>
+                        <form action="" method="post">
+                            <input type="hidden" name="cancel_order" value="<?php echo $order['id'] ?>">
+                            <input type="submit" value="Отменить заказ">
+                        </form>
+                    <?php endif; ?>
+                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
