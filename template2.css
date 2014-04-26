@@ -5211,6 +5211,7 @@ a.button.color {
     position: relative;
     overflow: hidden;
     width: 100%;
+    float: left;
 }
 
 .module-new .box_product_price em {
