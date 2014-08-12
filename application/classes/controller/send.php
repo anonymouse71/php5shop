@@ -22,11 +22,11 @@ class Controller_Send extends Controller
     {                                                                           //рекурсивная рассылка email
         @ignore_user_abort(TRUE);
 
-        if(!ORM::factory('send_email')->count_all())
+        $email_rows = DB::select()->from('send_emails')->limit(1)->execute()->as_array();
+        if (!count($email_rows))
             exit;
-        $email = ORM::factory('send_email')->find();
-        $id = $email->id;
-        $to = $email->to;
+        $id = $email_rows[0]['id'];
+        $to = $email_rows[0]['to'];
 
         $text = ORM::factory('send_text',$id);
         $code = $text->text;
@@ -34,8 +34,8 @@ class Controller_Send extends Controller
         
         $mail = Model::factory('PHPMailer');
         $name = Model::factory('html')->getblock('shopName');
-        $email = ORM::factory('mail',3)->__get('value');
-        $mail->AddReplyTo($email,$name);
+        $email = ORM::factory('mail', 3)->__get('value');
+        $mail->AddReplyTo($email, $name);
         $mail->From = $email;
         $mail->FromName = $name;
         $mail->AddAddress($to);
@@ -55,7 +55,7 @@ class Controller_Send extends Controller
 
         $mail->Send();
 
-        ORM::factory('send_email',$id)->delete();
+        DB::delete('send_emails')->where('id', '=', $id)->and_where('to', '=', $to)->limit(1)->execute();
         
         if(!ORM::factory('send_email')->where('id','=',$id)->count_all())
             $text->delete();
