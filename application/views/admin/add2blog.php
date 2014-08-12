@@ -11,7 +11,7 @@
     </p>
     <p>
         Сокращенный вариант для предпросмотра
-        <textarea cols="80" id="editor2" name="editor2" rows="10"><?php if(isset($post['code2'])) echo htmlspecialchars($post['code']); ?></textarea>
+        <textarea cols="80" id="editor2" name="editor2" rows="10"><?php if(isset($post['code2'])) echo htmlspecialchars($post['code2']); ?></textarea>
         <script type="text/javascript" src="<?php echo url::base();?>js/ckedit/inc2.js"></script>
     </p>
     <p>
