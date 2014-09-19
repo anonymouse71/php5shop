@@ -407,6 +407,11 @@ abstract class Kohana_Database {
 		if (strpos($value, '"') !== FALSE)
 		{
 			// Quote the column in FUNC("ident") identifiers
+            if (version_compare(PHP_VERSION, '5.5.0', '>='))
+            {
+                $that = $this;
+                return preg_replace_callback('/"(.+?)"/', function ($matches) use($that) { return $that->quote_identifier($matches[1]); }, $value);
+            }
 			return preg_replace('/"(.+?)"/e', '$this->quote_identifier("$1")', $value);
 		}
 		elseif (strpos($value, '.') !== FALSE)
