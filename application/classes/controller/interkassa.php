@@ -21,13 +21,15 @@ class Controller_Interkassa extends Controller_Site
 {
     public function action_success()
     {
-        $this->template->title .= ' - Платеж принят успешно.';
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title .= ' - Платеж принят успешно.';
         $this->template->about = 'Спасибо за покупку. Платеж принят успешно, ожидайте выполнения заказа.';
     }
 
     public function action_fail()
     {
-        $this->template->title .= ' - Ошибка при получении платежа!';
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title .= ' - Ошибка при получении платежа!';
         $this->template->about = 'Произошла ошибка при выполнении платежа.'
             . ' Если Вы перевели деньги, обратитесь к администрации для устранения проблемы.';
 

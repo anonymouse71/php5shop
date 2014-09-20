@@ -627,6 +627,18 @@ CREATE TABLE IF NOT EXISTS `p5shp_user_views` (
   UNIQUE KEY `user` (`user_id`,`product_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+
+CREATE TABLE IF NOT EXISTS `p5shp_metas` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) NOT NULL,
+  `title` varchar(300) NOT NULL,
+  `keywords` varchar(300) NOT NULL,
+  `description` varchar(300) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `path` (`path`(255))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='seo meta' AUTO_INCREMENT=1 ;
+
+
 --
 -- Ограничения внешнего ключа таблицы `p5shp_orders`
 --

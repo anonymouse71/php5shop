@@ -21,7 +21,8 @@ class Controller_Order extends Controller_Site
 {
     public function action_cart()
     {
-        $this->template->title .= ' - Покупки';
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title .= ' - Покупки';
         $this->template->breadcrumbs[] = array('Корзина', url::base() . 'order/cart');
         $cart = Session::instance()->get('cart');
         if (!is_array($cart))

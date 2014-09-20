@@ -858,4 +858,78 @@ class Controller_Admin extends Controller_Template
         $this->template->body->files = $files;
     }
 
+    public function action_meta()
+    {
+        $errorStr = Session::instance()->get('meta_err', '');
+        Session::instance()->delete('meta_err');
+
+        if (isset($_POST['update'], $_POST['id'], $_POST['title'], $_POST['description'], $_POST['keywords']))
+        {
+            // updating row
+            $m = ORM::factory('meta', $_POST['id']);
+            if (!$m->id)
+                die('error');
+            foreach (array('title', 'description', 'keywords') as $k)
+                $m->$k = $_POST[$k];
+            $m->save();
+            die('ok');
+        }
+        elseif (isset($_POST['del']))
+        {
+            // deleting row
+            ORM::factory('meta')->delete($_POST['del']);
+            die('ok');
+        }
+        elseif (isset($_POST['new_save'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['keywords']))
+        {
+            // inserting new row or updating if found
+            $m = ORM::factory('meta')->where('path', '=', $_POST['path'])->find();
+            if ($m->id)
+            {
+                $errorStr .= 'Страница с таким URI уже была в базе, ее значения мета-тегов обновлены. ';
+            }
+            else
+            {
+                $m = ORM::factory('meta');
+                $m->path = $_POST['path'];
+            }
+            foreach (array('title', 'description', 'keywords') as $k)
+                $m->$k = $_POST[$k];
+            if ($_POST['path'] && $_POST['path'][0] == '/')
+                $m->save();
+            else
+                $errorStr .= 'Страница не сохранена. Адрес должен начинаться с символа / ';
+
+            if ($errorStr)
+                Session::instance()->set('meta_err', $errorStr);
+
+            $this->request->redirect($_SERVER['REQUEST_URI']);
+        }
+
+        $perPage = 10;
+        $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1;
+        if (!$page)
+            $page = 1;
+        if (isset($_GET['search_path']))
+        {
+            $countAll = 0;
+            $meta = ORM::factory('meta')->where('path', '=', $_GET['search_path'])->find_all();
+        }
+        else
+        {
+            $countAll = ORM::factory('meta')->count_all();
+            $meta = ORM::factory('meta')->limit($perPage)->offset(($page - 1) * $perPage)->find_all();
+        }
+
+        $this->template->body = View::factory('admin/meta', array(
+            'meta' => $meta,
+            'error' => $errorStr,
+            'pagination' => new Pagination(array(
+                'uri_segment' => 'page',
+                'total_items' => $countAll,
+                'items_per_page' => $perPage,
+            ))
+        ));
+    }
+
 }//end Controller_Admin

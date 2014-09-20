@@ -84,7 +84,21 @@ class Controller_Site extends Controller_Template
 
         $tpl->css = $googleAnalytics; //добавление кода между <head> и </head>
         $tpl->topBlock3 = $htmlBlocks['headerWidg']; //подстановка переменных в шаблон
-        $tpl->keywords = htmlspecialchars($htmlBlocks['keywords']); //переменная с ключевыми словами для SEO оптимизации
+
+        if (Model_Meta::get_meta('keywords'))
+            $tpl->keywords = htmlspecialchars(Model_Meta::get_meta('keywords'));
+        else
+            $tpl->keywords = htmlspecialchars($htmlBlocks['keywords']);
+
+        if (Model_Meta::get_meta('description'))
+            $tpl->description = htmlspecialchars(Model_Meta::get_meta('description'));
+        else
+            $tpl->description = htmlspecialchars($htmlBlocks['shopName']);
+        if (Model_Meta::get_meta('title'))
+            $tpl->title = htmlspecialchars(Model_Meta::get_meta('title'));
+        else
+            $tpl->title = htmlspecialchars($htmlBlocks['shopName']); //название магазина
+
         $tpl->banner1 = $htmlBlocks['banner1']; //HTML код 4 баннеров или пользовательских блоков
         $tpl->banner2 = $htmlBlocks['banner2'];
         $tpl->banner3 = $htmlBlocks['banner3']
@@ -93,7 +107,6 @@ class Controller_Site extends Controller_Template
 
         $tpl->logo = $htmlBlocks['logo']; //логотип
         $tpl->about = $htmlBlocks['about']; //HTML код с описанием магазина
-        $tpl->title = htmlspecialchars($htmlBlocks['shopName']); //название магазина
         $tpl->lastNews = ''; //блок с последней записью из блога
         $tpl->topBlock2 = new View(TPL . 'topCart'); //корзина
         $tpl->topBlock2->items = 0; //количество товаров в корзине

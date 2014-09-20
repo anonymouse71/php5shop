@@ -5,7 +5,8 @@
  *
  * title                                - заголовок страницы
  * logo                                 - блок для logo
- * keywords                             - ключевые слова для поисковых систем
+ * keywords                             - meta keywords для поисковых систем
+ * description                          - meta description для поисковых систем
  * css                                  - стили
  * topBlock1                            - верхний виджет 1 (выбор валюты)
  * topBlock2                            - верхний виджет 2 (корзина)
@@ -38,7 +39,7 @@
     <base href="http://<?php echo $_SERVER['HTTP_HOST'] . url::base(); ?>">
     <meta name="copyright" content="<?php echo $_SERVER['HTTP_HOST']; ?>">
     <meta name="keywords" content="<?php echo $keywords; ?>">
-    <meta name="description" content="<?php echo $title; ?>">
+    <meta name="description" content="<?php echo $description; ?>">
     <meta name="cmsmagazine" content="f36b4b17fe8e41ffb1bc9b164f77b732">
     <link rel="shortcut icon" type="image/ico" href="images/favicon.gif">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">

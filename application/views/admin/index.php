@@ -24,6 +24,7 @@
         <li><a href="<?php echo $path; ?>categories"><b>Категории</b></a></li>
         <li><a href="<?php echo $path; ?>products"><b>Товары</b></a></li>
         <li><a href="<?php echo $path; ?>blog"><b>Блог</b></a></li>
+        <li><a href="<?php echo $path; ?>meta"><b>SEO</b></a></li>
         <li><a href=""><b>Перейти к магазину</b></a></li>
     </ul>
 </nav>

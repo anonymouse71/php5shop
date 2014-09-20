@@ -99,9 +99,16 @@ class Controller_Shop extends Controller_Site
             $this->template->stuff->set('rating', $rating);
             $this->template->stuff->set('description', $description);
 
-            $this->template->title .= ' - ' . $product['name'];
-            $this->template->about = ''; //блок приветствия не отображаем
+            if (!Model_Meta::special_meta_tags()) // если не назначено специального title
+            {
+                // передаем в title название товара и категории
+                $this->template->title = htmlspecialchars($product['name']);
+                if (isset($this->categoriesObject->categories['names'][$product['cat']]))
+                    $this->template->title .= ' - ' .
+                        htmlspecialchars($this->categoriesObject->categories['names'][$product['cat']]);
+            }
 
+            $this->template->about = ''; //блок приветствия не отображаем
             $this->template->oneProductPage = TRUE; //показывать 'itemscope itemtype="http://schema.org/Product"'
 
             //Сохраняем просматриваемый пользователем товар для его личной страницы
@@ -158,10 +165,10 @@ class Controller_Shop extends Controller_Site
                         'items_per_page' => $this->productsOnPage,
                     ));
             }
-
-            $this->template->title .= ' - ' . //добавляем в заголовок страницы
-                $this->categoriesObject->categories['names'][$cat] . //название категории
-                ' - Страница ' . $page . ''; //и страницу
+            if (!Model_Meta::special_meta_tags())
+                $this->template->title .= ' - ' . //добавляем в заголовок страницы
+                    $this->categoriesObject->categories['names'][$cat] . //название категории
+                    ' - Страница ' . $page . ''; //и страницу
 
             $this->template->about = Model_Descr_cat::get($cat); //описание категории
 
@@ -230,18 +237,19 @@ class Controller_Shop extends Controller_Site
             $this->request->redirect($_SERVER['REQUEST_URI']); //и обновляем страницу
         }
 
-        $fields = null;
-        $fieldVals = null;
+        $fieldVals = array();
         if (ORM::factory('field')->count_all())
         {
             $fields = ORM::factory('field')->find_all();
             $fieldORM = ORM::factory('field_value');
             foreach ($fields as $field)
                 $fieldVals[$field->id] = $fieldORM->get($field->id, $this->user->id);
-            $fieldVals = $fieldVals;
         }
-
-        $this->template->title .= ' - Личная страница ' . $this->user->username; //дополнение заголовка страницы
+        else
+            $fields = null;
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title .= ' - Личная страница '
+                . htmlspecialchars($this->user->username);
         $this->template->about = View::factory(TPL . 'userPage', array(
                 // Последние 30 просмотренных товаров
                 'views' => Model::factory('Views')->last_products($this->user->id, 30),

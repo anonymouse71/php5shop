@@ -38,7 +38,8 @@ class Controller_Page extends Controller_Site
             $view->post->title = htmlspecialchars($view->post->title);
             $view->is_admin = $is_admin;
             $this->template->about = $view; //запись есть? вставляем в страницу
-            $this->template->title .= ' - ' . $view->post->title; //дополняем заголовок страницы
+            if (!Model_Meta::special_meta_tags())
+                $this->template->title .= ' - ' . htmlspecialchars($view->post->title);
             //добавляем комментарии
             if ($this->boolConfigs['comments'])
             {
@@ -77,7 +78,8 @@ class Controller_Page extends Controller_Site
                          ->count(),
                      'items_per_page' => $this->blogLimit,
                 ));
-            $this->template->title .= ' - Новости магазина'; //дополняем заголовок страницы
+            if (!Model_Meta::special_meta_tags())
+                $this->template->title .= ' - Новости магазина'; //дополняем заголовок страницы
 
         }
     }
@@ -87,7 +89,8 @@ class Controller_Page extends Controller_Site
         if ($this->template->menu[4]) //если страница включена
         {
             $this->template->about = Model::factory('html')->getHtml(1); //подстановка HTML
-            $this->template->title .= ' - Наши клиенты'; //дополнение заголовка страницы
+            if (!Model_Meta::special_meta_tags())
+                $this->template->title .= ' - Наши клиенты'; //дополнение заголовка страницы
         }
         else
         {
@@ -100,7 +103,8 @@ class Controller_Page extends Controller_Site
         if ($this->template->menu[3]) //если страница включена
         {
             $this->template->about = Model::factory('html')->getHtml(2); //подстановка HTML
-            $this->template->title .= ' - Наши контакты'; //дополнение заголовка страницы
+            if (!Model_Meta::special_meta_tags())
+                $this->template->title .= ' - Наши контакты'; //дополнение заголовка страницы
         }
         else
         {
