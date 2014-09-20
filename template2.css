@@ -5468,3 +5468,21 @@ table#my_orders tr th {
     width: auto;
     color: rgb(37, 54, 111);
 }
+
+#contact_form input[type=text]{
+    width: 400px;
+}
+#contact_form #captcha{
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+}
+#contact_form .captcha, #captcha, #submit_contact_form{
+    float: left;
+    margin-right: 10px;
+}
+#contact_send{
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}

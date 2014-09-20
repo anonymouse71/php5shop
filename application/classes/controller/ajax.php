@@ -900,4 +900,70 @@ class Controller_Ajax extends Controller
         die(ORM::factory('order')->count_all());
     }
 
+    public function action_contact()
+    {
+        if (!isset($_POST['phone'], $_POST['email'], $_POST['name'], $_POST['subject'], $_POST['text'], $_POST['captcha']))
+        {
+            Kohana_Log::instance()->add('WARNING', 'Подделан запрос на отправку почты. IP: ' . $_SERVER['REMOTE_ADDR']);
+            die(json_encode(array('result' => 0, 'error' => 'Не все поля переданы. ')));
+        }
+
+        if (!$_POST['phone'])
+            die(json_encode(array('result' => 0, 'error' => 'Не указан телефон. ')));
+
+        if (!Captcha::valid($_POST['captcha']))
+            die(json_encode(array('result' => 0, 'error' => 'Неправильно ввели проверочное изображение. ')));
+
+
+        $to = ORM::factory('mail', 2)->as_array();
+
+        if (!isset($to['value']) || !$to['value'])
+            die(json_encode(array('result' => 0, 'error' => 'Администратор отключил эту форму. ')));
+
+
+        $mail = Model::factory('PHPMailer');
+        $mail->AddReplyTo($to['value'], 'no reply');
+        if ($_POST['email'])
+            $mail->From = $_POST['email'];
+        else
+            $mail->From = $to['value'];
+        $user = Auth::instance()->get_user();
+        if ($user)
+        {
+            $mail->FromName = $user->username;
+            $message = 'Пользователь ' . $_SERVER['HTTP_HOST']
+                . ' id ' . $user->id . htmlspecialchars(' (' . $user->username . ')');
+        }
+        else
+        {
+            $mail->FromName = 'Посетитель магазина ' . $_SERVER['HTTP_HOST'];
+            $message = 'Посетитель магазина ' . $_SERVER['HTTP_HOST'];
+        }
+        $message .= ' отправил следующее сообщение<br><br>' . nl2br(htmlspecialchars($_POST['text']));
+        $message .= '<br><hr><br>IP: ' . $_SERVER['REMOTE_ADDR']
+            . '<br>Телефон: ' . htmlspecialchars($_POST['phone'])
+            . '<br>Имя: ' . htmlspecialchars($_POST['name']);
+
+        $mail->AddAddress($to['value']);
+        $mail->Subject = $_POST['subject'];
+        $mail->MsgHTML('<body>' . $message . '</body>');
+        $mail->WordWrap = 80;
+        $mail->Send();
+        die(json_encode(array('result' => 1)));
+    }
+
+    public function action_contact_form()
+    {
+        $user = Auth::instance()->get_user();
+        if (false === $user)
+            $user = Model::factory('user');
+
+        die(View::factory('contactForm', array('data' => array(
+            array('name' => 'name', 'label' => 'Ваше имя', 'value' => htmlspecialchars($user->username), 'required' => true),
+            array('name' => 'phone', 'label' => 'Телефон', 'value' => htmlspecialchars($user->phone), 'required' => true),
+            array('name' => 'email', 'label' => 'Email для ответа', 'value' => htmlspecialchars($user->email), 'required' => true),
+            array('name' => 'subject', 'label' => 'Тема вопроса', 'value' => '', 'required' => true),
+        ))));
+    }
+
 }
