@@ -914,8 +914,7 @@ class Controller_Ajax extends Controller
         if (!Captcha::valid($_POST['captcha']))
             die(json_encode(array('result' => 0, 'error' => 'Неправильно ввели проверочное изображение. ')));
 
-
-        $to = ORM::factory('mail', 2)->as_array();
+        $to = ORM::factory('mail', 1)->as_array();
 
         if (!isset($to['value']) || !$to['value'])
             die(json_encode(array('result' => 0, 'error' => 'Администратор отключил эту форму. ')));
@@ -948,7 +947,10 @@ class Controller_Ajax extends Controller
         $mail->Subject = $_POST['subject'];
         $mail->MsgHTML('<body>' . $message . '</body>');
         $mail->WordWrap = 80;
-        $mail->Send();
+        $send = (int)$mail->Send();
+        Kohana_Log::instance()->add('NOTE',
+            'Произошла отправка письма на ' . $to['value']
+            . ' с IP: ' . $_SERVER['REMOTE_ADDR'] . ' sendmail вернул ' . $send);
         die(json_encode(array('result' => 1)));
     }
 
