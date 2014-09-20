@@ -17,35 +17,6 @@
  */
  
 class Controller_Error extends Controller {
- 
-    public function action_404()                                                //ошибка 404
-    {
-        $this->request->status = 404;
-        $this->request->headers['HTTP/1.1'] = '404';
-        $this->request->headers['Content-Type']='text/html; charset=UTF-8';
-        $this->request->response = new View('404');
-    }
- 
-    public function action_403()                                                //ошибка 403
-    {
-        $this->request->status = 403;
-        $this->request->headers['HTTP/1.1'] = '403';
-        $this->request->headers['content-type']='text/html;charset=utf8';
-        $this->request->response = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>Ошибка 403</body></html>';
-    }
- 
-    public function action_500()                                                //ошибка 500
-    {
-        $this->request->status = 500;
-        $this->request->headers['HTTP/1.1'] = '500';
-        $this->request->headers['content-type']='text/html;charset=utf8';
-        $this->request->response = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>Ошибка 500</body></html>';
-    }
-
-    public function action_loginlimit()                                         //исчерпаны неудачные попытки авторизации
-    {       
-        $this->request->response = new View('loginlimit');
-    }
 
     public function action_xsrf()                                               //заблокирована попытка xsrf атаки
     {

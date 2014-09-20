@@ -54,7 +54,7 @@ setlocale(LC_ALL, 'ru_RU.utf-8');
 /**
  * Версия php5shop
  */
-define('VERSION', '1.6.7');
+define('VERSION', '1.6.8');
 
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
@@ -252,7 +252,7 @@ Route::set('files', '(<file>)', array('file' => '.+'))
 /**
  * Set the production status
  */
-define('IN_PRODUCTION', FALSE);
+define('IN_PRODUCTION', TRUE);
 $request = Request::instance();
 try
 {
@@ -260,16 +260,10 @@ try
 }
 catch (ReflectionException $e)
 {
-    $request = Request::factory('error/404')->execute();
-}
-catch (Exception $e)
-{
-    if (!IN_PRODUCTION)
-        throw $e;
-    $request = Request::factory('error/500')->execute();
+    $request = Request::factory('page/404')->execute();
 }
 
 if (FALSE !== strpos($request->response, '<html')) //если контент в HTML, минимизируем код
-    echo preg_replace('/(\s+)\s{1,}/u', "\n", $request->response);
+    echo preg_replace('/(\s+)\s{1,}/u', "\n", $request->send_headers()->response);
 else
     echo $request->send_headers()->response;

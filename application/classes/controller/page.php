@@ -112,4 +112,13 @@ class Controller_Page extends Controller_Site
         }
     }
 
+    public function action_404()                                                //ошибка 404
+    {
+        $this->request->status = 404;
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title = '404';
+        $this->template->stuff = new View('404');
+        $this->template->about = '';
+    }
+
 }

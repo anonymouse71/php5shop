@@ -53,7 +53,8 @@ class Controller_Site extends Controller_Template
         // их кэш нужно удалять при модификации данных в БД: Cache::instance()->delete($id);
         self::$cache = Cache::instance();
 
-        define('TPL', 'themes/' . $this->theme . '/');
+        if (!defined('TPL'))
+            define('TPL', 'themes/' . $this->theme . '/');
         $tpl =& $this->template; //для сокращения
 
         //получение списка кнопок меню, которые должны быть показаны по настройкам
