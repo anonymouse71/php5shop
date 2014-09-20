@@ -983,3 +983,36 @@ a:hover.slidesjs-stop {
 #left ul li{
     margin-left: 20px;
 }
+#price_filter{
+    margin-bottom: 10px;
+    padding-top: 70px;
+}
+#price_filter .block_div{
+    padding: 10px;
+    background: url(images/bg.gif) repeat-y top left;
+    margin: -2px 0;
+    font-size: 13px;
+
+
+}
+#price_filter .block_div input{
+    width: auto;
+    font-size: 12px;
+}
+#price_filter .block_div input[type=submit]{
+    padding: 2px;
+    margin: 3px;
+}
+#price_filter .block_div div.currency{
+    font-size: 12px;
+    position: absolute;
+    margin-left: 176px;
+    margin-top: 20px;
+    color: rgb(37, 54, 111);
+}
+#price_filter .block_div #price_from{
+    width: 56px;
+}
+#price_filter .block_div #price_to{
+    width: 86px;
+}

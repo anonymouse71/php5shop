@@ -5442,3 +5442,29 @@ table#my_orders tr th {
     position: relative;
     top: -10px;
 }
+#price_filter{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+#price_filter .block_div{
+    padding: 10px;
+    margin: -2px 0;
+    font-size: 13px;
+}
+#price_filter .block_div input{
+    width: auto;
+    font-size: 12px;
+
+}
+#price_filter .block_div input[type=submit]{
+    padding: 2px;
+    margin: 3px;
+}
+#price_filter .block_div div.currency_p{
+    font-size: 12px;
+    position: absolute;
+    margin-left: 246px;
+    margin-top: 6px;
+    width: auto;
+    color: rgb(37, 54, 111);
+}

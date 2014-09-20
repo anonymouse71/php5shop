@@ -127,6 +127,23 @@ class Controller_Shop extends Controller_Site
         }
         elseif ($cat) //указана категория
         {
+            if (isset($_POST['price_from'], $_POST['price_to']))// установка фильтрации по цене
+            {
+                Session::instance()->set('price_filter', array(
+                    'min_price' => round((float)$_POST['price_from'], 2),
+                    'max_price' => round((float)$_POST['price_to'], 2),
+                    'last_cat' => $cat,
+                    'timestamp' => time()
+                ));
+                $this->request->redirect($_SERVER['REQUEST_URI']);
+            }
+            if (isset($_POST['disable_price_filtration']))
+            {
+                // отмена фильтрации по цене
+                Session::instance()->delete('price_filter');
+                $this->request->redirect($_SERVER['REQUEST_URI']);
+            }
+
             Session::instance()->set('cat', $cat);
             $categories = $this->categoriesObject->getCatChilds($cat);
 
@@ -135,10 +152,66 @@ class Controller_Shop extends Controller_Site
 
             $this->navigation_cat($cat);
 
-            $products = Model::factory('product')->byCategory($categories, $page, $this->productsOnPage);
-            $productsCount = ORM::factory('product')->where('cat', 'in', $categories)->count_all();
+            $price_filter = Session::instance()->get('price_filter', array(
+                'last_cat' => -1, // категория в которой установлен фильтр
+                'timestamp' => 0  // метка времени когда установлен фильтр
+            ));
+
+            $user_pct = $curr * $pct;
+
+            if ($price_filter['last_cat'] == $cat && time() - $price_filter['timestamp'] < 3600)
+            {
+                $using_price_filter = true;
+                // действует указанный ранее фильтр
+                $minPrice = $price_filter['min_price'];
+                $maxPrice = $price_filter['max_price'];
+            }
+            else // подставляем в фильтр минимальную и максимальную цену
+            {
+                $using_price_filter = false;
+                list($minPrice, $maxPrice) = Model::factory('product')->mPricesByCategory($categories);
+                $minPrice *= $user_pct;
+                $maxPrice *= $user_pct;
+            }
+            $priceFilterView = View::factory(TPL . 'priceFilter', array(
+                // учитываем курс валют и индивидуальную скидку
+                'min_price' => round($minPrice, 2),
+                'max_price' => round($maxPrice, 2),
+                'currency' => $this->currency
+            ));
+            if (TPL == 'themes/default2/')
+                $this->template->banner3 .= $priceFilterView;
+            else
+                $this->template->topBlock2 .= $priceFilterView;
+
+            if ($using_price_filter)
+            {
+                $expr_real_price = DB::expr('ROUND(price * ' . $user_pct .', 2)');
+                $where = array(
+                    array($expr_real_price, '>=', $minPrice),
+                    array($expr_real_price, '<=', $maxPrice)
+                );
+                $products = Model::factory('product')->byCategory($categories, $page, $this->productsOnPage, $where);
+                $productsCount = ORM::factory('product')
+                    ->where('cat', 'in', $categories)
+                    ->and_where($expr_real_price, '>=', $minPrice)
+                    ->and_where($expr_real_price, '<=', $maxPrice)
+                    ->count_all();
+            }
+            else
+            {
+                $products = Model::factory('product')->byCategory($categories, $page, $this->productsOnPage);
+                $productsCount = ORM::factory('product')->where('cat', 'in', $categories)->count_all();
+            }
+
+
             if (!$productsCount) //нет товаров в категории
-                $this->template->stuff = 'В этой категории сейчас нет товаров.';
+            {
+                if ($using_price_filter)
+                    $this->template->stuff = 'В этой категории сейчас нет товаров в указанном ценовом диапазоне.';
+                else
+                    $this->template->stuff = 'В этой категории сейчас нет товаров.';
+            }
             else
             {
                 $sortSelect = new View(TPL . 'sort');

@@ -25,18 +25,49 @@ class Model_Product extends ORM
      * @param array $categories
      * @param int $page
      * @param int $onPage
+     * @param array $and_where
      * @return array
      */
-    public function byCategory($categories, $page, $onPage)
+    public function byCategory($categories, $page, $onPage, $and_where=array())
     {
-        $orderBy = self::getSort(self::getSort());
-        return DB::select()->from('products')
-            ->order_by($orderBy[0], $orderBy[1])
+        list($column, $direction) = self::getSort(self::getSort());
+        $select = DB::select()->from('products')
+            ->order_by($column, $direction)
             ->limit($onPage)
             ->offset(($page - 1) * $onPage)
-            ->where('cat', 'in', $categories)
-            ->execute()
-            ->as_array();
+            ->where('cat', 'in', $categories);
+        foreach ($and_where as $where)
+        {
+            list($field, $op, $value) = $where;
+            $select->and_where($field, $op, $value);
+        }
+
+
+        if (!empty($minPrice) && !empty($user_pct))
+            $select->and_where(DB::expr('ROUND(price * ' . $user_pct .', 2)'), '>=', $minPrice);
+        if (!empty($maxPrice) && !empty($user_pct))
+            $select->and_where(DB::expr('ROUND(price * ' . $user_pct .', 2)'), '<=', $maxPrice);
+
+        return $select->execute()->as_array();
+    }
+
+    /**
+     * Возвращает минимальную и максимальную цены на товары в перечисленных категориях
+     * @param $categories
+     * @return array
+     */
+    public function mPricesByCategory($categories)
+    {
+        $minPrice = $maxPrice = 0;
+        foreach (DB::select('price')->from('products')->order_by('price', 'ASC')->limit(1)
+                     ->where('cat', 'in', $categories)->execute()->as_array(null, 'price')
+                 as $price)
+            $minPrice = $price;
+        foreach (DB::select('price')->from('products')->order_by('price', 'DESC')->limit(1)
+                     ->where('cat', 'in', $categories)->execute()->as_array(null, 'price')
+                 as $price)
+            $maxPrice = $price;
+        return array($minPrice, $maxPrice);
     }
 
     /**
