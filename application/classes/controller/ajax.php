@@ -852,7 +852,7 @@ class Controller_Ajax extends Controller
         $user = Auth::instance()->get_user();
         if (!$user || !isset($_SERVER['HTTP_REFERER']))
             exit;
-        if (!preg_match('#/product/(^[/]+)#', $_SERVER['HTTP_REFERER'], $matches))
+        if (!preg_match('#/product/([^/]+)#', $_SERVER['HTTP_REFERER'], $matches))
             exit;
         $product_path = urldecode($matches[1]);
         $product = ORM::factory('product')->where('path', '=', $product_path)->find();
