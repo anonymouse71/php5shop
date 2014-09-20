@@ -11,7 +11,7 @@ class Model_Views
      */
     public static function last_products($user, $limit)
     {
-        $views = DB::select('user_views.id', 'product_id', 'name')
+        $views = DB::select('user_views.id', 'product_id', 'name', 'products.path')
             ->from('user_views')
             ->join('products')->on('product_id', '=', 'products.id')
             ->where('user_id', '=', $user)

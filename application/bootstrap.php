@@ -176,7 +176,7 @@ Route::set('cat', 'shop/category<catid>', array('catid' => '[0-9]+'))
     );
 
 //маршрут товаров
-Route::set('product', 'shop/product<product>', array('product' => '[0-9]+'))
+Route::set('product', 'product/<product>', array('product' => '[^/]+'))
     ->defaults(
         array(
             'controller' => 'shop',

@@ -47,7 +47,7 @@ class Model_Yml
         $shopName = ORM::factory('html')->getblock('shopName');
         self::setNodeVal($dom, 'name', $shopName);
         self::setNodeVal($dom, 'company', $shopName);
-        $shopURL = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+        $shopURL = 'http://' . $_SERVER['HTTP_HOST'];
         self::setNodeVal($dom, 'url', $shopURL);
 
         $curr = Model::factory('config')->getCurrency($currency); //получение курса валют
@@ -77,11 +77,11 @@ class Model_Yml
             $p->setAttribute('id', $prod['id']);
             $p->setAttribute('type', 'vendor.model');
             $p->setAttribute('available', $prod['whs'] ? 'true' : 'false');
-            $p->appendChild($dom->createElement('url', $shopURL . 'shop/product' . $prod['id']));
+            $p->appendChild($dom->createElement('url', $shopURL . Model_Product::getProdUri($prod['path'])));
             $p->appendChild($dom->createElement('price', round($curr * $prod['price'], 2)));
             $p->appendChild($dom->createElement('currencyId', 'RUR'));
             $p->appendChild($dom->createElement('categoryId', $prod['cat']));
-            $p->appendChild($dom->createElement('picture', $shopURL . 'images/products/' . $prod['id'] . '.jpg'));
+            $p->appendChild($dom->createElement('picture', $shopURL . url::base() . 'images/products/' . $prod['id'] . '.jpg'));
             $p->appendChild($dom->createElement('model', htmlspecialchars($prod['name'])));
             $p->appendChild($dom->createElement('description', htmlspecialchars($prod['text'])));
 

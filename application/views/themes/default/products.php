@@ -21,7 +21,7 @@
         <?php endif;?>
     </div>
   
-    <a href="<?php echo 'shop/product' . $item['id']?>" class="name">
+    <a href="<?php echo Model_Product::getProdUri($item['path'])?>" class="name">
             <?php echo $item['name'];?>
     </a>
 

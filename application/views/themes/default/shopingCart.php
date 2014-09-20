@@ -10,7 +10,7 @@
 
 <?php foreach($products as $item):?>
     <tr class="post">
-        <td><a href="shop/product<?php echo $item['id'];?>"><?php echo $item['name'];?></a></td>
+        <td><a href="<?php echo Model_Product::getProdUri($item['path']);?>"><?php echo $item['name'];?></a></td>
         <td></td>
         <td><?php echo $item['price'];?></td>
         <td></td>

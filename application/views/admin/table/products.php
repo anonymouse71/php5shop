@@ -87,6 +87,7 @@ endif;?>
         <tr class="selected">
             <td>№</td>
             <td>название</td>
+            <td>адрес для ЧПУ</td>
             <td>категория</td>
             <td>цена <?php echo $currency;?></td>
             <td>наличие</td>
@@ -100,6 +101,7 @@ endif;?>
             <tr>
                 <td><?php echo $item->id;?></td>
                 <td><input size="35" type="text" value="<?php echo htmlspecialchars($item->name); ?>"></td>
+                <td><input size="35" type="text" value="<?php echo htmlspecialchars($item->path); ?>"></td>
                 <td><?php echo $item->cat;?></td>
                 <td><input size="7" type="text" value="<?php echo $item->price; ?>"></td>
                 <td><input size="4" maxlengt="4" type="text" value="<?php echo (int)$item->whs; ?>"></td>
@@ -138,17 +140,25 @@ endif;?>
         $('.saveIt').click(function () {
             myP = $(this).parent().parent().children();
             pcat = 0;
-            val = $(myP[2]).children().val();
+            val = $(myP[3]).children().val();
             chldr = $('select').children();
             for (var k in chldr)
                 if ($(chldr[k]).val() == val) {
                     pcat = $(chldr[k]).attr('id');
                     break;
                 }
-            $.post('ajax/products/2', { id: $(myP[0]).html(), name: $(myP[1]).children().val(), price: $(myP[3]).children().val(), whs: $(myP[4]).children().val(), cat: pcat }, function (data) {
-                $('#ansver').html(data);
-                $('#ansver').show();
-            });
+            $.post('ajax/products/2', {
+                    id: $(myP[0]).html(),
+                    name: $(myP[1]).children().val(),
+                    path: $(myP[2]).children().val(),
+                    price: $(myP[4]).children().val(),
+                    whs: $(myP[5]).children().val(),
+                    cat: pcat
+                },
+                function (data) {
+                    $('#ansver').html(data);
+                    $('#ansver').show();
+                });
         });
         $('.removeIt').click(function () {
             $(this).parent().parent().hide();
@@ -181,7 +191,7 @@ endif;?>
             $('.saveIt').each(function () {
                 myP = $(this).parent().parent().children();
                 pcat = 0;
-                val = $(myP[2]).children().val();
+                val = $(myP[3]).children().val();
                 chldr = $('select').children();
                 for (var k in chldr)
                     if ($(chldr[k]).val() == val) {
@@ -191,8 +201,9 @@ endif;?>
                 var data2save = {
                     id: $(myP[0]).html(),
                     name: $(myP[1]).children().val(),
-                    price: $(myP[3]).children().val(),
-                    whs: $(myP[4]).children().val(),
+                    path: $(myP[2]).children().val(),
+                    price: $(myP[4]).children().val(),
+                    whs: $(myP[5]).children().val(),
                     cat: pcat
                 };
                 $.post('ajax/products/2', data2save, function (data) {

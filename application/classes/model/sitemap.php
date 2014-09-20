@@ -41,7 +41,7 @@ class Model_Sitemap
             $urls .= $this->url($site . $page);
 
         foreach (ORM::factory('product')->find_all() as $product)
-            $urls .= $this->url($site . 'shop/product' . $product->id);
+            $urls .= $this->url($site . mb_substr($product->getUri(), strlen(url::base())));
         foreach (DB::select('id')->from('categories')->execute()->as_array('id', 'id') as $catid)
             $urls .= $this->url($site . 'shop/category' . $catid);
         foreach (ORM::factory('blogPost')->find_all() as $blog)

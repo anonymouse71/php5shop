@@ -245,7 +245,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                 str += 'Ничего не найдено<' + 'br' + '>';
             else
                 for (var k in data)
-                    str += '<' + 'a h' + 'ref="shop/product' + data[k].id + '">' + data[k].name + '<' + '/a' + '><' + 'br' + '>';
+                    str += '<' + 'a h' + 'ref="' + data[k].path + '">' + data[k].name + '<' + '/a' + '><' + 'br' + '>';
             $('#searchresults').html(str);
             $('#searchresults').modal();
             $('#simplemodal-container').css('width', '400px');

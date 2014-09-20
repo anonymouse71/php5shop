@@ -19,7 +19,7 @@ $td = 0;
         <div class="featuredIndent item" id="n<?php echo $item['id'];?>">
             <div class="featuredborder">
                 <div class="product_name">
-                    <a href="<?php echo 'shop/product' . $item['id'] ?>" class="name product_name">
+                    <a href="<?php echo Model_Product::getProdUri($item['path']) ?>" class="name product_name">
                         <h4><?php echo $item['name']; ?></h4>
                     </a>
                 </div>
@@ -51,11 +51,9 @@ $td = 0;
                     <div class="product-options">
 
                         <div class="product_details_container">
-                            <a class="details" title="<?php echo $item['name']; ?>" href="<?php echo 'shop/product' . $item['id'] ?>">Подробнее</a>
+                            <a class="details" title="<?php echo $item['name']; ?>"
+                               href="<?php echo Model_Product::getProdUri($item['path']) ?>">Подробнее</a>
                         </div>
-
-
-
                     </div>
                 </div>
 

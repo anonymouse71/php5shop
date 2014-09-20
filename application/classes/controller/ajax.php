@@ -157,7 +157,7 @@ class Controller_Ajax extends Controller
             $words1 = explode(' ', $string); //по словам
             $words2 = explode(' ', $string2); //по словам без спецсимв.
 
-            $db = DB::select('id', 'name');
+            $db = DB::select('id', 'name', 'path');
             $db->from('products')->where('name', 'LIKE', '%' . $string . '%');
             $db->or_where('name', 'LIKE', '%' . $string2 . '%');
             $db->or_where('name', 'LIKE', '%' . $string3 . '%');
@@ -167,7 +167,11 @@ class Controller_Ajax extends Controller
             $db->or_where('name', 'LIKE', '%' . implode('%', $words2) . '%');
             $db->or_where('name', 'LIKE', '%' . implode('%', array_reverse($words2)) . '%'); //слова в обратном порядке (без спецсимв.)
 
-            echo json_encode($db->limit(20)->execute()->as_array());
+            $found = $db->limit(20)->execute()->as_array();
+            foreach ($found as $i => $row)
+                $found[$i]['path'] = Model_Product::getProdUri($row['path']);
+
+            echo json_encode($found);
         }
         else
             echo '[]'; //ничего не искали? ничего и не нашли
@@ -742,7 +746,7 @@ class Controller_Ajax extends Controller
                 exit;
 
             case 2: //редактирование
-                if (isset($_POST['name']) && isset($_POST['id']) && isset($_POST['price']) && isset($_POST['whs']))
+                if (isset($_POST['name'], $_POST['id'], $_POST['price'], $_POST['whs'], $_POST['path']))
                 {
                     $p = ORM::factory('product', (int)$_POST['id']);
                     if (isset($_POST['cat']))
@@ -750,6 +754,7 @@ class Controller_Ajax extends Controller
                     $p->set('name', $_POST['name'])
                         ->set('price', (float)$_POST['price'])
                         ->set('whs', (int)$_POST['whs'])
+                        ->set('path', $_POST['path'])
                         ->save();
                     echo 'Успешно сохранено!';
                 }
@@ -847,12 +852,12 @@ class Controller_Ajax extends Controller
         $user = Auth::instance()->get_user();
         if (!$user || !isset($_SERVER['HTTP_REFERER']))
             exit;
-        if (preg_match('#/shop/product([0-9]*)#', $_SERVER['HTTP_REFERER'], $matches))
-            $product = $matches[1];
-        else
+        if (!preg_match('#/product/(^[/]+)#', $_SERVER['HTTP_REFERER'], $matches))
             exit;
-
-        Model_Rating_value::vote($product, $value, $user);
+        $product_path = urldecode($matches[1]);
+        $product = ORM::factory('product')->where('path', '=', $product_path)->find();
+        if ($product->id)
+            Model_Rating_value::vote($product->id, $value, $user);
     }
 
     /**

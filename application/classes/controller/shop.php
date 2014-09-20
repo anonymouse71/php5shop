@@ -36,7 +36,7 @@ class Controller_Shop extends Controller_Site
         }
         $this->template->stuff = new View(TPL . 'products'); //Подключаем представление
 
-        $product = $this->request->param('product'); //получение GET переменных
+        $product_path = $this->request->param('product'); //получение GET переменных
         $cat = $this->request->param('catid');
         $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1; //номер страницы >0
         if (!$page)
@@ -45,14 +45,14 @@ class Controller_Shop extends Controller_Site
         if (isset($this->user->id)) //если пользователь зарегистрирован
             $pct = Model::factory('group')->get_pct($this->user->id); //получаем множитель скидки для пользователя
 
-        if ($product) //указан продукт
+        if ($product_path) //указан продукт
         {
-            $product = ORM::factory('product', $product)->as_array(); //находим продукт в БД
+            $product = ORM::factory('product')->where('path', '=', urldecode($product_path))->find()->as_array(); //находим продукт в БД
             if (!$product['id']) //если его там нет,
                 $this->request->redirect(url::base()); //перенаправляем на главную
 
             $this->navigation_cat($product['cat']);
-            $this->template->breadcrumbs[] = array($product['name'], url::base() . 'shop/product' . $product['id']);
+            $this->template->breadcrumbs[] = array($product['name'], Model_Product::getProdUri($product['path']));
 
             //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
             $product['price'] = round($curr * $product['price'] * $pct, 2);

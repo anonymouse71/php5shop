@@ -115,7 +115,7 @@ if (isset($orders) && count($orders)): ?>
                         foreach ($order['products'] as $prod):
                             if ($prod_count > 1)
                                 echo '<li>';
-                            echo '<a href="', url::base(), 'shop/product', $prod['product'], '">', $prod['name'], '</a>';
+                            echo '<a href="', Model_Product::getProdUri($prod['path']), '">', $prod['name'], '</a>';
                             echo ' Цена: ', $prod['price'], ' ', $currency;
                             if ($prod['count'] > 1)
                                 echo '  x', $prod['count'], ' ед. (', $prod['sum'], ')';
@@ -153,7 +153,7 @@ if (isset($orders) && count($orders)): ?>
     <?php foreach ($views as $prod): ?>
         <div class="p_views">
             <?php
-            echo '<a href="', url::base(), 'shop/product', $prod['product_id'], '">',
+            echo '<a href="', Model_Product::getProdUri($prod['path']), '">',
             (file_exists(
                 $_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/small/' . $prod['product_id'] . '.jpg')
                 ?

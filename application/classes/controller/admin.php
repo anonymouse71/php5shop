@@ -647,13 +647,14 @@ class Controller_Admin extends Controller_Template
 
     public function action_description($id = null)
     {
-        $product = ORM::factory('product', $id)->__get('name');
-        if (!$product)
+        $p = ORM::factory('product', $id);
+        $productname = $p->__get('name');
+        if (!$productname)
             die(Request::factory('error/404')->execute());
 
         $this->template->body = new View('admin/description');
-        $this->template->body->productname = $product;
-        $this->template->body->link = url::base() . 'shop/product' . (string)(int)$id;
+        $this->template->body->productname = $productname;
+        $this->template->body->link = $p->getUri();
         $this->template->head = new View('admin/ckeditorHeader');
 
         if (isset($_POST['editor']))
@@ -753,7 +754,7 @@ class Controller_Admin extends Controller_Template
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : die($error);
 
         if (
-            (preg_match('|/shop/product[0-9]+|', $referer) OR preg_match('|/blog/[0-9]+|', $referer))
+            (preg_match('|/product/|', $referer) OR preg_match('|/blog/[0-9]+|', $referer))
             &&
             FALSE !== strpos($referer, $_SERVER['HTTP_HOST'])
             &&

@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="floatElement">
-            <a itemprop="url" href="<?php echo 'shop/product' . $item['id'] ?>" class="name product_name">
+            <a itemprop="url" href="<?php echo Model_Product::getProdUri($item['path']) ?>" class="name product_name">
                 <h2 class="browseProductTitle" itemprop="name"><?php echo $item['name']; ?></h2>
             </a>
 

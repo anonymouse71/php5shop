@@ -100,11 +100,8 @@ class Model_Product extends ORM
         foreach (self::getLast(10) as $item)
         {
             $posts[$i]['title'] = $item['name'];
-            $posts[$i]['link'] = 'http://' . $_SERVER['HTTP_HOST'] .
-                url::base() . 'shop/product' . $item['id'];
-
+            $posts[$i]['link'] = 'http://' . $_SERVER['HTTP_HOST'] . self::getProdUri($item['path']);
             $posts[$i]['description'] = strip_tags(ORM::factory('description', $item['id'])->__get('text'));
-
             $posts[$i]['pubDate'] = date('r');
             $posts[$i]['guid'] = $posts[$i]['link'];
             $i++;
@@ -268,6 +265,7 @@ class Model_Product extends ORM
 
                         $product->set('cat', $catId)
                             ->set('name', $prodName)
+                            ->set('path', str_replace(' ', '-', strtolower($prodName)))
                             ->set('price', $prodPrice)
                             ->set('whs', $availability)
                             ->save();
@@ -299,5 +297,25 @@ class Model_Product extends ORM
                     }
                 }
         return $i;
+    }
+
+    /**
+     * Возвращает адрес страницы
+     * @return string
+     */
+    public function getUri()
+    {
+        return url::base() . 'product/' . htmlspecialchars($this->path);
+    }
+
+    /**
+     * Возвращает адрес страницы товара по переданному параметру path
+     * @return string
+     */
+    public static function getProdUri($path)
+    {
+        $p = Model::factory('product');
+        $p->path = $path;
+        return $p->getUri();
     }
 }
