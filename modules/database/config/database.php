@@ -21,7 +21,7 @@ return array
 			'username'    =>    'root',
 			'password'    =>    'password',
 			'persistent' => FALSE,
-			'database'    =>    'php5shop',
+			'database'    =>    'remontad',
 		),
 		'table_prefix' => 'p5shp_',
 		'charset'      => 'utf8',
