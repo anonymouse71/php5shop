@@ -75,8 +75,12 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  * - boolean  caching     enable or disable internal caching                 FALSE
  */
 
+/**
+ * Set the production status
+ */
+define('IN_PRODUCTION', TRUE);
 
-Kohana::init(array('base_url' => '/', 'index_file' => '', 'caching' => TRUE));
+Kohana::init(array('base_url' => '/', 'index_file' => '', 'caching' => TRUE, 'profile' => FALSE));
 
 /**
  * Attach the file write to logging. Multiple writers are supported.
@@ -249,10 +253,6 @@ Route::set('files', '(<file>)', array('file' => '.+'))
     )
 );
 
-/**
- * Set the production status
- */
-define('IN_PRODUCTION', TRUE);
 $request = Request::instance();
 try
 {
