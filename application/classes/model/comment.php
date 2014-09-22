@@ -61,7 +61,7 @@ class Model_Comment extends ORM
                 $obj->__set('username', $_POST['yourName'] ? $_POST['yourName'] : 'Аноним');
                 $obj->save();
                 header('Location: ' . $_SERVER['REQUEST_URI']);
-                return '';
+                die('<html><script>document.location.href += "";</script></html>');
             }
             return 'Проверочное изображение введено неверно';
 
