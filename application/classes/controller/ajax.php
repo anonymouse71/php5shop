@@ -148,7 +148,7 @@ class Controller_Ajax extends Controller
     {
         if ($string)
         {
-            //$string2 = preg_replace('#[-.\'"(),/\;:<>]*#u', '', $string);     //без осн. спецсимв.
+            $string = urldecode($string);
             $string2 = $string; //регулярное выражение заменено на более быстрый варинт с str_replace
             foreach (array('=', '.', ';', ':', '\\', "'", '"', '(', ')', '/', '<', '>', '+', '-', '_', ',') as $char)
                 $string2 = str_replace($char, '', $string2);
