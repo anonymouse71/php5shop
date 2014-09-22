@@ -146,6 +146,7 @@ class Controller_Ajax extends Controller
      */
     public function action_search($string = null)
     {
+        $string = urldecode($string);
         if ($string)
         {
             //$string2 = preg_replace('#[-.\'"(),/\;:<>]*#u', '', $string);     //без осн. спецсимв.
