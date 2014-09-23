@@ -424,7 +424,7 @@ class Controller_Admin extends Controller_Template
         if (isset($_POST['add_item']))
         {   //Добавление товаров по 1
             ORM::factory('product')
-                ->set('name', str_replace(' ', '-', strtolower($_POST['add_item'])))
+                ->set('path', str_replace(' ', '-', strtolower($_POST['add_item'])))
                 ->set('name', $_POST['add_item'])
                 ->save();
             $this->request->redirect(
