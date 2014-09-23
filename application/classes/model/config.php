@@ -46,9 +46,9 @@ class Model_Config
         {
             $query = 'UPDATE ' . Kohana::config('database')->default['table_prefix'] . 'configBool SET value = CASE ';
             foreach ($name as $key => $value)
-            {
-                $query .= 'WHEN name="' . mysql_real_escape_string($key) . '" THEN ' . ($value ? '1' : '0') . ' ';
-            }
+                $query .= 'WHEN name="' . Database::instance()->escape($key)
+                    . '" THEN ' . ($value ? '1' : '0') . ' ';
+
             $query .= 'END;';
 
             DB::query(Database::UPDATE, $query)->execute();
