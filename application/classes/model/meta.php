@@ -20,7 +20,7 @@ class Model_Meta extends ORM
     public static function get_current()
     {
         $base = url::base();
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = urldecode($_SERVER['REQUEST_URI']);
         if ($base != '/' && $uri != '/')
             $uri = '/' . mb_substr($uri, mb_strlen($base, Kohana::$charset));
 
@@ -53,4 +53,9 @@ class Model_Meta extends ORM
         return self::$meta->$key;
     }
 
+    public function set($column, $value)
+    {
+        parent::__set($column, $value);
+        return $this;
+    }
 }
