@@ -421,14 +421,17 @@ class Controller_Admin extends Controller_Template
     public function action_products($cat = 0)
     {
         $onPage = 200;
-        if(isset($_POST['add_item']))
+        if (isset($_POST['add_item']))
         {   //Добавление товаров по 1
-            ORM::factory('product')->set('name', $_POST['add_item'])->save();
+            ORM::factory('product')
+                ->set('name', str_replace(' ', '-', strtolower($_POST['add_item'])))
+                ->set('name', $_POST['add_item'])
+                ->save();
             $this->request->redirect(
                 url::base()
-                    . 'admin/products?page='
-                    . ceil(Model::factory('product')->count_all() / $onPage)
-                    . '#addItemForm');
+                . 'admin/products?page='
+                . ceil(Model::factory('product')->count_all() / $onPage)
+                . '#addItemForm');
             Model::factory('sitemap')->update();
             exit;
         }
