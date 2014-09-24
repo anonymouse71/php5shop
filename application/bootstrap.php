@@ -248,7 +248,7 @@ Route::set('interkassa_status', 'interkassa/status/<hash>', array('hash' => '[^/
 Route::set('files', '(<file>)', array('file' => '.+'))
     ->defaults(
     array(
-        'controller' => 'error',
+        'controller' => 'page',
         'action' => '404',
     )
 );
@@ -260,7 +260,10 @@ try
 }
 catch (ReflectionException $e)
 {
-    $request = Request::factory('page/404')->execute();
+    $uri = $request->uri;
+    $request = Request::factory('page/404');
+    $request->uri = $uri;
+    $request->execute();
 }
 
 if (FALSE !== strpos($request->response, '<html')) //если контент в HTML, минимизируем код

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+
 /**
  * php5shop - CMS интернет-магазина
  * Copyright (C) 2010-2012 phpdreamer
@@ -15,37 +16,50 @@
  * Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.
  */
-
-/**
- * Модель для получения и изменения настроек верхнего меню
- */
-
-class Model_Menuitem extends ORM
+class Model_Page extends ORM
 {
-    /**
-     * метод получает значения массива, который определяет какие пункты меню будут отображены
-     */
-    public static function get()
-    {
-        return ORM::factory('menuItem')->find_all()->as_array('id', 'item');
-    }
+    protected static $menu_items;
+    protected static $cache_key = 'special_pages';
 
     /**
-     * метод устанавливает значения массива, который определяет какие пункты меню будут отображены
+     * Возвращает асоциативный массив, ключами которого являются uri страниц, а значениями - их названия
+     * @return array
      */
-    public static function set($array)
+    public static function get_menu()
     {
-        if (!count($array))
-            return;
 
-        $count = ORM::factory('menuItem')->count_all(); //получение количества записей в таблице menus
+        if (!isset(self::$menu_items))
+        {
+            self::$menu_items = Cache::instance()->get(self::$cache_key);
 
-        foreach ($array as $key => $value) //для всех элиментов массива
-            if (($value == 0 || $value == 1) && $key > 0 && $key <= $count) //если значения 0 или 1, причем ключевое поле от 1 до $count
+            if (!isset(self::$menu_items))
             {
-                $menu = ORM::factory('menuItem', $key); //выполняется поиск записи с индексом равным ключу
-                $menu->item = $value; //устанавливается новое значение
-                $menu->save(); //данные отправляются в СУБД
+                self::$menu_items = DB::select('name', 'path')->from('pages')
+                    ->where('enabled', '=', '1')
+                    ->execute()->as_array('path', 'name');
+                Cache::instance()->set(self::$cache_key, self::$menu_items);
             }
+        }
+
+        return self::$menu_items;
     }
+
+    public function set($column, $value)
+    {
+        parent::__set($column, $value);
+        return $this;
+    }
+
+    public function save()
+    {
+        Cache::instance()->delete(self::$cache_key);
+        return parent::save();
+    }
+
+    public function delete($id = NULL)
+    {
+        Cache::instance()->delete(self::$cache_key);
+        return parent::delete($id);
+    }
+
 }

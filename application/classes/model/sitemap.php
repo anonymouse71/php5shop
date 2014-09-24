@@ -29,14 +29,8 @@ class Model_Sitemap
         $site = 'http://' . $_SERVER['HTTP_HOST'] . url::base();
         $urls = '';
 
-        $controllers = array(
-            '',
-            'page/clients',
-            'page/contacts',
-            'shop/cart',
-            'shop/blog',
-            'about'
-        );
+        $controllers = array_merge(array('', 'shop/blog', 'about'), array_keys(Model_Page::get_menu()));
+
         foreach ($controllers as $page)
             $urls .= $this->url($site . $page);
 

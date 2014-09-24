@@ -18,16 +18,10 @@
         <a href="<?php echo url::base();?>admin/edit/5">Footer (низ страницы)</a>
     </li>
     <li>
-        <a href="<?php echo url::base();?>admin/edit/6">Страница &quot;Доставка и оплата&quot;</a>
+        <a href="<?php echo url::base();?>admin/edit/6">Логотип</a>
     </li>
     <li>
-        <a href="<?php echo url::base();?>admin/edit/7">Страница контактов</a>
-    </li>
-    <li>
-        <a href="<?php echo url::base();?>admin/edit/8">Логотип</a>
-    </li>
-    <li>
-        <a href="<?php echo url::base();?>admin/edit/9">Заголовок магазина</a>
+        <a href="<?php echo url::base();?>admin/edit/7">Заголовок магазина</a>
     </li>
 </ul>
 <form action="" method="post">

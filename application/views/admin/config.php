@@ -1,7 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
 <style type="text/css">a{color: #000;}</style>
 <h2>Настройки магазина</h2>
-<a class="btn btn-info button-lg" href="admin/edit/">Редактирование рекламных блоков и дополнительных страниц магазина</a>
+<a class="btn btn-info button-lg" href="admin/edit/">Редактирование рекламных блоков</a>
+<a class="btn btn-info button-lg" href="admin/pages/">Редактирование дополнительных страниц</a>
+
 <a class="btn btn-info button-lg"  href="admin/paytypes">Редактирование способов оплаты</a>
 <br>
 <table border="0" style="margin-top: 10px">
@@ -95,28 +97,20 @@
                         <td><input type="checkbox" name="menu2" <?php if($menu[2])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Контакты</span></td>
+                        <td><span>Панель управления (видна только администраторам)</span></td>
                         <td><input type="checkbox" name="menu3" <?php if($menu[3])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Доставка и оплата</span></td>
+                        <td><span>Аккаунт</span></td>
                         <td><input type="checkbox" name="menu4" <?php if($menu[4])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Панель управления (видна только администраторам)</span></td>
+                        <td><span>Покупки (корзина)</span></td>
                         <td><input type="checkbox" name="menu5" <?php if($menu[5])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Аккаунт</span></td>
-                        <td><input type="checkbox" name="menu6" <?php if($menu[6])echo 'checked="1"';?>></td>
-                    </tr>
-                    <tr>
-                        <td><span>Покупки (корзина)</span></td>
-                        <td><input type="checkbox" name="menu7" <?php if($menu[7])echo 'checked="1"';?>></td>
-                    </tr>
-                    <tr>
                         <td><span>Лента новостей (RSS)</span></td>
-                        <td><input type="checkbox" name="menu8" <?php if($menu[8])echo 'checked="1"';?>></td>
+                        <td><input type="checkbox" name="menu6" <?php if($menu[6])echo 'checked="1"';?>></td>
                     </tr>                    
                     <tr align="center">
                         <td ><input type="button" id="submit" value="сохранить"></td>
@@ -186,6 +180,7 @@ $('.removeIt').css('cursor', 'pointer');
 $('#ansver').ajaxError(function() {
   $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
   $(this).show("slow");
+    // TODO: заменить attr('disabled', 0) на removeAttr
   $('#submit').attr('disabled', 0);
 });
 $('#submit').click(function (){

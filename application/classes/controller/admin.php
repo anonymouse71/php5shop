@@ -493,76 +493,110 @@ class Controller_Admin extends Controller_Template
     {
         $this->template->head = new View('admin/ckeditorHeader');
         $this->template->body = new View('admin/editHTML');
+        $blocks = array(
+            1 => 'about',
+            2 => 'banner1',
+            3 => 'banner2',
+            4 => 'banner3',
+            5 => 'banner4',
+            6 => 'logo',
+            7 => 'topTitle'
+        );
+        $block = (int)$block;
+        if (isset($blocks[$block]))
+        {
+            if (isset($_POST['editor']))
+            {
+                Model::factory('html')->setblock($blocks[$block], $_POST['editor']);
+                Cache::instance()->delete('htmlBlocks');
+                $this->template->body->text = $_POST['editor'];
+            }
+            else
+                $this->template->body->text = Model::factory('html')->getblock($blocks[$block]);
+        }
+        else
+            $this->template->body->text = '';
+    }
+
+    public function action_pages()
+    {
         if (isset($_POST['editor']))
         {
-            switch ($block)
+            if( isset($_POST['id']) && $_POST['id'])
             {
-                case 1:
-                    Model::factory('html')->setblock('about', $_POST['editor']);
-                    break;
-                case 2:
-                    Model::factory('html')->setblock('banner1', $_POST['editor']);
-                    break;
-                case 3:
-                    Model::factory('html')->setblock('banner2', $_POST['editor']);
-                    break;
-                case 4:
-                    Model::factory('html')->setblock('banner3', $_POST['editor']);
-                    break;
-                case 5:
-                    Model::factory('html')->setblock('banner4', $_POST['editor']);
-                    break;
-                case 6:
-                    Model::factory('html')->setHtml(1, $_POST['editor']);
-                    break;
-                case 7:
-                    Model::factory('html')->setHtml(2, $_POST['editor']);
-                    break;
-                case 8:
-                    Model::factory('html')->setblock('logo', $_POST['editor']);
-                    break;
-                case 9:
-                    Model::factory('html')->setblock('topTitle', $_POST['editor']);
-                    break;
-                default:
-                    break;
+                // редактирование text
+                $page = ORM::factory('page', $_POST['id']);
+                $page->text = $_POST['editor'];
+                $page->save();
             }
-            Cache::instance()->delete('htmlBlocks');
+            elseif(isset($_POST['name']))
+            {
+                // добавление
+
+                $name = str_replace(' ', '-', $_POST['name']);
+                if (function_exists('mb_strtolower'))
+                    $name = mb_strtolower($_POST['name'], 'utf-8');
+
+                Model::factory('page')
+                    ->set('name', $_POST['name'])
+                    ->set('text', $_POST['editor'])
+                    ->set('path', $name)
+                    ->save();
+            }
+            $this->request->redirect(url::base() . 'admin/pages');
         }
-        switch ($block)
+        if (isset($_POST['del']))
         {
-            case 1:
-                $this->template->body->text = Model::factory('html')->getblock('about');
-                break;
-            case 2:
-                $this->template->body->text = Model::factory('html')->getblock('banner1');
-                break;
-            case 3:
-                $this->template->body->text = Model::factory('html')->getblock('banner2');
-                break;
-            case 4:
-                $this->template->body->text = Model::factory('html')->getblock('banner3');
-                break;
-            case 5:
-                $this->template->body->text = Model::factory('html')->getblock('banner4');
-                break;
-            case 6:
-                $this->template->body->text = Model::factory('html')->getHtml(1);
-                break;
-            case 7:
-                $this->template->body->text = Model::factory('html')->getHtml(2);
-                break;
-            case 8:
-                $this->template->body->text = Model::factory('html')->getblock('logo');
-                break;
-            case 9:
-                $this->template->body->text = Model::factory('html')->getblock('topTitle');
-                break;
-            default:
-                $this->template->body->text = '';
-                break;
+            $page = Model::factory('page', (int)$_POST['del']);
+            if ($page->id)
+            {
+                $path = '/' . $page->path;
+                $page->delete();
+                DB::delete('metas')->where('path', '=', $path)->execute();
+            }
+            die('ok');
         }
 
+        $pages = Model::factory('page')->find_all();
+        if (isset($_POST['save']))
+        {
+            // обновление названий и ЧПУ
+            foreach ($pages as $item)
+                if (isset($_POST['path_' . $item->id], $_POST['name_' . $item->id]))
+                {
+                    $changed = false;
+                    $enabled = (int)isset($_POST['enabled_' . $item->id]);
+                    if ($item->enabled != $enabled)
+                    {
+                        $item->enabled = $enabled;
+                        $changed = true;
+                    }
+                    if ($item->name != $_POST['name_' . $item->id])
+                    {
+                        $item->name = $_POST['name_' . $item->id];
+                        $changed = true;
+                    }
+                    if ($item->path != $_POST['path_' . $item->id] && $_POST['path_' . $item->id])
+                    {
+                        // переносим мета данные на новый url
+                        $meta = ORM::factory('meta')
+                            ->where('path', '=', '/' . $item->path)
+                            ->find();
+                        if ($meta->id)
+                            $meta->set('path', '/' . $_POST['path_' . $item->id])->save();
+
+                        $item->path = $_POST['path_' . $item->id];
+                        $changed = true;
+                    }
+                    if ($changed)
+                        $item->save();
+
+                }
+            Model::factory('sitemap')->update();
+            $this->request->redirect($_SERVER['REQUEST_URI']);
+        }
+        $this->template->head = new View('admin/ckeditorHeader');
+        $this->template->body = View::factory('admin/editPages', array('pages' => $pages));
     }
 
     /**
@@ -913,7 +947,7 @@ class Controller_Admin extends Controller_Template
         if (isset($_GET['search_path']))
         {
             $countAll = 0;
-            $meta = ORM::factory('meta')->where('path', '=', $_GET['search_path'])->find_all();
+            $meta = ORM::factory('meta')->where('path', '=', urldecode($_GET['search_path']))->find_all();
         }
         else
         {

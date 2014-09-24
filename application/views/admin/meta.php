@@ -2,7 +2,7 @@
 <h2>SEO</h2>
 <p>Этот раздел дает возможность привязать значения meta-тегов и тега title к страницам магазина.</p>
 <?php if($error):?><p class="alert alert-danger"><?php echo htmlspecialchars($error)?></p><?php endif; ?>
-<form action="" method="post" class="meta_edit_form">
+<form action="" method="post">
     <fieldset>
         <legend>Добавить Meta</legend>
         <label for="new_path">Для страницы:</label><br>
@@ -45,7 +45,9 @@
     <br>
     <hr>
 
-<?php if (count($meta)): ?>
+<?php if (count($meta)):
+    echo View::factory('admin/editMeta')
+    ?>
     <table>
         <thead>
         <tr>
@@ -79,64 +81,9 @@
         </p>
 <?php endif; ?>
 
-<div class="modal fade" id="modal_meta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Редактирование meta</h4>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть окно</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<style>
-    .modal-dialog {
-        width: 720px;
-    }
-</style>
+
 <script type="text/javascript">
-    $('.edit_meta').click(function () {
-        var id = $(this).parent().parent().attr('id').split('_')[1];
-        var tr = $(this).parent().parent();
-        var data = $(".meta_edit_form:first").clone();
-        var fields = ['path', 'title', 'description', 'keywords'];
-        $.each(fields, function (i, v) {
-            var elem = data.find('[name=' + v + ']');
-            elem.val($(tr.find('td')[i]).text());
-            if (i == 0) {
-                elem.attr('disabled', 'disabled');
-            }
-        });
-        data.find('form').submit(function(){return false;});
-        data.find('legend').remove();
-        var submit = data.find('input[type=submit]');
-        submit.attr('type', 'button').attr("data-dismiss", "modal").click(function(){
-            var post_data = {id: id, update: true};
-            $.each(fields, function (i, v) {
-                post_data[v] = data.find('[name=' + v + ']').val();
-            });
-            $.post(document.location.href, post_data, function(answer){
-                if(answer != 'ok'){
-                    alert('Произошла ошибка. Страница будет обновлена. ');
-                    document.location.href += '';
-                    return false;
-                }
-                $.each(fields, function (i, v) {
-                    $(tr.find('td')[i]).text(post_data[v]);
-                });
-            }, 'text');
-        });
-        var modal_meta = $('#modal_meta');
-        modal_meta.find(".modal-body:first").html(data);
-        modal_meta.find(".modal-footer input").remove();
-        submit.detach().appendTo(modal_meta.find(".modal-footer:first"));
-        modal_meta.modal({});
-    });
     $('.del_meta').click(function () {
         if (confirm("Точно удалить?")){
             var id = $(this).parent().parent().attr('id').split('_')[1];
@@ -153,4 +100,17 @@
         }
     });
 
+    $('.edit_meta').click(function () {
+        var tr = $(this).parent().parent();
+        var data = {id: $(this).parent().parent().attr('id').split('_')[1]};
+        var fields = ['path', 'title', 'description', 'keywords'];
+        $.each(fields, function (i, v) {
+            data[v] = $(tr.find('td')[i]).text();
+        });
+        edit_meta_modal(data, function (post_data) {
+            $.each(fields, function (i, v) {
+                $(tr.find('td')[i]).text(post_data[v]);
+            });
+        });
+    });
 </script>

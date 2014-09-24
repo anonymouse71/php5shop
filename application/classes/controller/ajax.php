@@ -328,7 +328,7 @@ class Controller_Ajax extends Controller
         Cache::instance()->delete('htmlBlocks');
 
         //установка пунктов меню
-        for($menuItem = 1; $menuItem < 9; $menuItem++)
+        for ($menuItem = 1; $menuItem < 7; $menuItem++)
             $menu[$menuItem] = (isset($_POST['menu' . $menuItem])) ? 1 : 0;
 
         Model::factory('menuItem')->set($menu);
@@ -893,6 +893,22 @@ class Controller_Ajax extends Controller
     public function action_countOrders()
     {
         die(ORM::factory('order')->count_all());
+    }
+
+    public function action_meta_load()
+    {
+        if (!isset($_POST['path']))
+            throw new Kohana_Exception('Invalid Request');
+
+        $meta = ORM::factory('meta')
+            ->where('path', '=', $_POST['path'])
+            ->find()->as_array();
+
+        if (!isset($meta['id']) || !$meta['id'])
+            $meta = ORM::factory('meta')->set('path', $_POST['path'])->save()->as_array();
+
+        die(json_encode($meta));
+
     }
 
 }

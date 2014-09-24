@@ -65,6 +65,9 @@ class Controller_Site extends Controller_Template
             self::$cache->set('menuItem', $tpl->menu);
         }
 
+        // дополниетельные страницы ( cached ! )
+        $tpl->special_pages = Model_Page::get_menu();
+
         //получение содержимого пользовательских HTML блоков
         $htmlBlocks = self::$cache->get('htmlBlocks');
         if (null === $htmlBlocks)
