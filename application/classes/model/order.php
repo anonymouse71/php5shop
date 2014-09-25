@@ -191,7 +191,7 @@ class Model_Order extends ORM
 
         foreach ($orders as $i => $order)
         {
-            $products = DB::select('products.name', 'products.price', 'ordproducts.*')->from('ordproducts')
+            $products = DB::select('products.path', 'products.name', 'products.price', 'ordproducts.*')->from('ordproducts')
                 ->where('ordproducts.id', '=', $order['id'])
                 ->and_where('ordproducts.whs', '>', 0)
                 ->join('products')->on('products.id', '=', 'product')
