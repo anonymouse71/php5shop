@@ -87,7 +87,11 @@ class Controller_Page extends Controller_Site
     public function action_404()                                                //ошибка 404
     {
         if ($this->find_page(urldecode($this->request->uri)))
+        {
+            $this->template->show_contact_form = TRUE;
             return;
+        }
+
 
         if (in_array($_SERVER['REQUEST_URI'],
             array( // с этих страниц отправляем на главную

@@ -248,7 +248,7 @@ class Controller_Shop extends Controller_Site
             if (count($cat_description))
                 $this->template->about2 = join('<hr />', $cat_description);
 
-
+            $this->template->show_contact_form = TRUE;
         }
         else //категория не указана
         {
@@ -259,6 +259,8 @@ class Controller_Shop extends Controller_Site
             {
                 if ($_SERVER['REQUEST_URI'] != url::base())
                     $this->request->redirect(url::base(), 301);
+
+                $this->template->show_contact_form = TRUE;
 
                 //берем 1-ю страницу из кэша
                 $products = self::$cache->get('LastProd');

@@ -31,6 +31,7 @@
  * themes                               - массив со списком доступных для применения шаблонов дизайна
  * theme                                - выбранный шаблон дизайна
  * special_pages                        - ссылки на дополнительные страницы
+ * show_contact_form                   - показывать форму обратной связи
  */
 ?><!DOCTYPE html>
 <html>
@@ -194,14 +195,14 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                     </div>
                 </div>
 
-
                 <!-- Форма обратной связи -->
+                <?php if ($show_contact_form): ?>
                 <div id="place_for_contact_form"></div>
                 <script>
                     $.get('/ajax/contact_form', null, function(f){$("#place_for_contact_form").html(f)}, 'html');
                 </script>
+                <?php endif ?>
                 <!-- /Форма обратной связи -->
-
 
             </div>
         </div>
