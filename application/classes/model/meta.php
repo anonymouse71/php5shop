@@ -19,7 +19,13 @@ class Model_Meta extends ORM
      */
     public static function get_current()
     {
-        self::$meta = ORM::factory('meta')->where('path', '=', $_SERVER['REQUEST_URI'])->find();
+        $base = url::base();
+        $uri = urldecode($_SERVER['REQUEST_URI']);
+        if ($base != '/' && $uri != '/')
+            $uri = '/' . mb_substr($uri, mb_strlen($base, Kohana::$charset));
+
+        self::$meta = ORM::factory('meta')->where('path', '=', $uri)->find();
+         self::$meta_set = (bool)self::$meta->id;
         self::$meta_set = (bool)self::$meta->id;
         return self::$meta;
     }
