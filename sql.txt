@@ -643,3 +643,14 @@ ALTER TABLE `p5shp_orders`
 ALTER TABLE  `p5shp_products`
 ADD  `main_page` TINYINT( 1 ) NOT NULL DEFAULT  '0'
 COMMENT  'show product on the main page';
+
+ALTER TABLE  `p5shp_users`
+ADD  `password` CHAR( 32 )
+CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER  `username`;
+
+CREATE TABLE IF NOT EXISTS `p5shp_antibruteforce` (
+  `ip` bigint(14) unsigned NOT NULL,
+  `try` int(1) DEFAULT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

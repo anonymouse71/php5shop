@@ -31,7 +31,7 @@ class Controller_Admin extends Controller_Template
 
         Auth::instance()->auto_login();
         if (!Auth::instance()->logged_in('admin'))
-            die(Request::factory(url::base() . 'error/404')->execute());
+            die(Request::factory(url::base() . 'page/auth')->execute());
 
         $this->template->path = url::base() . 'admin/';
         $this->template->title = 'Панель управления ';

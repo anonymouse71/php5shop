@@ -54,11 +54,12 @@ abstract class Kohana_Auth {
 
 	protected $config;
 
-	/**
-	 * Loads Session and configuration options.
-	 *
-	 * @return  void
-	 */
+    /**
+     * Loads Session and configuration options.
+     *
+     * @param array $config
+     * @return \Kohana_Auth
+     */
 	public function __construct($config = array())
 	{
 		// Clean up the salt pattern and split it into an array
@@ -105,11 +106,10 @@ abstract class Kohana_Auth {
 
 		if (is_string($password))
 		{
-			// Get the salt from the stored password
-			$salt = $this->find_salt($this->password($username));
 
-			// Create a hashed password using the salt from the stored password
-			$password = $this->hash_password($password, $salt);
+			// Create a hashed password
+			$password = md5($password);
+
 		}
 
 		return $this->_login($username, $password, $remember);

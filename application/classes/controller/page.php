@@ -82,6 +82,42 @@ class Controller_Page extends Controller_Site
         }
     }
 
+    public function action_auth()
+    {
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title .= ' - Вход в панель управления';
+
+        $error = '';
+        if (isset($_POST['username'], $_POST['password'], $_POST['token']))
+        {
+            if (Model_Token::check($_POST['token']))
+            {
+                $antibrut = Model::factory('Antibrut');                                 //механизм защиты от перебора паролей
+                if ($antibrut->chk())                                                   //если попытки авторизаций закончились
+                {
+                    $auth = Auth::instance();
+
+                    if (!$auth->login($_POST['username'], $_POST['password'], TRUE)) //попытка авторизации
+                    {
+                        $antibrut->bad();
+                        $error = 'Ошибка! Не найден пользователь с таким логином и паролем.';
+                    }
+                    elseif ($auth->logged_in('admin'))
+                    {
+                        $antibrut->unlock();
+                        $this->request->redirect($_SERVER['REQUEST_URI']);
+                    }
+                }
+                else
+                    $error = 'Вы исчерпали лимит ошибок при вводе пароля. В целях безопасности, для Вас временно заблокирована возможность входа.';
+            }
+            else
+                $error = 'Ошибка! Одноразовый ключ устарел, повторите попытку.';
+        }
+
+        $this->template->about = View::factory('login_admin',
+            array('token' => Model_Token::get(TRUE), 'error' => $error));
+    }
 
 
     public function action_404()                                                //ошибка 404
