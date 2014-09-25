@@ -287,7 +287,7 @@ class Controller_Shop extends Controller_Site
             $Pagination = new Pagination(
                 array( //создаем навигацию
                     'uri_segment' => 'products/',
-                    'total_items' => ORM::factory('product')->count_all(),
+                    'total_items' => ORM::factory('product')->where('main_page', '=', 1)->count_all(),
                     'items_per_page' => $this->productsOnPage,
                 ));
         }

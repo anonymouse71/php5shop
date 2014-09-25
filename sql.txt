@@ -638,3 +638,8 @@ CREATE TABLE IF NOT EXISTS `p5shp_pages` (
 --
 ALTER TABLE `p5shp_orders`
   ADD CONSTRAINT `p5shp_orders_ibfk_2` FOREIGN KEY (`pay_type`) REFERENCES `p5shp_pay_types` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+
+ALTER TABLE  `p5shp_products`
+ADD  `main_page` TINYINT( 1 ) NOT NULL DEFAULT  '0'
+COMMENT  'show product on the main page';

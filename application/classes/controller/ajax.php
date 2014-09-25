@@ -747,11 +747,19 @@ class Controller_Ajax extends Controller
                 exit;
 
             case 2: //редактирование
-                if (isset($_POST['name'], $_POST['id'], $_POST['price'], $_POST['whs'], $_POST['path']))
+                if (isset($_POST['name'], $_POST['id'], $_POST['price'],
+                    $_POST['whs'], $_POST['path'], $_POST['main_page']))
                 {
                     $p = ORM::factory('product', (int)$_POST['id']);
                     if (isset($_POST['cat']))
                         $p->set('cat', (int)$_POST['cat']);
+
+                    if ($p->main_page != $_POST['main_page']) // изменился параметр "отображать на главной"
+                    {
+                        $p->set('main_page', $_POST['main_page']);
+                        // чистим кэш главной страницы
+                        Cache::instance()->delete('LastProd');
+                    }
                     $p->set('name', $_POST['name'])
                         ->set('price', (float)$_POST['price'])
                         ->set('whs', (int)$_POST['whs'])

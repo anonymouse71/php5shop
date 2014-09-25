@@ -78,7 +78,7 @@ class Model_Product extends ORM
      */
     public function getLast($n, $offset = 0)
     {
-        return DB::select()->from('products')
+        return DB::select()->from('products')->where('main_page', '=', 1)
             ->order_by('id', 'desc')
             ->offset($offset)
             ->limit($n)

@@ -92,6 +92,7 @@ endif;?>
             <td>цена <?php echo $currency;?></td>
             <td>наличие</td>
             <td>фото</td>
+            <td>на главной</td>
             <td></td>
         </tr>
         <?php foreach ($cats as $item): ?>
@@ -116,6 +117,9 @@ endif;?>
                        onClick="popupWin = window.open(this.href, 'contacts', 'location,width=700,height=600,top=50,scrollbars=1,location=0,menubar=0,resizable=1,status=0,toolbar=0'); popupWin.focus(); return false;">
                         <img class="editd" alt="edit" src="images/edit.png" title="Редактировать изображения">
                     </a>
+                </td>
+                <td>
+                    <input type="checkbox" <?php echo $item->main_page == '1' ?'checked' : ''; ?>>
                 </td>
                 <td>
                     <img class="saveIt" alt="Сохранить" src="images/save.png" title="Сохранить">
@@ -153,7 +157,8 @@ endif;?>
                     path: $(myP[2]).children().val(),
                     price: $(myP[4]).children().val(),
                     whs: $(myP[5]).children().val(),
-                    cat: pcat
+                    cat: pcat,
+                    main_page: $(myP[7]).find('input:first').prop('checked') ? '1' : '0'
                 },
                 function (data) {
                     $('#ansver').html(data);
@@ -204,7 +209,8 @@ endif;?>
                     path: $(myP[2]).children().val(),
                     price: $(myP[4]).children().val(),
                     whs: $(myP[5]).children().val(),
-                    cat: pcat
+                    cat: pcat,
+                    main_page: $(myP[7]).find('input:first').prop('checked') ? '1' : '0'
                 };
                 $.post('ajax/products/2', data2save, function (data) {
                     post_resp += 1;
