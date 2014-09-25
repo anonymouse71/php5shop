@@ -31,9 +31,7 @@ class Controller_Page extends Controller_Site
             $view = new View(TPL . 'blogPost'); //подключение отображения
             $view->post = Model::factory('BlogPost', $id); //получение записи
             if (!isset($view->post->id)) //нет записи с таким id?
-            {
-                exit($this->request->redirect(url::base() . 'error/404'));
-            } //перенаправление на страницу 404
+                throw new ReflectionException();// 404
             $this->template->breadcrumbs[] = array($view->post->title, url::base() . 'blog/' . $id);
             $view->post->title = htmlspecialchars($view->post->title);
             $view->is_admin = $is_admin;
@@ -84,36 +82,13 @@ class Controller_Page extends Controller_Site
         }
     }
 
-    public function action_clients()
-    {
-        if ($this->template->menu[4]) //если страница включена
-        {
-            $this->template->about = Model::factory('html')->getHtml(1); //подстановка HTML
-            if (!Model_Meta::special_meta_tags())
-                $this->template->title .= ' - Наши клиенты'; //дополнение заголовка страницы
-        }
-        else
-        {
-            $this->request->redirect(url::base());
-        }
-    }
 
-    public function action_contacts()
-    {
-        if ($this->template->menu[3]) //если страница включена
-        {
-            $this->template->about = Model::factory('html')->getHtml(2); //подстановка HTML
-            if (!Model_Meta::special_meta_tags())
-                $this->template->title .= ' - Наши контакты'; //дополнение заголовка страницы
-        }
-        else
-        {
-            $this->request->redirect(url::base());
-        }
-    }
 
     public function action_404()                                                //ошибка 404
     {
+        if ($this->find_page(urldecode($this->request->uri)))
+            return;
+
         $this->request->status = 404;
         if (!Model_Meta::special_meta_tags())
             $this->template->title = '404';
@@ -121,4 +96,23 @@ class Controller_Page extends Controller_Site
         $this->template->about = '';
     }
 
+    protected function find_page($uri)
+    {
+        $known_pages = Model_Page::get_menu();
+        if (!isset($known_pages[$uri]))
+            return FALSE;                // page not found in menu
+
+        $page = ORM::factory('page')
+            ->where('path', '=', $uri)
+            ->and_where('enabled', '=', 1)->find();
+        if (!$page->id)                 // page not found in database
+            return FALSE;
+
+        if (!Model_Meta::special_meta_tags())
+            $this->template->title .= ' - ' . htmlspecialchars($page->name);
+        $this->template->stuff = $page->text;
+        $this->template->about = '';
+        // page was found and rendered
+        return TRUE;
+    }
 }

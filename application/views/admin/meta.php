@@ -2,7 +2,7 @@
 <h2>SEO</h2>
 <p>Этот раздел дает возможность привязать значения meta-тегов и тега title к страницам магазина.</p>
 <?php if($error):?><p class="alert alert-danger"><?php echo htmlspecialchars($error)?></p><?php endif; ?>
-<form action="" method="post" class="meta_edit_form">
+<form action="" method="post">
     <fieldset>
         <legend>Добавить Meta</legend>
         <label for="new_path">Для страницы:</label><br>
@@ -12,7 +12,7 @@
             >
         <br>
         <small>*Указывайте адрес страницы начиная с символа /, который следуюет за доменом сайта.
-        Пример: /page/contacts
+            Пример: /page/contacts
         </small>
         <br>
         <label for="new_title">Заголовок страницы (title)</label><br>
@@ -26,26 +26,28 @@
         <br><input type="submit" value="Сохранить" name="new_save">
     </fieldset>
 </form>
-    <br><br>
+<br><br>
 <fieldset>
     <legend>Редактировать Meta</legend>
 </fieldset>
-    <form action="" method="GET">
+<form action="" method="GET">
 
-        <label for="search_path">Поиск страницы по URI:</label><br>
-        <input id="search_path" name="search_path" placeholder="/page_uri" maxlength="255" size="100"
-            <?php if (isset($_GET['search_path']))
-                echo 'value="', htmlspecialchars($_GET['search_path']), '"';?>
-            >
-        <br><br>
-        <input type="submit" value="Найти">
+    <label for="search_path">Поиск страницы по URI:</label><br>
+    <input id="search_path" name="search_path" placeholder="/page_uri" maxlength="255" size="100"
         <?php if (isset($_GET['search_path']))
-            echo '<a href="/admin/meta" class="btn btn-default">Отменить поиск, показать все</a>';?>
-    </form>
-    <br>
-    <hr>
+            echo 'value="', htmlspecialchars($_GET['search_path']), '"';?>
+        >
+    <br><br>
+    <input type="submit" value="Найти">
+    <?php if (isset($_GET['search_path']))
+        echo '<a href="/admin/meta" class="btn btn-default">Отменить поиск, показать все</a>';?>
+</form>
+<br>
+<hr>
 
-<?php if (count($meta)): ?>
+<?php if (count($meta)):
+    echo View::factory('admin/editMeta')
+    ?>
     <table>
         <thead>
         <tr>
@@ -57,16 +59,16 @@
         </tr>
         </thead>
         <tbody>
-    <?php foreach($meta as $item): ?>
-        <tr id="meta_<?php echo $item->id ?>">
-            <?php foreach(array('path', 'title', 'description', 'keywords') as $k)
-                echo '<td>',htmlspecialchars($item->$k),'</td>' ?>
-            <td><a href="javascript:void(0);" class="btn btn-default edit_meta"><img alt="edit" src="images/edit.png" title="Редактировать"></a>
-                <a href="javascript:void(0);" class="btn btn-default del_meta"><img alt="Удалить" src="images/delete.png" title="Удалить"></a>
-            </td>
-        </tr>
+        <?php foreach($meta as $item): ?>
+            <tr id="meta_<?php echo $item->id ?>">
+                <?php foreach(array('path', 'title', 'description', 'keywords') as $k)
+                    echo '<td>',htmlspecialchars($item->$k),'</td>' ?>
+                <td><a href="javascript:void(0);" class="btn btn-default edit_meta"><img alt="edit" src="images/edit.png" title="Редактировать"></a>
+                    <a href="javascript:void(0);" class="btn btn-default del_meta"><img alt="Удалить" src="images/delete.png" title="Удалить"></a>
+                </td>
+            </tr>
 
-    <?php endforeach ?>
+        <?php endforeach ?>
         </tbody>
     </table>
     <?php echo $pagination ?>
@@ -76,67 +78,12 @@
             echo 'искомой страницы';
         else
             echo 'страниц.';?>
-        </p>
+    </p>
 <?php endif; ?>
 
-<div class="modal fade" id="modal_meta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Редактирование meta</h4>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть окно</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<style>
-    .modal-dialog {
-        width: 720px;
-    }
-</style>
+
 <script type="text/javascript">
-    $('.edit_meta').click(function () {
-        var id = $(this).parent().parent().attr('id').split('_')[1];
-        var tr = $(this).parent().parent();
-        var data = $(".meta_edit_form:first").clone();
-        var fields = ['path', 'title', 'description', 'keywords'];
-        $.each(fields, function (i, v) {
-            var elem = data.find('[name=' + v + ']');
-            elem.val($(tr.find('td')[i]).text());
-            if (i == 0) {
-                elem.attr('disabled', 'disabled');
-            }
-        });
-        data.find('form').submit(function(){return false;});
-        data.find('legend').remove();
-        var submit = data.find('input[type=submit]');
-        submit.attr('type', 'button').attr("data-dismiss", "modal").click(function(){
-            var post_data = {id: id, update: true};
-            $.each(fields, function (i, v) {
-                post_data[v] = data.find('[name=' + v + ']').val();
-            });
-            $.post(document.location.href, post_data, function(answer){
-                if(answer != 'ok'){
-                    alert('Произошла ошибка. Страница будет обновлена. ');
-                    document.location.href += '';
-                    return false;
-                }
-                $.each(fields, function (i, v) {
-                    $(tr.find('td')[i]).text(post_data[v]);
-                });
-            }, 'text');
-        });
-        var modal_meta = $('#modal_meta');
-        modal_meta.find(".modal-body:first").html(data);
-        modal_meta.find(".modal-footer input").remove();
-        submit.detach().appendTo(modal_meta.find(".modal-footer:first"));
-        modal_meta.modal({});
-    });
     $('.del_meta').click(function () {
         if (confirm("Точно удалить?")){
             var id = $(this).parent().parent().attr('id').split('_')[1];
@@ -153,4 +100,17 @@
         }
     });
 
+    $('.edit_meta').click(function () {
+        var tr = $(this).parent().parent();
+        var data = {id: $(this).parent().parent().attr('id').split('_')[1]};
+        var fields = ['path', 'title', 'description', 'keywords'];
+        $.each(fields, function (i, v) {
+            data[v] = $(tr.find('td')[i]).text();
+        });
+        edit_meta_modal(data, function (post_data) {
+            $.each(fields, function (i, v) {
+                $(tr.find('td')[i]).text(post_data[v]);
+            });
+        });
+    });
 </script>

@@ -1,7 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
 <style type="text/css">a{color: #000;}</style>
 <h2>Настройки магазина</h2>
-<a class="btn btn-info button-lg" href="admin/edit/">Редактирование рекламных блоков и дополнительных страниц магазина</a>
+<a class="btn btn-info button-lg" href="admin/edit/">Редактирование рекламных блоков</a>
+<a class="btn btn-info button-lg" href="admin/pages/">Редактирование дополнительных страниц</a>
+
 <a class="btn btn-info button-lg"  href="admin/paytypes">Редактирование способов оплаты</a>
 <br>
 <table border="0" style="margin-top: 10px">
@@ -95,29 +97,21 @@
                         <td><input type="checkbox" name="menu2" <?php if($menu[2])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Контакты</span></td>
+                        <td><span>Панель управления (видна только администраторам)</span></td>
                         <td><input type="checkbox" name="menu3" <?php if($menu[3])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Доставка и оплата</span></td>
+                        <td><span>Аккаунт</span></td>
                         <td><input type="checkbox" name="menu4" <?php if($menu[4])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Панель управления (видна только администраторам)</span></td>
+                        <td><span>Покупки (корзина)</span></td>
                         <td><input type="checkbox" name="menu5" <?php if($menu[5])echo 'checked="1"';?>></td>
                     </tr>
                     <tr>
-                        <td><span>Аккаунт</span></td>
+                        <td><span>Лента новостей (RSS)</span></td>
                         <td><input type="checkbox" name="menu6" <?php if($menu[6])echo 'checked="1"';?>></td>
                     </tr>
-                    <tr>
-                        <td><span>Покупки (корзина)</span></td>
-                        <td><input type="checkbox" name="menu7" <?php if($menu[7])echo 'checked="1"';?>></td>
-                    </tr>
-                    <tr>
-                        <td><span>Лента новостей (RSS)</span></td>
-                        <td><input type="checkbox" name="menu8" <?php if($menu[8])echo 'checked="1"';?>></td>
-                    </tr>                    
                     <tr align="center">
                         <td ><input type="button" id="submit" value="сохранить"></td>
                     </tr>
@@ -133,17 +127,17 @@
         <td>
             <b>Статусы заказов:</b>
             <?php foreach($status as $item):?>
-            <div>
-                <p>
-                    <input id="g<?php echo $item->id;?>" type="text" size="23" value="<?php echo $item->name;?>">
-                    <img class="saveIt" alt="Сохранить" src="<?php echo url::base();?>images/save.png" title="Сохранить">
-                    <?php // нельзя удалять статусы "Клиент ожидает звонка", "Ложный заказ", "Выполнен" и "Отменен"
-                    if (!in_array($item->id, array(1, 4, 5, 6))): ?>
-                        <img class="removeIt" alt="Удалить" src="<?php echo url::base(); ?>images/delete.png"
-                             title="Удалить">
-                    <?php endif ?>
-                </p>
-            </div>
+                <div>
+                    <p>
+                        <input id="g<?php echo $item->id;?>" type="text" size="23" value="<?php echo $item->name;?>">
+                        <img class="saveIt" alt="Сохранить" src="<?php echo url::base();?>images/save.png" title="Сохранить">
+                        <?php // нельзя удалять статусы "Клиент ожидает звонка", "Ложный заказ", "Выполнен" и "Отменен"
+                        if (!in_array($item->id, array(1, 4, 5, 6))): ?>
+                            <img class="removeIt" alt="Удалить" src="<?php echo url::base(); ?>images/delete.png"
+                                 title="Удалить">
+                        <?php endif ?>
+                    </p>
+                </div>
             <?php endforeach;?>
             <form method="post" action="<?php echo url::base()?>ajax/status/1">
                 <p>
@@ -164,9 +158,9 @@
                     <input type="submit" value="Сохранить"><br><br>
                     Результаты:<br>
                     <?php foreach($answers as $item):?><span style="color: teal"><?php echo $item->text ;?></span> - <b><?php echo $item->count;?></b><br><?php endforeach;?>
-                </p>                   
+                </p>
                 <input type="button" value="Обнулить счетчики голосования" onclick="$.get('<?php echo url::base();?>ajax/vote0'); this.value='Успешно!'; $(this).attr('disabled',1)">
-                
+
             </form>
             <br>
             <form action="" method="post"> <input type="submit" name="clearRating" value="Обнулить счетчики рейтинга товаров"></form>
@@ -175,47 +169,48 @@
     </tr>
 </table>
 <script type="text/javascript">
-$.each($("#userForm").find('input[type=checkbox]'), function(){
-    $(this).click(function(){
-        $("#submit").trigger('click');
+    $.each($("#userForm").find('input[type=checkbox]'), function(){
+        $(this).click(function(){
+            $("#submit").trigger('click');
+        });
     });
-});
 
-$('.saveIt').css('cursor', 'pointer');
-$('.removeIt').css('cursor', 'pointer');
-$('#ansver').ajaxError(function() {
-  $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
-  $(this).show("slow");
-  $('#submit').attr('disabled', 0);
-});
-$('#submit').click(function (){
-    $(this).attr('disabled', 1);
-    $.post('ajax/config',$("#userForm").serialize(),function (data,textStatus){
-        $('#ansver').html(data);
+    $('.saveIt').css('cursor', 'pointer');
+    $('.removeIt').css('cursor', 'pointer');
+    $('#ansver').ajaxError(function() {
+        $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
+        $(this).show("slow");
+        // TODO: заменить attr('disabled', 0) на removeAttr
         $('#submit').attr('disabled', 0);
-        $('#ansver').show("slow");
     });
-});
-$('#ansver').click(function (){$(this).hide(1000);});
-$('#ansver2').click(function (){$(this).hide(1000);});
-$('.saveIt').click(function(){
-    myP = $(this).parent().children();
-    $.post('ajax/status/2',{ id: myP[0].id.split('g')[1], name: $(myP[0]).val() },function (data){
-       $('#ansver2').html(data);
-       $('#ansver2').show("slow");
+    $('#submit').click(function (){
+        $(this).attr('disabled', 1);
+        $.post('ajax/config',$("#userForm").serialize(),function (data,textStatus){
+            $('#ansver').html(data);
+            $('#submit').attr('disabled', 0);
+            $('#ansver').show("slow");
+        });
     });
-});
-$('.removeIt').click(function(){
-    myP = $(this).parent().children();    
-    $.post('ajax/status/3',{ id: myP[0].id.split('g')[1] },function (data){
-       $('#ansver2').html(data);
-       $('#ansver2').show("slow");
+    $('#ansver').click(function (){$(this).hide(1000);});
+    $('#ansver2').click(function (){$(this).hide(1000);});
+    $('.saveIt').click(function(){
+        myP = $(this).parent().children();
+        $.post('ajax/status/2',{ id: myP[0].id.split('g')[1], name: $(myP[0]).val() },function (data){
+            $('#ansver2').html(data);
+            $('#ansver2').show("slow");
+        });
     });
-    $(this).parent().hide();
-});
-$("#datalog").css('display','none');
+    $('.removeIt').click(function(){
+        myP = $(this).parent().children();
+        $.post('ajax/status/3',{ id: myP[0].id.split('g')[1] },function (data){
+            $('#ansver2').html(data);
+            $('#ansver2').show("slow");
+        });
+        $(this).parent().hide();
+    });
+    $("#datalog").css('display','none');
 
-$('#turnOnInvites').click(function(){$('#turnOnInvites').css('background-color','white');});
+    $('#turnOnInvites').click(function(){$('#turnOnInvites').css('background-color','white');});
 </script>
 
 <div id="errorlogplace"></div>

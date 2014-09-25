@@ -29,6 +29,7 @@
  * breadcrumbs                          - навигационная цепочка
  * themes                               - массив со списком доступных для применения шаблонов дизайна
  * theme                                - выбранный шаблон дизайна
+ * special_pages                        - ссылки на дополнительные страницы
  */
 ?><!DOCTYPE html>
 <html>
@@ -112,22 +113,21 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                             if ($menu[2]): ?>
                                 <li><a href="blog">Новости</a></li>
                             <?php endif;
+                            foreach ($special_pages as $page_uri => $page_label):
+                                ?>
+                                <li><a href="<?php echo htmlspecialchars($page_uri); ?>"><?php echo htmlspecialchars($page_label); ?></a></li>
+
+                            <?php endforeach;
                             if ($menu[3]): ?>
-                                <li><a href="page/contacts">Контакты</a></li>
-                            <?php endif;
-                            if ($menu[4]): ?>
-                                <li><a href="page/clients">Доставка и оплата</a></li>
-                            <?php endif;
-                            if ($menu[5]): ?>
                                 <li><a href="admin/">Панель управления</a></li>
                             <?php endif;
-                            if ($menu[6]): ?>
+                            if ($menu[4]): ?>
                                 <li><a href="shop/user">Личный кабинет</a></li>
                             <?php endif;
-                            if ($menu[7]): ?>
+                            if ($menu[5]): ?>
                                 <li><a href="order/cart">Корзина</a></li>
                             <?php endif;
-                            if ($menu[8] && !$menu[5]): ?>
+                            if ($menu[6] && !$menu[3]): ?>
                                 <li><a href="rss.xml">RSS</a></li>
                             <?php endif; ?>
 
