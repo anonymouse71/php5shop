@@ -82,22 +82,30 @@ color: #000;
 </div>
 <p>&nbsp;</p>
 <div id="ansver"><?php echo $errors;?></div>
-<?php if(isset($_POST['ed']) && $_POST['ed']): ?>
-<div id="editD">
+<?php if (isset($_POST['ed']) && $_POST['ed']): ?>
+    <div id="editD">
+        <h3>Редактирование описания категории id <?php echo (int)$_POST['ed']; ?></h3>
+
         <form action="" method="post">
             <p>
                 <textarea cols="80" id="editor1" name="editor" rows="10"><?php echo $html; ?></textarea>
                 <script type="text/javascript" src="js/ckedit/inc.js"></script>
             </p>
             <p>
-                <input type="submit" value="Сохранить">
-                <input type="hidden" id="descrid" name="descrid" value="<?php echo (string)(int)($_POST['ed']);?>">
-
+                Вы можете использовать разделитель <span class="cke_button_icon cke_button__horizontalrule_icon"
+                                                         style="background-image:url(http://subaru.ccc/js/ckeditor/plugins/icons.png?t=DAED);background-position:0 -336px;background-size:auto;float: none">&nbsp;</span>
+                <br/>Содержимое снизу от разделителя будет отображаться под блоком с товарами,
+                содержимое сверху от разделителя будет над товарами.
             </p>
+            <p>
+                <input type="submit" value="Сохранить">
+                <input type="hidden" id="descrid" name="descrid" value="<?php echo (int)$_POST['ed']; ?>">
+            </p>
+
         </form>
     </div>
 
- <?php endif;   ?>
+<?php endif; ?>
 <script type="text/javascript" language="JavaScript">
 function reloadcats(){
 document.location.href = document.location.href;

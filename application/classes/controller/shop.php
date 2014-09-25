@@ -243,7 +243,11 @@ class Controller_Shop extends Controller_Site
                     $this->categoriesObject->categories['names'][$cat] . //название категории
                     ' - Страница ' . $page . ''; //и страницу
 
-            $this->template->about = Model_Descr_cat::get($cat); //описание категории
+            $cat_description = explode('<hr />', Model_Descr_cat::get($cat));
+            $this->template->about = array_shift($cat_description); //описание категории
+            if (count($cat_description))
+                $this->template->about2 = join('<hr />', $cat_description);
+
 
         }
         else //категория не указана

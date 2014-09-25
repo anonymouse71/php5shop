@@ -242,6 +242,7 @@ class Controller_Site extends Controller_Template
         }
 
         $tpl->breadcrumbs = array(array('Главная', '/'));
+        $tpl->about2 = '';
     }
 
     public function after()
