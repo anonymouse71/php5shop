@@ -9,6 +9,7 @@ color: #000;
 .level3{padding-left: 45px;}
 .level4{padding-left: 60px;}
 </style>
+<?php echo View::factory('admin/editMeta'); ?>
 
 <table border="0">
     <tr>
@@ -71,9 +72,12 @@ color: #000;
 
      
     <form action="" method="post">
-        <input type="submit" value="Редактировать описание категории">
+        <input type="submit" value="Редактировать описание">
+        <span style="color:green;">категории 1</span>
         <input type="hidden" id="ed" name="ed" value="">
     </form>
+    <br>
+    <button id="b_meta">Редактировать title и meta</button> для <span style="color:green;">категории 1</span>
     
 </div>
 <p>&nbsp;</p>
@@ -125,7 +129,9 @@ $('.category-item').click(function (){
     $('#ed').attr('value',catid);
     $('#whattodo').show(500);
     $('#infoid').show();
-    
+    $("#b_meta").unbind('click').click(function(){
+        edit_meta_by_path("<?php echo url::base()?>shop/category" + catid);
+    });
 });
 $('#updatebutton').click(function (){
 if(!$('#ansver').data('selected1') || !$('#ansver').data('selected2') )
