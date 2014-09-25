@@ -210,7 +210,7 @@ class Controller_Shop extends Controller_Site
                 if ($using_price_filter)
                     $this->template->stuff = 'В этой категории сейчас нет товаров в указанном ценовом диапазоне.';
                 else
-                    $this->template->stuff = 'В этой категории сейчас нет товаров.';
+                    $this->template->stuff = '';
             }
             else
             {
