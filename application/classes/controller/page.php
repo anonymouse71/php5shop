@@ -89,6 +89,16 @@ class Controller_Page extends Controller_Site
         if ($this->find_page(urldecode($this->request->uri)))
             return;
 
+        if (in_array($_SERVER['REQUEST_URI'],
+            array( // с этих страниц отправляем на главную
+                url::base() . 'page/',
+                url::base() . 'page',
+                url::base() . 'product/',
+                url::base() . 'product'
+            )
+        ))
+            $this->request->redirect(url::base(), 301);
+
         $this->request->status = 404;
         if (!Model_Meta::special_meta_tags())
             $this->template->title = '404';

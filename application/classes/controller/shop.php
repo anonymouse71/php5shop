@@ -256,7 +256,11 @@ class Controller_Shop extends Controller_Site
             if ($page < 1)
                 $page = 1;
             if ($page == 1)
-            { //берем 1-ю страницу из кэша
+            {
+                if ($_SERVER['REQUEST_URI'] != url::base())
+                    $this->request->redirect(url::base(), 301);
+
+                //берем 1-ю страницу из кэша
                 $products = self::$cache->get('LastProd');
                 if (null === $products)
                 {
