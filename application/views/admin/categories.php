@@ -101,7 +101,7 @@ document.location.href = document.location.href;
 $('#ansver').ajaxError(function() {
   $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span> и обновите страницу.");
   $(this).show("slow");
-  $('#submit').attr('disabled', 0);
+  $('#submit').removeAttr('disabled');
 });
 
 $('.category-item').click(function (){

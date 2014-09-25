@@ -59,8 +59,8 @@ endif;?>
             $('#ansver').html(data);
             $('#ansver').show();
             $('#loadingimg').hide();
-            $('#uploaded').attr('disabled', 0);
-            $('#addit').attr('disabled', 0);
+            $('#uploaded').removeAttr('disabled');
+            $('#addit').removeAttr('disabled');
         });
     });
 
@@ -71,7 +71,7 @@ endif;?>
     $('#ansver').ajaxError(function () {
         $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
         $(this).show("slow");
-        $('#submit').attr('disabled', 0);
+        $('#submit').removeAttr('disabled');
     });
     $('#ansver').click(function () {
         $(this).hide("slow");
