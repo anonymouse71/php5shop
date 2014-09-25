@@ -188,7 +188,7 @@ class Controller_Site extends Controller_Template
         }
 
         if (!$this->auth->logged_in()) //если пользователь все равно не авторизован
-            $tpl->menu[6] = FALSE; //прячем кнопку "Аккаунт" из меню
+            $tpl->menu[4] = FALSE; //прячем кнопку "Аккаунт" из меню
         else //авторизован?
         { //получаем данные о пользователе и вместо формы авторизации показываем имя и кнопку выхода
             $tpl->loginForm = new View(TPL . 'exitForm');
@@ -197,10 +197,10 @@ class Controller_Site extends Controller_Template
         }
 
         if (!$this->auth->logged_in('admin')) //если пользователь не авторизован как администратор,
-            $tpl->menu[5] = FALSE;            //убераем из меню кнопку панели управления
+            $tpl->menu[3] = FALSE;            //убераем из меню кнопку панели управления
 
         if (!filesize('rss.xml'))
-            $tpl->menu[8] = FALSE;
+            $tpl->menu[6] = FALSE;
 
         //получение всех категорий
         $catsArray = self::$cache->get('cats');
