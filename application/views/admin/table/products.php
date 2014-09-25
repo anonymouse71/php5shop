@@ -59,8 +59,8 @@ endif;?>
             $('#ansver').html(data);
             $('#ansver').show();
             $('#loadingimg').hide();
-            $('#uploaded').attr('disabled', 0);
-            $('#addit').attr('disabled', 0);
+            $('#uploaded').removeAttr('disabled');
+            $('#addit').removeAttr('disabled');
         });
     });
 

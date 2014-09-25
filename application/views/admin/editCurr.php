@@ -39,7 +39,7 @@
     $('#ansver').ajaxError(function () {
         $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
         $(this).show("slow");
-        $('#submit').attr('disabled', 0);
+        $('#submit').removeAttr('disabled');
     });
     $('.dosave').click(function () {
         obj = $(this).parent().children();
@@ -59,7 +59,7 @@
             else {
                 $('#ansver').html(data);
                 $('#ansver').show("slow");
-                $('.removeit').attr('disabled', 0);
+                $('.removeit').removeAttr('disabled');
             }
         });
     });

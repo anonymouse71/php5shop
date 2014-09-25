@@ -64,14 +64,14 @@
 $('#ansver').ajaxError(function() {
   $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span>");
   $(this).show("slow");
-  $('#submit').attr('disabled', 0);
+  $('#submit').removeAttr('disabled');
 });
     
 $('#submit').click(function (){
     $(this).attr('disabled', 1);
     $.post('ajax/user',$("#userForm").serialize(),function (data,textStatus){
         $('#ansver').html(data);
-        $('#submit').attr('disabled', 0);
+        $('#submit').removeAttr('disabled');
         $('#ansver').show("slow");
     });
 });

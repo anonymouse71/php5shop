@@ -43,7 +43,7 @@
                 var idv = $(this).parent().attr('class');
                 $(myP[0]).attr('disabled', 1);
                 $.post('<?php echo url::base();?>ajax/fields', { id: idv.split('q')[1], name: $(myP[0]).val(), type: $(myP[1]).val(), empty: $(myP[2]).attr('checked') }, function (data) {
-                    $('input').attr('disabled', 0);
+                    $('input').removeAttr('disabled');
                 });
             });
             $('.removeIt').click(function () {
