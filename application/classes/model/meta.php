@@ -53,4 +53,9 @@ class Model_Meta extends ORM
         return self::$meta->$key;
     }
 
+    public function set($column, $value)
+    {
+        parent::__set($column, $value);
+        return $this;
+    }
 }
