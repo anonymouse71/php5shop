@@ -73,7 +73,7 @@ class Model_Cbr
             return $currency;
 
         foreach ($xml->Valute as $curr)
-            $currency[(string)$curr->CharCode] = str_replace(',', '.', (string)$curr->Value);
+            $currency[(string)$curr->CharCode] = str_replace(',', '.', $curr->Value / $curr->Nominal);
 
         return $currency;
     }
