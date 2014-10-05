@@ -992,4 +992,18 @@ class Controller_Ajax extends Controller
         die(json_encode($meta));
 
     }
+
+    public function action_user_img_json()
+    {
+        $images = array();
+        $folder = 'user-img';
+        foreach(scandir($folder) as $file)
+            if (mb_substr($file, 0, 1, Kohana::$charset) != '.')
+                $images[] = array(
+                    'image' => url::base() . $folder . '/' . $file,
+                    'thumb' => url::base() . $folder . '/' . $file,
+                    'folder' => 'user-img'
+                );
+        die(json_encode($images));
+    }
 }

@@ -33,8 +33,10 @@ CKEDITOR.editorConfig = function( config ) {
 	// Se the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
 
-    config.extraPlugins = 'panelbutton,floatpanel,colorbutton,colordialog,justify,font';
+    config.extraPlugins = 'panelbutton,floatpanel,colorbutton,colordialog,justify,font,imagebrowser';
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+    config.imageBrowser_listUrl = "/ajax/user_img_json";
 };
