@@ -4,7 +4,9 @@
     .modal-dialog {
         width: 720px;
     }
-
+    #meta_path, #meta_title, #meta_description, #meta_keywords{
+        max-width:600px;
+    }
 </style>
 
 
