@@ -10,7 +10,7 @@
             <th>Название</th>
             <th>Мета теги</th>
             <th>Содержимое</th>
-            <th>Включена</th>
+            <th>Показывать в меню</th>
             <th></th>
         </tr>
         </thead>
@@ -110,13 +110,7 @@
 </form>
 
 <script>
-    $("a.go2page").click(function(){
-        if(!$(this).parent().parent().find('input[type=checkbox]:first').prop('checked')){
-            alert('Страница не включена. Сначала включите ее.');
-            return false;
-        }
-        return true;
-    });
+
     $(".del_page_button").click(function(){
         var tr = $(this).parent().parent();
         var page_id = $(this).attr('id').split('del_page_')[1];

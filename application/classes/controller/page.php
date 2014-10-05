@@ -148,13 +148,7 @@ class Controller_Page extends Controller_Site
 
     protected function find_page($uri)
     {
-        $known_pages = Model_Page::get_menu();
-        if (!isset($known_pages[$uri]))
-            return FALSE;                // page not found in menu
-
-        $page = ORM::factory('page')
-            ->where('path', '=', $uri)
-            ->and_where('enabled', '=', 1)->find();
+        $page = ORM::factory('page')->where('path', '=', $uri)->find();
         if (!$page->id)                 // page not found in database
             return FALSE;
 
