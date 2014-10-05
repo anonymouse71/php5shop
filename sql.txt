@@ -654,3 +654,5 @@ CREATE TABLE IF NOT EXISTS `p5shp_antibruteforce` (
   `date` date NOT NULL,
   PRIMARY KEY (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE  `p5shp_products` CHANGE  `whs`  `whs` TINYINT( 4 ) NULL DEFAULT NULL;

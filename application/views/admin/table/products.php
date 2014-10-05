@@ -105,7 +105,7 @@ endif;?>
                 <td><input size="35" type="text" value="<?php echo htmlspecialchars($item->path); ?>"></td>
                 <td><?php echo $item->cat;?></td>
                 <td><input size="7" type="text" value="<?php echo $item->price; ?>"></td>
-                <td><input size="4" maxlengt="4" type="text" value="<?php echo (int)$item->whs; ?>"></td>
+                <td><input size="4" maxlengt="4" type="text" value="<?php echo $item->whs; ?>"></td>
                 <td>
                     <?php
                     if (file_exists($imagePath))

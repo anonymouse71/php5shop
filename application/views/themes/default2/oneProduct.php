@@ -157,7 +157,8 @@
         }
         var user_want_count = parseInt(t.val());
 
-        if (user_want_count > parseInt(whs)) {
+        var unlimited = <?php echo getrandmax()?>;
+        if (parseInt(whs) < unlimited && user_want_count > parseInt(whs)) {
             $(this).val(whs);
             user_want_count = whs;
             $("#whsError" + prodId).html("Сейчас на складе только " + whs);

@@ -240,7 +240,7 @@ class Model_Product extends ORM
                     $prodPrice = str_replace(' ', '', $prodPrice);
 
                     $imgs = isset($cell[6]) ? $cell[6] : ''; //изображения
-                    $availability = isset($cell[7]) ? $cell[7] : 1; //наличие на складе (кол-во)
+                    $availability = isset($cell[7]) ? $cell[7] : null; //наличие на складе (кол-во)
 
                     if (!$catId) // категория не указана
                     { //товар будет удален

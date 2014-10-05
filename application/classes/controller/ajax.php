@@ -762,7 +762,7 @@ class Controller_Ajax extends Controller
                     }
                     $p->set('name', $_POST['name'])
                         ->set('price', (float)$_POST['price'])
-                        ->set('whs', (int)$_POST['whs'])
+                        ->set('whs', $_POST['whs'] === '' ? null : (int)$_POST['whs'])
                         ->set('path', $_POST['path'])
                         ->save();
                     echo 'Успешно сохранено!';

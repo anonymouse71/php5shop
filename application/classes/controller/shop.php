@@ -58,6 +58,8 @@ class Controller_Shop extends Controller_Site
             $product['price'] = round($curr * $product['price'] * $pct, 2);
             $product['price'] .= ' ' . $this->currency;
             $product['name'] = htmlspecialchars($product['name']);
+            if ($product['whs'] === null)
+                $product['whs'] = getrandmax();
             $product['cart'] = FALSE; //по умолчанию продукт не в корзине
             if (is_array($sessionCart) && in_array($product['id'], $sessionCart))
                 $product['cart'] = TRUE;
@@ -223,6 +225,8 @@ class Controller_Shop extends Controller_Site
                     $products[$k]['cart'] = FALSE; //добавляем информацию
                     if (is_array($sessionCart) && in_array($products[$k]['id'], $sessionCart)) //о наличии или отсутствии продукта в корзине
                         $products[$k]['cart'] = TRUE;
+                    if ($products[$k]['whs'] === null)
+                        $products[$k]['whs'] = getrandmax();
 
                     if (isset($bcart[$p['id']])) //если товара выбрано больше 1 ед.
                         $products[$k]['bigcart'] = $bcart[$p['id']];
@@ -278,6 +282,9 @@ class Controller_Shop extends Controller_Site
             { //учитываем курс валют, скидку и добавляем к цене банковский код валюты:
                 $products[$k]['price'] = round($curr * $p['price'] * $pct, 2) . ' ' . $this->currency;
                 $products[$k]['cart'] = FALSE; //добавляем информацию
+                if ($products[$k]['whs'] === null)
+                    $products[$k]['whs'] = getrandmax();
+
                 $products[$k]['name'] = htmlspecialchars($products[$k]['name']);
                 if (in_array($products[$k]['id'], $sessionCart)) //о наличии или отсутствии продукта в корзине
                     $products[$k]['cart'] = TRUE;
