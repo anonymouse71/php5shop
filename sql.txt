@@ -656,3 +656,11 @@ CREATE TABLE IF NOT EXISTS `p5shp_antibruteforce` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE  `p5shp_products` CHANGE  `whs`  `whs` TINYINT( 4 ) NULL DEFAULT NULL;
+
+--
+-- ЧПУ категорий
+--
+ALTER TABLE  `p5shp_categories`
+ADD  `path` VARCHAR( 255 )
+CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+ADD INDEX (  `path` );

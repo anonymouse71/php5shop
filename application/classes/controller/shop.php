@@ -37,7 +37,6 @@ class Controller_Shop extends Controller_Site
         $this->template->stuff = new View(TPL . 'products'); //Подключаем представление
 
         $product_path = $this->request->param('product'); //получение GET переменных
-        $cat = $this->request->param('catid');
         $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1; //номер страницы >0
         if (!$page)
             $page = 1;
@@ -127,14 +126,14 @@ class Controller_Shop extends Controller_Site
             }
 
         }
-        elseif ($cat) //указана категория
+        elseif ($this->catId) //указана категория
         {
             if (isset($_POST['price_from'], $_POST['price_to']))// установка фильтрации по цене
             {
                 Session::instance()->set('price_filter', array(
                     'min_price' => round((float)$_POST['price_from'], 2),
                     'max_price' => round((float)$_POST['price_to'], 2),
-                    'last_cat' => $cat,
+                    'last_cat' => $this->catId,
                     'timestamp' => time()
                 ));
                 $this->request->redirect($_SERVER['REQUEST_URI']);
@@ -146,13 +145,13 @@ class Controller_Shop extends Controller_Site
                 $this->request->redirect($_SERVER['REQUEST_URI']);
             }
 
-            Session::instance()->set('cat', $cat);
-            $categories = $this->categoriesObject->getCatChilds($cat);
+            Session::instance()->set('cat', $this->catId);
+            $categories = $this->categoriesObject->getCatChildren($this->catId);
 
-            if (!count($categories) || !isset($this->categoriesObject->categories['names'][$cat]))
-                $this->request->redirect(url::base() . 'error/404');
+            if (!isset($this->categoriesObject->categories['names'][$this->catId]))
+                throw new ReflectionException();// 404
 
-            $this->navigation_cat($cat);
+            $this->navigation_cat($this->catId);
 
             $price_filter = Session::instance()->get('price_filter', array(
                 'last_cat' => -1, // категория в которой установлен фильтр
@@ -161,7 +160,7 @@ class Controller_Shop extends Controller_Site
 
             $user_pct = $curr * $pct;
 
-            if ($price_filter['last_cat'] == $cat && time() - $price_filter['timestamp'] < 3600)
+            if ($price_filter['last_cat'] == $this->catId && time() - $price_filter['timestamp'] < 3600)
             {
                 $using_price_filter = true;
                 // действует указанный ранее фильтр
@@ -241,10 +240,10 @@ class Controller_Shop extends Controller_Site
             }
             if (!Model_Meta::special_meta_tags())
                 $this->template->title .= ' - ' . //добавляем в заголовок страницы
-                    $this->categoriesObject->categories['names'][$cat] . //название категории
+                    $this->categoriesObject->categories['names'][$this->catId] . //название категории
                     ' - Страница ' . $page . ''; //и страницу
 
-            $cat_description = explode('<hr />', Model_Descr_cat::get($cat));
+            $cat_description = explode('<hr />', Model_Descr_cat::get($this->catId));
             $this->template->about = array_shift($cat_description); //описание категории
             if (count($cat_description))
                 $this->template->about2 = join('<hr />', $cat_description);
@@ -308,7 +307,7 @@ class Controller_Shop extends Controller_Site
     public function action_user()
     {
         if (!$this->user)
-            exit($this->request->redirect(url::base()));
+            $this->request->redirect(url::base());
 
         if (isset($_POST['cancel_order']))
         {
@@ -384,7 +383,8 @@ class Controller_Shop extends Controller_Site
     public function action_sortset($code = 0)
     {
         Session::instance()->set('sort', $code);
-        $this->request->redirect(url::base() . 'shop/category' . Session::instance()->get('cat', 1));
+        $catId =  Session::instance()->get('cat', 0);
+        $this->request->redirect($this->categoriesObject->getUri($catId));
     }
 
     /**
@@ -459,6 +459,11 @@ class Controller_Shop extends Controller_Site
         exit;
     }
 
+    public function action_cat_old()
+    {
+        $this->request->redirect($this->categoriesObject->getUri($this->request->param('catid', 0)));
+    }
+
     protected function navigation_cat($cat)
     {
         if ($cat && isset($this->categoriesObject->categories['names'][$cat]))
@@ -470,7 +475,7 @@ class Controller_Shop extends Controller_Site
                 $tmp_cat = $this->categoriesObject->categories['parents'][$tmp_cat];
                 $parent_cats[] = array(
                     $this->categoriesObject->categories['names'][$tmp_cat],
-                    url::base() . 'shop/category' . $tmp_cat
+                    $this->categoriesObject->getUri($tmp_cat)
                 );
             }
             for ($ind = count($parent_cats) - 1; $ind >= 0; $ind--)
@@ -478,7 +483,7 @@ class Controller_Shop extends Controller_Site
 
             $this->template->breadcrumbs[] = array(
                 $this->categoriesObject->categories['names'][$cat],
-                url::base() . 'shop/category' . $cat
+                $this->categoriesObject->getUri($cat)
             );
         }
     }

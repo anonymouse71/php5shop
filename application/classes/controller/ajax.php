@@ -484,27 +484,42 @@ class Controller_Ajax extends Controller
         switch ($action)
         {
             case 1: //добавление
-                if (isset($_POST['id']) && isset($_POST['val']))
+                if (isset($_POST['id'], $_POST['val'], $_POST['path']))
                 {
-                    $add = Categories::add($_POST['id'], $_POST['val']);
+                    $add = Categories::add($_POST['id'], $_POST['val'], $_POST['path']);
                     if (count($add))
+                    {
+                        $errorStr = '';
                         foreach ($add as $field => $error)
-                            echo $field . $error . ' ';
-                    else
-                        echo 'Успешно.';
-
+                            $errorStr .= $field . $error . ' ';
+                        Session::instance()->set('error_adm', $errorStr);
+                    }
                 }
+
                 Model::factory('sitemap')->update();
                 exit;
 
             case 2: //редактирование
-                if (isset($_POST['id']) && isset($_POST['val']) && isset($_POST['parentId']))
+                if (isset($_POST['id'], $_POST['val'], $_POST['path']))
                 {
-                    if (empty($_POST['val']))
-                        die('Введите новое название');
+                    if (!$_POST['val'])
+                    {
+                        Session::instance()->set('error_adm', 'Введите новое название. ');
+                        break;
+                    }
+                    if (isset($_POST['parentId']))
+                        $parentId = $_POST['parentId'];
+                    else
+                        $parentId = -1;
                     $cat = new Categories();
-                    if ($cat->update($_POST['id'], $_POST['parentId'], $_POST['val']) === FALSE)
-                        Session::instance()->set('error_adm', 'Нельзя поместить категорию в дочернюю. ');
+                    $errors = $cat->update($_POST['id'], $parentId, $_POST['val'], $_POST['path']);
+                    if (count($errors))
+                    {
+                        $errorStr = '';
+                        foreach ($errors as $field => $error)
+                            $errorStr .= $field . $error . ' ';
+                        Session::instance()->set('error_adm', $errorStr);
+                    }
                 }
 
                 exit;
@@ -513,7 +528,7 @@ class Controller_Ajax extends Controller
                 if (isset($_POST['id']))
                 {
                     $cat = new Categories();
-                    $cats = $cat->getCatChilds($_POST['id']);
+                    $cats = $cat->getCatChildren($_POST['id']);
                     foreach ($cats as $catId)
                     {
                         $cat->delete($catId);

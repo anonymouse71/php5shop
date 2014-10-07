@@ -1,62 +1,62 @@
-<?php
-
-defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 
 /**
- * Класс решает задачи организации хранения древовидной структуры категорий в СУБД
- * и построения меню из этих категорий.
+ * Класс решает задачи организации хранения древовидной структуры категорий
+ * и построения меню.
  *
- * phpdreamer
- * 16.08.2010
- * 04.05.2012
+ * @property string $code
+ * @property mixed $categories
+ * @property string $view
+ * @property string $viewSelect
+ * @property array $children
+ * @property array $render
+ *
+ * @author phpdreamer
+ * @created 16.08.2010
+ * @modified 07.10.2014
  */
 class Categories
 {
-
     public $code;                                                               //возвращаемый код меню
     public $categories;                                                         //массив с категориями, который могут использовать другие классы, например для выборки товаров категории
     public $view = 'item';                                                      //представление для меню
     public $viewSelect = 'select';                                              //представление для select
-    public $path = '/shop/cat/';                                                //путь для построения ссылок
-                                        //- если путь /shop/cat/ , то ссылки на категории будут /shop/cat/{id}
-    private $childs;
 
-    public function __construct($catsArray=null)
+    private $children;
+    private $render;
+
+    /**
+     * @param array $catsArray
+     */
+    public function __construct($catsArray = null)
     {
         if ($catsArray == null)
-            $catsArray = DB::select()->from('categories')->order_by('id')
-                            ->execute()->as_array();
+            $catsArray = DB::select()->from('categories')->order_by('id')->execute()->as_array();
 
-        foreach ($catsArray as $value)                                          //информация разделяется на 3 массива (для удобства)
+        $this->categories = array(
+            'parents' => array(),
+            'names' => array(),
+            'level' => array(),
+            'path' => array(),
+        );
+        $fields = array_keys($this->categories);
+        foreach ($catsArray as $value)
         {
-            $parents[$value['id']] = $value['parent'];
-            $names[$value['id']] = $value['name'];
-            $level[$value['id']] = $value['level'];
+            $value['parents'] = $value['parent'];
+            $value['names'] = $value['name'];
+            foreach ($fields as $k)
+                $this->categories[$k][$value['id']] = $value[$k];
         }
-        if (isset($parents))
-            $this->categories = array(
-                'parents' => $parents,
-                'names' => $names,
-                'level' => $level
-            );
-        else
-            $this->categories = array(
-                'parents' => array(),
-                'names' => array(),
-                'level' => array()
-            );
-
     }
 
     /**
      * Метод возвращает HTML код меню
      * (используется отображение MODPATH.'categories/views/item.php')
-     * @param string $path - путь к контроллеру категорий от корня виртуального сервера
+     * @param int $id
      * @return string
      */
-    public function menu($path, $id=0)
+    public function menu($id = 0)
     {
-        $this->path = $path;                                                    //переданный $path устанавливает свойство класса
         $this->build(0, $id);                                                    //запуск рекурсивной функции
         return $this->code;                                                     //ф-я возвращает HTML код
     }
@@ -66,12 +66,13 @@ class Categories
      * Причем выбрана категория $id
      * @param int $id
      * @param string $delimiter - разделитель
+     * @return string
      */
-    public function select($id, $delimiter='->')
+    public function select($id, $delimiter = '->')
     {
         $cats[0] = '';
         if (!isset($this->categories['names']))
-            return;
+            return "";
         foreach ($this->categories['names'] as $CatId => $name)
         {
             $string = $this->categories['names'][$CatId];
@@ -84,9 +85,9 @@ class Categories
             $cats[$CatId] = $string;
         }
         return View::factory($this->viewSelect)
-                        ->set('cats', $cats)
-                        ->set('selected', $id)
-                        ->render();
+            ->set('cats', $cats)
+            ->set('selected', $id)
+            ->render();
     }
 
     /**
@@ -98,9 +99,7 @@ class Categories
     {
         $level = 0;
         while (0 < $id = self::getParent($id))
-        {
             $level++;
-        }
         return $level;
     }
 
@@ -113,10 +112,10 @@ class Categories
     public static function getParent($id)
     {
         $array = DB::select('parent')->from('categories')
-                ->where('id', '=', $id)
-                ->limit(1)
-                ->execute()
-                ->as_array();
+            ->where('id', '=', $id)
+            ->limit(1)
+            ->execute()
+            ->as_array();
 
         return isset($array[0]['parent']) ? $array[0]['parent'] : -1;
     }
@@ -125,50 +124,64 @@ class Categories
      * Добавляет категорию с именем $name, дочернюю для $parent
      * @param int $parent
      * @param string $name
+     * @param $path
      * @return array
      */
-    public static function add($parent, $name)
+    public static function add($parent, $name, $path)
     {
         $name = Security::xss_clean($name);
-        $array = array('parent' => $parent, 'name' => $name);
-        $rules['parent'] = array(
-            'not_empty' => NULL,
-            'validate::digit' => NULL,
-        );
-        $rules['name'] = array(
-            'not_empty' => NULL,
-            'max_length' => array(50),
-        );
-        $array = Validate::factory($array)
-                ->filter(TRUE, 'trim')
-                ->rules('parent', $rules['parent'])
-                ->rules('name', $rules['name']);
+        $path = str_replace('/', '-', $path);
+        $array = self::getValidator($name, $path);
         if (!$array->check())
             return $array->errors('validate');
 
         if ($parent)
         {
             $obj = DB::select()->from('categories')
-                    ->where('id', '=', $parent)
-                    ->limit(1)
-                    ->execute()
-                    ->as_array('id');
+                ->where('id', '=', $parent)
+                ->limit(1)
+                ->execute()
+                ->as_array('id');
 
             if (!isset($obj[$parent]['id']))
                 return array('' => 'Родительская категория не найдена');
 
             $level = self::getLevel($parent) + 1;
-        }
-        else
+        } else
             $level = 0;
 
-        $insert = DB::insert('categories', array('parent', 'level', 'name'))
-                ->values(array($parent, $level, $name))
-                ->execute();
+        if (count(DB::select()->from('categories')->where('path', '=', $path)->limit(1)->execute()->as_array()))
+            return array('' => 'Адрес уже занят');
+
+        $insert = DB::insert('categories', array('parent', 'level', 'name', 'path'))
+            ->values(array($parent, $level, $name, $path))->execute();
         if ($insert)
             return array();
         else
             return array('' => 'Ошибка! категория не добавлена');
+    }
+
+    /**
+     * Возвращает объект валидатор
+     * @param $name
+     * @param $path
+     * @return Validate
+     */
+    protected static function getValidator($name, $path)
+    {
+        $rules['name'] = array(
+            'not_empty' => NULL,
+            'max_length' => array(50),
+        );
+        $rules['path'] = array(
+            'not_empty' => NULL,
+            'max_length' => array(255),
+        );
+        return Validate::factory(array( 'name' => $name, 'path' => $path))
+            ->filter(TRUE, 'trim')
+
+            ->rules('path', $rules['path'])
+            ->rules('name', $rules['name']);
     }
 
     /**
@@ -177,47 +190,83 @@ class Categories
      * @param int $id
      * @param int $parent
      * @param string $name
-     * @return bool
+     * @param $path
+     * @return array of errors
      */
-    public function update($id, $parent, $name)
+    public function update($id, $parent, $name, $path)
     {
-        $id = (int) $id;
-        $parent = (int) $parent;
-        if ($id == 0)
-            return;
-        if ($parent)
+        $name = Security::xss_clean($name);
+        $path = str_replace('/', '-', $path);
+        $id = (int)$id;
+        $parent = (int)$parent;
+        $validator = self::getValidator($name, $path);
+        if (!$id || !$validator->check())
+            return $validator->errors();
+
+        if ($this->categories['path'][$id] != $path)
         {
-            if (!isset($this->categories['level'][$parent]))
-                return FALSE;
-            $level = $this->categories['level'][$parent] + 1;
+            foreach ($this->categories['path'] as $cId => $cPath)
+                if ($cPath == $path && $cId != $id)
+                    return array('' => 'Путь "' . $path . '" уже используется другой категорией (' . $cId . ').');
         }
-        else
-            $level = 0;
+
         $wasLevel = $this->categories['level'][$id];
 
-        if ($wasLevel != $level)
+        if ($parent >= 0)
         {
-            $childs = $this->getCatChilds($id);
-            if (in_array($parent, $childs))
-                return FALSE;
-            array_pop($childs);
-            $add = $level - $wasLevel;
-            foreach ($childs as $id_)
+            if ($parent)
             {
-                $newLevel = $this->categories['level'][$id_] + $add;
-                DB::update('categories')
+                if (!isset($this->categories['level'][$parent]))
+                    return array('' => 'Родительская категория id ' . $parent . ' не найдена.');
+                $level = $this->categories['level'][$parent] + 1;
+            }
+            else
+                $level = 0;
+
+
+
+            if ($wasLevel != $level)
+            {
+                $children = $this->getCatChildren($id);
+                if (in_array($parent, $children))
+                    return array('' => 'Категория не может быть перенесена "в себя".');
+
+                array_pop($children);
+                $add = $level - $wasLevel;
+                foreach ($children as $id_)
+                {
+                    $newLevel = $this->categories['level'][$id_] + $add;
+                    DB::update('categories')
                         ->value('level', $newLevel)
                         ->where('id', '=', $id_)
                         ->limit(1)
                         ->execute();
+                }
             }
         }
-        DB::update('categories')
-                ->value('parent', $parent)
-                ->value('level', $level)
-                ->value('name', Security::xss_clean($name))
-                ->where('id', '=', $id)
-                ->execute();
+        else
+        {
+            $parent = $this->categories['parents'][$id];
+            $level = $wasLevel;
+        }
+
+        if ($this->categories['path'][$id] != $path)
+        {
+            $uri_old = self::getUriByPath($this->categories['path'][$id]);
+            $uri_new = self::getUriByPath($path);
+            DB::update('metas')->set(array('path' => $uri_new))->where('path', '=', $uri_old)->execute();
+        }
+
+        if ((bool)DB::update('categories')
+            ->value('parent', $parent)
+            ->value('level', $level)
+            ->value('path', $path)
+            ->value('name', $name)
+            ->where('id', '=', $id)
+            ->execute()
+        ) return array();
+        else
+            return array('' => 'Ошибка сохранения.');
     }
 
     /**
@@ -227,9 +276,42 @@ class Categories
      */
     public static function delete($id)
     {
-        return DB::delete('categories')
-                        ->where('id', '=', $id)
-                        ->execute();
+        $path = DB::select('path')->from('categories')
+            ->where('id', '=', $id)
+            ->execute()->as_array(null, 'path');
+        if (!count($path))
+            return TRUE;
+        $uri = self::getUriByPath($path[0]);
+        DB::delete('metas')->where('path', '=', $uri)->execute();
+
+        return (bool)DB::delete('categories')
+            ->where('id', '=', $id)
+            ->execute();
+    }
+
+    /**
+     * Возвращает адрес страницы
+     * @param $id
+     * @param string $path
+     * @return string
+     */
+    public function getUri($id, $path=null)
+    {
+        if (!$path && !isset($this->categories['path'][$id]))
+            return url::base();
+        if (!$path)
+            $path = $this->categories['path'][$id];
+        return url::base() . 'category/' . htmlspecialchars($path);
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public static function getUriByPath($path)
+    {
+        $c = new self(array());
+        return $c->getUri(0, $path);
     }
 
     /**
@@ -239,27 +321,27 @@ class Categories
      * @param int $id
      * @return array
      */
-    public function getCatChilds($id)
+    public function getCatChildren($id)
     {
         if (!isset($this->categories['level'][$id]))
             return array();
-        $this->childs = array();
-        $this->childs[] = $id;
-        $this->getChilds($id);
-        return $this->childs;
+        $this->children = array();
+        $this->children[] = $id;
+        $this->getChildren($id);
+        return $this->children;
     }
 
     /**
      * Рекурсивно заполняет массив $this->childs подкатегориями для категории $id
      * @param int $id
      */
-    protected function getChilds($id)
+    protected function getChildren($id)
     {
         foreach ($this->categories['parents'] as $n => $cat)
             if ($cat == $id)
             {
-                $this->childs[] = $n;
-                $this->getChilds($n);
+                $this->children[] = $n;
+                $this->getChildren($n);
             }
     }
 
@@ -269,7 +351,7 @@ class Categories
      * @param int $id
      * @param int $boldId - текущая категория для выделения тегом <b>
      */
-    protected function build($id=0, $boldId=0)
+    protected function build($id = 0, $boldId = 0)
     {
         if (!is_array($this->categories))
             return;
@@ -291,27 +373,26 @@ class Categories
      * @param bool $bold
      * @return string
      */
-    protected function render($id, $name, $level, $bold=FALSE)
+    protected function render($id, $name, $level, $bold = FALSE)
     {
         $v = View::factory($this->view)
-                ->set('id', $id)
-                ->set('name', $name)
-                ->set('level', $level)
-                ->set('path', $this->path);
+            ->set('id', $id)
+            ->set('name', $name)
+            ->set('level', $level)
+            ->set('path', $this->getUri($id));
         if ($bold)
             $v->set('tag', 'b');
         return $v->render();
     }
 
-    public function menu2($path, $id=0)
+    public function menu2($id = 0)
     {
-        $this->path = $path;
         $this->build2(0);
         $this->__render(0, $id);
         return View::factory('menu')->set('menu', $this->code)->render();
     }
 
-    protected function build2($id=0)
+    protected function build2($id = 0)
     {
         if (!is_array($this->categories))
             return;
@@ -326,7 +407,7 @@ class Categories
                 $this->build2($PerentId);
     }
 
-    protected function __render($id, $boldId=0)
+    protected function __render($id, $boldId = 0)
     {
         if (!isset($this->render))
             return;
@@ -344,19 +425,17 @@ class Categories
             $this->code .= '<ul>';
 
         foreach ($this->render as $r)
-        {
             if ($r['parent'] == $id)
             {
                 if ($r['id'] == $boldId)
-                    $this->code .= '<li><b><a href="/shop/category' . $r['id']
+                    $this->code .= '<li><b><a href="' . $this->getUri($r['id'])
                         . '">' . $r['name'] . '</a></b>';
                 else
-                    $this->code .= '<li><a href="/shop/category' . $r['id']
+                    $this->code .= '<li><a href="' . $this->getUri($r['id'])
                         . '">' . $r['name'] . '</a>';
                 $this->__render($r['id'], $boldId);
                 $this->code .= '</li>';
             }
-        }
         $this->code .= '</ul>';
     }
 
