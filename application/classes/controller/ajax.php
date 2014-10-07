@@ -898,26 +898,6 @@ class Controller_Ajax extends Controller
         );
     }
 
-    public function action_invite()
-    {
-        if (!Auth::instance()->logged_in('admin') || !count($_POST)) //пользователь не авторизован как admin или зашел на страницу напрямую
-            die('Авторизуйтесь');
-        if (isset ($_POST['create'])) //создать инвайт и показать
-            echo Model_Invite::createInvite((int)$_POST['create']);
-        elseif (isset ($_POST['count'])) //показать сколько инвайтов активны
-            echo ORM::factory('Invite')->count_all();
-        elseif (isset ($_POST['clearall'])) //удалить все
-            ORM::factory('Invite')->delete_all();
-        elseif (isset ($_POST['clearlast'])) //удалить 1
-        {
-            if ($_POST['clearlast'] == 1)
-                ORM::factory('Invite')->order_by('id', 'DESC')->find()->delete();
-            else
-                ORM::factory('Invite')->order_by('id')->find()->delete();
-        }
-
-    }
-
 
     public function action_countOrders()
     {
