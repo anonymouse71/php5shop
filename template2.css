@@ -252,10 +252,11 @@ body, input, label {
 
 select#sortset{
     width: 300px;
+    /*
     margin-left: 0px;
     position: relative;
     top: 150px;
-    left: 640px;
+    left: 640px;*/
 }
 
 #toTop {

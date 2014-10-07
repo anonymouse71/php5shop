@@ -245,6 +245,9 @@ class Controller_Site extends Controller_Template
         $tpl->about2 = '';
 
         $tpl->show_contact_form = FALSE;
+
+        $tpl->price_filter = '';
+        $tpl->sortForm = '';
     }
 
     public function after()

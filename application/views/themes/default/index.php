@@ -31,6 +31,8 @@
  * themes                               - массив со списком доступных для применения шаблонов дизайна
  * theme                                - выбранный шаблон дизайна
  * special_pages                        - ссылки на дополнительные страницы
+ * price_filter                         - фильтр по цене
+ * sortForm                             - выбор сортировки товаров
  */
 ?><!DOCTYPE html>
 <html>
@@ -189,7 +191,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
         <div class="rightblock">
 
-            <?php echo $topBlock2; ?>
+            <?php echo $topBlock2, $price_filter, $sortForm; ?>
             <?php echo @$topBlock1; ?>
             <?php echo $topBlock3; ?>
 

@@ -181,10 +181,7 @@ class Controller_Shop extends Controller_Site
                 'max_price' => round($maxPrice, 2),
                 'currency' => $this->currency
             ));
-            if (TPL == 'themes/default2/')
-                $this->template->banner3 .= $priceFilterView;
-            else
-                $this->template->topBlock2 .= $priceFilterView;
+            $this->template->price_filter = $priceFilterView;
 
             if ($using_price_filter)
             {
@@ -218,7 +215,7 @@ class Controller_Shop extends Controller_Site
             {
                 $sortSelect = new View(TPL . 'sort');
                 $sortSelect->__set('type', Model_Product::getSort());
-                $this->template->topBlock2 .= $sortSelect;
+                $this->template->sortForm = $sortSelect;
                 foreach ($products as $k => $p)
                 { //учитываем скидку, курс валют и добавляем к цене банковский код валюты:
                     $products[$k]['price'] = round($curr * $p['price'] * $pct, 2) . ' ' . $this->currency;

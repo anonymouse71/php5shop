@@ -31,7 +31,9 @@
  * themes                               - массив со списком доступных для применения шаблонов дизайна
  * theme                                - выбранный шаблон дизайна
  * special_pages                        - ссылки на дополнительные страницы
- * show_contact_form                   - показывать форму обратной связи
+ * show_contact_form                    - показывать форму обратной связи
+ * price_filter                         - фильтр по цене
+ * sortForm                             - выбор сортировки товаров
  */
 ?><!DOCTYPE html>
 <html>
@@ -173,7 +175,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                                     </form>
                                 <?php endif;?>
 
-                                <?php echo $banner3; ?>
+                                <?php echo $banner3, $price_filter; ?>
 
                                 <?php echo $topBlock3; ?>
 
@@ -186,6 +188,8 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                     <div class="container">
                         <?php echo $banner1; ?>
                         <?php echo $about; ?>
+                        <?php echo $sortForm; ?>
+
                         <div class="stuff" <?php
                         if (isset($oneProductPage))
                             echo 'itemscope itemtype="http://schema.org/Product"'; ?>>
