@@ -1001,4 +1001,10 @@ class Controller_Ajax extends Controller
                 );
         die(json_encode($images));
     }
+
+    public function action_upload_img()
+    {
+        die(Model_SaveImage::ckeditor_image_upload());
+    }
+
 }
