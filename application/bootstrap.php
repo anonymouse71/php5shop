@@ -171,11 +171,20 @@ Route::set('searchproducts', 'ajax/search/<string>', array('string' => '[^/]+'))
     );
 
 //маршрут категорий
-Route::set('cat', 'shop/category<catid>', array('catid' => '[0-9]+'))
+Route::set('cat', 'category/<catpath>', array('catpath' => '[^/]+'))
     ->defaults(
         array(
             'controller' => 'shop',
             'action' => 'index'
+        )
+    );
+
+//старый маршрут категорий для возможности обновления CMS v1.6.8 без потери страниц из индекса
+Route::set('cat_old', 'shop/category<catid>', array('catid' => '[0-9]+'))
+    ->defaults(
+        array(
+            'controller' => 'shop',
+            'action' => 'cat_old'
         )
     );
 

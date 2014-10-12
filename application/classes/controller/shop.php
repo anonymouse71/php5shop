@@ -37,7 +37,7 @@ class Controller_Shop extends Controller_Site
         $this->template->stuff = new View(TPL . 'products'); //Подключаем представление
 
         $product = $this->request->param('product'); //получение GET переменных
-        $cat = $this->request->param('catid');
+
         $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1; //номер страницы >0
         if (!$page)
             $page = 1;
@@ -125,15 +125,15 @@ class Controller_Shop extends Controller_Site
             }
 
         }
-        elseif ($cat) //указана категория
+        elseif ($this->catId) //указана категория
         {
-            Session::instance()->set('cat', $cat);
-            $categories = $this->categoriesObject->getCatChilds($cat);
+            Session::instance()->set('cat', $this->catId);
+            $categories = $this->categoriesObject->getCatChildren($this->catId);
 
-            if (!count($categories) || !isset($this->categoriesObject->categories['names'][$cat]))
-                $this->request->redirect(url::base() . 'error/404');
+            if (!isset($this->categoriesObject->categories['names'][$this->catId]))
+                throw new ReflectionException();
 
-            $this->navigation_cat($cat);
+            $this->navigation_cat($this->catId);
 
             $products = Model::factory('product')->byCategory($categories, $page, $this->productsOnPage);
             $productsCount = ORM::factory('product')->where('cat', 'in', $categories)->count_all();
@@ -167,10 +167,10 @@ class Controller_Shop extends Controller_Site
             }
             if (!Model_Meta::special_meta_tags())
                 $this->template->title .= ' - ' . //добавляем в заголовок страницы
-                    $this->categoriesObject->categories['names'][$cat] . //название категории
+                    $this->categoriesObject->categories['names'][$this->catId] . //название категории
                     ' - Страница ' . $page . ''; //и страницу
 
-            $this->template->about = Model_Descr_cat::get($cat); //описание категории
+            $this->template->about = Model_Descr_cat::get($this->catId); //описание категории
 
         }
         else //категория не указана
@@ -221,7 +221,7 @@ class Controller_Shop extends Controller_Site
     public function action_user()
     {
         if (!$this->user)
-            exit($this->request->redirect(url::base()));
+            $this->request->redirect(url::base());
 
         if (isset($_POST['cancel_order']))
         {
@@ -297,21 +297,10 @@ class Controller_Shop extends Controller_Site
     public function action_sortset($code = 0)
     {
         Session::instance()->set('sort', $code);
-        $this->request->redirect(url::base() . 'shop/category' . Session::instance()->get('cat', 1));
+        $catId =  Session::instance()->get('cat', 0);
+        $this->request->redirect($this->categoriesObject->getUri($catId));
     }
 
-    /**
-     * Пользователь перешел по партнерской ссылке
-     * @param $id
-     */
-    public function action_referral($id)
-    {
-        if ($this->boolConfigs['refpp'])
-        {
-            Session::instance()->set('referral', $id);
-        }
-        $this->action_index();
-    }
 
     /**
      * Метод перенесен в Controller_Page
@@ -319,41 +308,7 @@ class Controller_Shop extends Controller_Site
      */
     public function action_blog($id = 0)
     {
-        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : ''));
-    }
-
-    /**
-     * Метод перенесен в Controller_Page
-     */
-    public function action_clients()
-    {
-        $this->request->redirect(url::base() . 'page/clients');
-    }
-
-    /**
-     * Метод перенесен в Controller_Page
-     */
-    public function action_contacts()
-    {
-        $this->request->redirect(url::base() . 'page/contacts');
-    }
-
-    /**
-     * Метод перенесен в Controller_Order
-     */
-    public function action_order()
-    {
-        throw new Exception('Ссылка устарела!');
-        $this->request->redirect(url::base() . 'order');
-    }
-
-    /**
-     * Метод перенесен в Controller_Order
-     */
-    public function action_cart()
-    {
-        throw new Exception('Ссылка устарела!');
-        $this->request->redirect(url::base() . 'order/cart');
+        $this->request->redirect(url::base() . 'blog/' . ($id ? $id : ''), 301);
     }
 
     /**
@@ -362,7 +317,7 @@ class Controller_Shop extends Controller_Site
     public function action_indexphp()
     {
         if (strpos(url::base(), 'index.php') === FALSE)
-            $this->request->redirect(url::base());
+            $this->request->redirect(url::base(), 301);
     }
 
     public function action_yml()
@@ -370,6 +325,15 @@ class Controller_Shop extends Controller_Site
         header('Content-Type: text/xml; charset=utf-8');
         echo Model_Yml::get();
         exit;
+    }
+
+    /**
+     * Перенаправление со старого адреса категории без ЧПУ на адрес с ЧПУ
+     */
+    public function action_cat_old()
+    {
+        $cat_id = $this->request->param('catid', 0);
+        $this->request->redirect($this->categoriesObject->getUri($cat_id), 301);
     }
 
     protected function navigation_cat($cat)
@@ -383,7 +347,7 @@ class Controller_Shop extends Controller_Site
                 $tmp_cat = $this->categoriesObject->categories['parents'][$tmp_cat];
                 $parent_cats[] = array(
                     $this->categoriesObject->categories['names'][$tmp_cat],
-                    url::base() . 'shop/category' . $tmp_cat
+                    $this->categoriesObject->getUri($tmp_cat)
                 );
             }
             for ($ind = count($parent_cats) - 1; $ind >= 0; $ind--)
@@ -391,7 +355,7 @@ class Controller_Shop extends Controller_Site
 
             $this->template->breadcrumbs[] = array(
                 $this->categoriesObject->categories['names'][$cat],
-                url::base() . 'shop/category' . $cat
+                $this->categoriesObject->getUri($cat)
             );
         }
     }

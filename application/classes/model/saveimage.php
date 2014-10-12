@@ -118,4 +118,72 @@ class Model_SaveImage extends ORM
         curl_close($curl);
 
     }
+
+    public static function ckeditor_image_upload()
+    {
+        $http_path = '';
+        $error = '';
+        if (!isset($_GET['CKEditorFuncNum'], $_FILES['upload']))
+        {
+            $error = 'Bad Request!';
+            $callback = '"function(){alert(\'' . $error . '\')}"';
+        }
+        else
+        {
+            $folder = 'user-img/';
+            $callback = $_GET['CKEditorFuncNum'];
+            $file_name = $_FILES['upload']['name'];
+            $ext = explode('.', $file_name);
+            $ext = $ext[count($ext) - 1];
+            if ($ext == 'php')
+            {
+                $error = 'Нельзя загружать php файлы.';
+                Kohana_Log::instance()->add('SECURITY',
+                    'Попытка загрузить PHP файл как изображение с IP ' . $_SERVER['REMOTE_ADDR']);
+            }
+            else
+            {
+                $file_name_tmp = $_FILES['upload']['tmp_name'];
+                do
+                {
+                    $file_name = Kohana_Text::random('alnum', 16) . '.' . $ext;
+                }
+                while (file_exists($folder . $file_name));
+
+                $full_path = $folder . $file_name;
+                $moved = false;
+                try
+                {
+                    $moved = move_uploaded_file($file_name_tmp, $full_path);
+                    if (!$moved)
+                    {
+                        $error = 'Не удалось сохранить файл.';
+                    }
+                } catch (ErrorException $e)
+                {
+
+                    $error = 'Не удалось сохранить файл. ';
+                    if (FALSE !== strpos($e, 'Permission'))
+                        $error .= 'Необходимо установить права на запись в каталог ' . $folder;
+                }
+                if ($moved)
+                {
+                    try
+                    {
+                        new Kohana_Image_GD($full_path);
+                        $http_path = '/' . $folder . $file_name;
+                    }
+                    catch (Kohana_Exception $ke)
+                    {
+                        unlink($full_path);
+                        $error = 'Файл не является допустимым изображением.';
+                    }
+                }
+            }
+
+        }
+
+        return "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction("
+        . $callback . ",  \"" . $http_path . "\", \"" . $error . "\" );</script>";
+    }
 }

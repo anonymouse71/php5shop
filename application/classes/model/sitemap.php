@@ -20,26 +20,26 @@ class Model_Sitemap
 {
     public function update()
     {
-        @file_put_contents($_SERVER['DOCUMENT_ROOT'] . url::base() . 'sitemap.xml', $this->get());
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] . url::base() . 'sitemap.xml', $this->get());
         $this->pingIt();
     }
 
     public function get()
     {
-        $site = 'http://' . $_SERVER['HTTP_HOST'] . url::base();
+        $site = 'http://' . $_SERVER['HTTP_HOST'];
         $urls = '';
 
         $controllers = array_merge(array('', 'shop/blog', 'about'), array_keys(Model_Page::get_menu()));
 
         foreach ($controllers as $page)
-            $urls .= $this->url($site . $page);
+            $urls .= $this->url($site .  url::base() . $page);
 
         foreach (ORM::factory('product')->find_all() as $product)
-            $urls .= $this->url($site . 'shop/product' . $product->id);
-        foreach (DB::select('id')->from('categories')->execute()->as_array('id', 'id') as $catid)
-            $urls .= $this->url($site . 'shop/category' . $catid);
+            $urls .= $this->url($site . url::base() . 'shop/product' . $product->id);
+        foreach (DB::select('path')->from('categories')->execute()->as_array(null, 'path') as $cat_path)
+            $urls .= $this->url($site . Categories::getUriByPath($cat_path));
         foreach (ORM::factory('blogPost')->find_all() as $blog)
-            $urls .= $this->url($site . 'blog/' . $blog);
+            $urls .= $this->url($site . url::base() . 'blog/' . $blog);
 
         return '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n" .

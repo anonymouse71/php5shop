@@ -17,7 +17,21 @@
  * с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/
  */
 
-class Controller_Site extends Controller_Template
+/**
+ * Class Controller_Site
+ * @abstract
+ * @property string $theme
+ * @property Cache $cache
+ * @property array $themes
+ * @property string $currency
+ * @property int $blogLimit
+ * @property int $productsOnPage
+ * @property Categories $categoriesObject
+ * @property Model_User $user
+ * @property array $apis
+ * @property int $catId
+ */
+abstract class Controller_Site extends Controller_Template
 {
     public $theme = 'default2'; //тема по умолчанию
     public static $cache; //объект модуля кэширования
@@ -28,6 +42,7 @@ class Controller_Site extends Controller_Template
     protected $categoriesObject; //массив с категориями (сохранен после pre() для уменьшения количества запросов к БД)
     protected $user; //объект с данными о пользователе
     protected $apis; //массив данных для интеграции с сторонними сервисами
+    protected $catId = 0; // текущая категория в каталоге товаров, если это страница категории
 
     public function __construct(Kohana_Request $request)
     {
@@ -214,15 +229,9 @@ class Controller_Site extends Controller_Template
         $this->categoriesObject = new Categories($catsArray);
 
         if (MENU2 === TRUE)
-            $tpl->cats = $this->categoriesObject->menu2( //подстановка дерева категорий в представление
-                url::base() . 'shop/category',
-                $this->request->param('catid')
-            );
+            $tpl->cats = $this->categoriesObject->menu2($this->getCurrentCatId());
         else
-            $tpl->cats = $this->categoriesObject->menu(
-                url::base() . 'shop/category',
-                $this->request->param('catid')
-            );
+            $tpl->cats = $this->categoriesObject->menu($this->getCurrentCatId());
 
         if ($this->boolConfigs['poll'])
         {
@@ -271,5 +280,14 @@ class Controller_Site extends Controller_Template
             $this->template->breadcrumbs = implode(' → ', $breadcrumbs_a);
         else
             $this->template->breadcrumbs = '';
+    }
+
+    private function getCurrentCatId()
+    {
+        $catPath = urldecode($this->request->param('catpath'));
+        foreach ($this->categoriesObject->categories['path'] as $cat_id => $cat_path)
+            if ($cat_path == $catPath)
+                return $this->catId = $cat_id;
+        return 0;
     }
 }

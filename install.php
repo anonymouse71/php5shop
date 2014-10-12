@@ -95,7 +95,7 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
 		</tr>
 		<tr>
 			<th>Каталог для кэширования (Cache)</th>
-			<?php if (is_dir(APPPATH) AND is_dir(APPPATH.'cache') AND (is_writable(APPPATH.'cache') OR chmod(APPPATH.'cache',0777)) ): ?>
+			<?php if (is_dir(APPPATH) AND is_dir(APPPATH.'cache') AND (is_writable(APPPATH.'cache') OR @chmod(APPPATH.'cache',0777)) ): ?>
 				<td class="pass"><?php echo APPPATH.'cache' ?></td>
 			<?php else: $failed = TRUE ?>
 				<td class="fail"><code><?php echo APPPATH.'cache' ?></code> - каталог не доступен для записи. Установите права 777</td>
@@ -104,24 +104,33 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
                 <tr>
 			<th>Каталог для кэширования запросов к mySQL</th>
 			<?php @mkdir(APPPATH . 'cache/.kohana_cache', 0777);
-                              if (is_dir(APPPATH) AND is_dir(APPPATH.'cache/.kohana_cache') AND (is_writable(APPPATH.'cache/.kohana_cache')OR chmod(APPPATH.'cache/.kohana_cache',0777))): ?>
+                              if (is_dir(APPPATH) AND is_dir(APPPATH.'cache/.kohana_cache') AND (is_writable(APPPATH.'cache/.kohana_cache')OR @chmod(APPPATH.'cache/.kohana_cache',0777))): ?>
 				<td class="pass"><?php echo APPPATH.'cache/.kohana_cache' ?></td>
 			<?php else: $failed = TRUE ?>
 				<td class="fail"><code><?php echo APPPATH.'cache/.kohana_cache' ?></code> - каталог не доступен для записи. Установите права 777</td>
 			<?php endif ?>
 		</tr>
-                <tr>
+        <tr>
 			<th>Каталог для сохранения изображений</th>
-			<?php if (is_dir(DOCROOT.'images/products/small') AND is_dir(DOCROOT.'images/products') AND (is_writable(DOCROOT.'images/products') OR chmod(DOCROOT.'images/products',0777))): ?>
+			<?php if (is_dir(DOCROOT.'images/products/small') AND is_dir(DOCROOT.'images/products') AND (is_writable(DOCROOT.'images/products') OR @chmod(DOCROOT.'images/products',0777))): ?>
 				<td class="pass"><?php echo DOCROOT;?>images/products</td>
 			<?php else: $failed = TRUE ?>
 				<td class="fail"><code>images/products</code> - каталог не доступен для записи. Установите права 777</td>
 			<?php endif ?>
 		</tr>
+
+        <tr>
+            <th>Каталог для дополнительных изображений</th>
+            <?php if (is_dir(DOCROOT.'user-img') AND (is_writable(DOCROOT.'user-img') OR @chmod(DOCROOT.'user-img',0777))): ?>
+                <td class="pass"><?php echo DOCROOT;?>user-img</td>
+            <?php else: $failed = TRUE ?>
+                <td class="fail"><code>user-img</code> - каталог не доступен для записи. Установите права 777</td>
+            <?php endif ?>
+        </tr>
                 
 		<tr>
 			<th>Каталог для записи ошибок (Logs)</th>
-			<?php if (is_dir(APPPATH) AND is_dir(APPPATH.'logs') AND (is_writable(APPPATH.'logs') OR chmod(APPPATH.'logs',0777))): ?>
+			<?php if (is_dir(APPPATH) AND is_dir(APPPATH.'logs') AND (is_writable(APPPATH.'logs') OR @chmod(APPPATH.'logs',0777))): ?>
 				<td class="pass"><?php echo APPPATH.'logs/' ?></td>
 			<?php else: $failed = TRUE ?>
 				<td class="fail"><code><?php echo APPPATH.'logs/' ?></code> - каталог не доступен для записи. Установите права 777</td>
@@ -206,7 +215,7 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
 		</tr>
                 <tr>
 			<th>rss.xml</th>
-			<?php if (is_writable('rss.xml') OR chmod('rss.xml',0777)): ?>
+			<?php if (is_writable('rss.xml') OR @chmod('rss.xml',0777)): ?>
 				<td class="pass">ок</td>
 			<?php else: $failed = TRUE ?>
 				<td class="fail">Файл rss.xml не доступен для записи.</td>
@@ -214,7 +223,7 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
 		</tr>
                 <tr>
 			<th>sitemap.xml</th>
-			<?php if (is_writable('sitemap.xml') OR chmod('sitemap.xml',0777)): ?>
+			<?php if (is_writable('sitemap.xml') OR @chmod('sitemap.xml',0777)): ?>
 				<td class="pass">ок</td>
 			<?php else:  $failed = TRUE ?>
 				<td class="fail">Файл sitemap.xml не доступен для записи.</td>
@@ -268,7 +277,7 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
             </tr>
             <tr>
 
-                <?php if (is_writable('modules/database/config/database.php') OR chmod('modules/database/config/database.php',0777)): ?>
+                <?php if (is_writable('modules/database/config/database.php') OR @chmod('modules/database/config/database.php',0777)): ?>
                     <?php if (count($_POST)): ?>
                     <td colspan="2"><b>Сохранено!</b> Удалите или переименуйте install<?php echo EXT ?> и приступайте к настройке магазина </td>
                     <?php else: ?>
@@ -276,6 +285,9 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
                     <td colspan="2">
                         <input type="checkbox" name="importSQL" checked="1" />Создать в базе структуру таблиц
                         <input type="submit" value="Сохранить"/>
+                        <?php if (!is_writable('install.php')): ?>
+                                <br>После нажатия на кнопку Сохранить переименуйте файл install.php
+                        <?php endif ?>
                     </td>
                     <?php endif ?>
                 <?php else: ?>
@@ -284,6 +296,7 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
             </tr>
         </table>
         </form>
+
 <p style="float:right;"><a href="http://php5shop.com" title="php5shop">php5shop © 2011-2016</a></p>
 </body>
 </html>

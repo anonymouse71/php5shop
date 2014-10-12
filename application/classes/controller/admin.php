@@ -378,10 +378,11 @@ class Controller_Admin extends Controller_Template
         $info->info .= new View('admin/lastCatId');
         $categories = new Categories(); //инициализация класса для построения дерева категорий
         $this->template->body = new View('admin/categories');
-        $this->template->body->cats = $categories->menu('javascript:void(0);#');
+        $this->template->body->cats = $categories->menu();
+        $this->template->body->catsArray = $categories->categories;
         $this->template->body->countCats = count($categories->categories['names']);
 
-        $this->template->body->errors = Session::instance()->get('error_adm');
+        $this->template->body->errors = htmlspecialchars(Session::instance()->get('error_adm', ''));
         Session::instance()->delete('error_adm');
         $this->template->head = '';
         if (isset($_POST['editor']) && $_POST['editor'])

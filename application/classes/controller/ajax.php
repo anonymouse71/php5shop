@@ -479,36 +479,52 @@ class Controller_Ajax extends Controller
         switch ($action)
         {
             case 1: //добавление
-                if (isset($_POST['id']) && isset($_POST['val']))
+                if (isset($_POST['id'], $_POST['val'], $_POST['path']))
                 {
-                    $add = Categories::add($_POST['id'], $_POST['val']);
+                    $add = Categories::add($_POST['id'], $_POST['val'], $_POST['path']);
                     if (count($add))
+                    {
+                        $errorStr = '';
                         foreach ($add as $field => $error)
-                            echo $field . $error . ' ';
+                            $errorStr .= $field . $error . ' ';
+                        Session::instance()->set('error_adm', $errorStr);
+                    }
                     else
-                        echo 'Успешно.';
-
+                        Model::factory('sitemap')->update();
                 }
-                Model::factory('sitemap')->update();
                 exit;
 
             case 2: //редактирование
-                if (isset($_POST['id']) && isset($_POST['val']) && isset($_POST['parentId']))
+                if (isset($_POST['id'], $_POST['val'], $_POST['path']))
                 {
-                    if (empty($_POST['val']))
-                        die('Введите новое название');
+                    if (!$_POST['val'])
+                    {
+                        Session::instance()->set('error_adm', 'Введите новое название. ');
+                        break;
+                    }
+                    if (isset($_POST['parentId']))
+                        $parentId = $_POST['parentId'];
+                    else
+                        $parentId = -1;
                     $cat = new Categories();
-                    if ($cat->update($_POST['id'], $_POST['parentId'], $_POST['val']) === FALSE)
-                        Session::instance()->set('error_adm', 'Нельзя поместить категорию в дочернюю. ');
+                    $errors = $cat->update($_POST['id'], $parentId, $_POST['val'], $_POST['path']);
+                    if (count($errors))
+                    {
+                        $errorStr = '';
+                        foreach ($errors as $field => $error)
+                            $errorStr .= $field . $error . ' ';
+                        Session::instance()->set('error_adm', $errorStr);
+                    }
+                    else
+                        Model::factory('sitemap')->update();
                 }
-
                 exit;
 
             case 3: //удаление
                 if (isset($_POST['id']))
                 {
                     $cat = new Categories();
-                    $cats = $cat->getCatChilds($_POST['id']);
+                    $cats = $cat->getCatChildren($_POST['id']);
                     foreach ($cats as $catId)
                     {
                         $cat->delete($catId);
@@ -534,6 +550,7 @@ class Controller_Ajax extends Controller
                         }
                         ORM::factory('product')->where('cat', '=', $catId)->delete_all();
                     }
+                    Model::factory('sitemap')->update();
                 }
                 exit;
             default:
@@ -869,32 +886,18 @@ class Controller_Ajax extends Controller
         );
     }
 
-    public function action_invite()
-    {
-        if (!Auth::instance()->logged_in('admin') || !count($_POST)) //пользователь не авторизован как admin или зашел на страницу напрямую
-            die('Авторизуйтесь');
-        if (isset ($_POST['create'])) //создать инвайт и показать
-            echo Model_Invite::createInvite((int)$_POST['create']);
-        elseif (isset ($_POST['count'])) //показать сколько инвайтов активны
-            echo ORM::factory('Invite')->count_all();
-        elseif (isset ($_POST['clearall'])) //удалить все
-            ORM::factory('Invite')->delete_all();
-        elseif (isset ($_POST['clearlast'])) //удалить 1
-        {
-            if ($_POST['clearlast'] == 1)
-                ORM::factory('Invite')->order_by('id', 'DESC')->find()->delete();
-            else
-                ORM::factory('Invite')->order_by('id')->find()->delete();
-        }
-
-    }
-
-
+    /**
+     * Ajax count of orders in store
+     */
     public function action_countOrders()
     {
         die(ORM::factory('order')->count_all());
     }
 
+    /**
+     * Ajax JSON SEO META-data
+     * @throws Kohana_Exception
+     */
     public function action_meta_load()
     {
         if (!isset($_POST['path']))
@@ -909,6 +912,14 @@ class Controller_Ajax extends Controller
 
         die(json_encode($meta));
 
+    }
+
+    /**
+     * Image uploading with ckeditor
+     */
+    public function action_upload_img()
+    {
+        die(Model_SaveImage::ckeditor_image_upload());
     }
 
 }
