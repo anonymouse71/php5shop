@@ -32,7 +32,7 @@
             <?php endif; ?>
         </ul>
     </div>
-    <img src="images/bot_bg.gif" alt="" width="218" height="10">
+    <img src="themes_public/default1/img/bot_bg.gif" alt="" width="218" height="10">
 </div>
 <br>
 </div>

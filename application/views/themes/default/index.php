@@ -7,7 +7,7 @@
  * logo                                 - блок для logo
  * keywords                             - meta keywords для поисковых систем
  * description                          - meta description для поисковых систем
- * css                                  - стили
+ * head                                 - дополнительные вставки кода в head
  * topBlock1                            - верхний виджет 1 (выбор валюты)
  * topBlock2                            - верхний виджет 2 (корзина)
  * topBlock3                            - верхний виджет 3 (дополнительный) - сортировка в категории
@@ -44,11 +44,11 @@
     <meta name="cmsmagazine" content="f36b4b17fe8e41ffb1bc9b164f77b732">
     <link rel="shortcut icon" type="image/ico" href="images/favicon.gif">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
-    <link rel="stylesheet" href="template1.css">
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <link rel="stylesheet" href="themes_public/default1/css/template1.css">
+    <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery-migrate-1.2.1.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/jquery.simplemodal.js"></script>
-    <?php echo $css; ?>
+    <?php echo $head; ?>
     <?php if (isset($lastNews)): ?>
         <script type="text/javascript" src="js/jquery.slides.min.js"></script>
     <?php endif; ?>
@@ -74,7 +74,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
         </p>
 
         <p>&nbsp;<a href="javascript:void(0);" id="buttonsearch">Поиск</a></p>
-        <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
+        <img src="themes_public/default1/img/bot_bg.gif" alt="" width="218" height="10"><br>
 
         <div style="display:none" id="searchresults"></div>
         <script type="text/javascript">
@@ -114,7 +114,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
     <ul id="menu">
         <?php if ($menu[1]): ?>
             <li><a href="">
-                    <img style="margin: 5px 0px" src="images/home.png" alt="Витрина">
+                    <img style="margin: 5px 0px" src="themes_public/default1/img/home.png" alt="Витрина">
                 </a>
             </li>
         <?php endif;
@@ -201,11 +201,16 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                     <?php
                     $else_theme = $themes[0];
                     //по нажатию на кнопку выбираем следующую за текущей тему
-                    foreach($themes as $tpl)
-                        if($tpl != $theme):
+                    $found = false;
+                    foreach ($themes as $tpl)
+                        if ($found)
+                        {
                             $else_theme = $tpl;
                             break;
-                        endif;
+                        } elseif ($tpl == $theme)
+                            $found = true;
+
+
                     ?>
                     <input type="hidden" name="theme" value="<?php echo $else_theme ?>">
                 </form>

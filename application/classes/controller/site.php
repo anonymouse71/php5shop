@@ -101,7 +101,7 @@ abstract class Controller_Site extends Controller_Template
         $googleAnalytics = new View('analytics'); //подключение представления для кода google analistics
         $googleAnalytics->set('account', $this->apis['analytics']); //подстановка кода аккаунта google analistics
 
-        $tpl->css = $googleAnalytics; //добавление кода между <head> и </head>
+        $tpl->head = $googleAnalytics; //добавление кода между <head> и </head>
         $tpl->topBlock3 = $htmlBlocks['headerWidg']; //подстановка переменных в шаблон
 
         if (Model_Meta::get_meta('keywords'))

@@ -1,9 +1,6 @@
-* {
-    margin: 0px;
-    padding: 0px
-}
+* {margin: 0;padding: 0}
 img {
-    border: 0px;
+    border: 0;
 }
 html {
     width: 100%;
@@ -13,7 +10,7 @@ body {
     min-width: 412px;
     width: 985px;
     margin: 0 auto;
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 11px;
     color: #565656;
     position: relative
@@ -37,21 +34,15 @@ body {
     margin-right: 0;
     position: relative;
     width: 970px;
-
-
     -moz-border-radius: 4px 4px 4px 4px;
     -webkit-border-radius: 4px 4px 4px 4px;
-
     background: -moz-linear-gradient(top, #fefefe 0%, #eee9f0 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefefe), color-stop(100%, #eee9f0));
     background: -webkit-linear-gradient(top, #fefefe 0%, #eee9f0 100%);
     background: -o-linear-gradient(top, #fefefe 0%, #eee9f0 100%);
     background: -ms-linear-gradient(top, #fefefe 0%, #eee9f0 100%);
     background: linear-gradient(top, #fefefe 0%, #eee9f0 100%);
-
     margin-bottom: 9px;
-
-
     background-image: -webkit-gradient(linear,left 0,left 100%,from(#fff),to(#F1F0F0));
     background-image: -webkit-linear-gradient(top,#fff,0%,#F1F0F0,100%);
     background-image: -moz-linear-gradient(top,#fff 0,#F1F0F0 100%);
@@ -61,7 +52,6 @@ body {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#fff8f8f8',GradientType=0);
     -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),0 1px 5px rgba(0,0,0,0.075);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),0 1px 5px rgba(0,0,0,0.075);
-
     background-color: #f8f8f8;
     border-color: #e7e7e7;
 }
@@ -191,7 +181,7 @@ body {
 
 #content p {
     padding: 3px 0 0 5px;
-    margin: 0px;
+    margin: 0;
 }
 
 .pad25 {
@@ -215,7 +205,7 @@ body {
 }
 
 .name {
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 12px;
     color: #4A4A4A;
     text-decoration: underline;
@@ -258,8 +248,8 @@ body {
 
 #navigation {
     width: 168px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #navigation li {
@@ -288,9 +278,7 @@ body {
 
 .blocks {
     width: 218px;
-    background-image: url(images/bg.gif);
-    background-position: top left;
-    background-repeat: repeat-y;
+    background: url(../../../images/bg.gif) repeat-y top left;
     margin: -2px 0;
 }
 
@@ -299,7 +287,7 @@ body {
     float: left;
     line-height: 19px;
     padding: 5px 0 0 0;
-    margin: 0px;
+    margin: 0;
 }
 
 .blocks span {
@@ -333,7 +321,7 @@ body {
 
 #lastNews{
     padding: 10px;
-    background: url(images/bg.gif) repeat-y top left;
+    background: url(../../../images/bg.gif) repeat-y top left;
     margin: -2px 0;
 }
 
@@ -348,12 +336,11 @@ body {
     line-height: 19px;
     margin: 11px 0 12px 0;
     text-align: center;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-size: 12px;
     font-weight: normal;
     color: #272727;
-    background-position: top left;
-    background-repeat: no-repeat;
+    background: no-repeat top left;
 }
 
 #news p {
@@ -410,7 +397,7 @@ body {
 #footer #bft {
     color: #8E190B;
     text-decoration: underline;
-    margin: 0px
+    margin: 0;
 }
 
 #footer #bft:visited {
@@ -427,16 +414,14 @@ body {
 }
 
 .topblock1 {
-    background-image: url(images/block2bg.gif);
-    background-position: top left;
-    background-repeat: no-repeat;
+    background: url(../img/block2bg.gif) no-repeat top left;
     width: 218px;
     height: 46px;
     padding: 15px 1px 0 30px;
     margin-bottom: 10px;
     margin-top: 10px;
     float: left;
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 11px;
     color: #5B5B5B;
     font-weight: bold
@@ -456,14 +441,14 @@ body {
 }
 
 .topblock2 {
-    background-image: url(images/block2bg.gif);
+    background-image: url(../img/block2bg.gif);
     background-position: top left;
     background-repeat: no-repeat;
     width: 218px;
     height: 46px;
     padding: 15px 1px 0 24px;
     float: left;
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 11px;
     color: #5B5B5B;
     font-weight: bold
@@ -521,7 +506,7 @@ body {
 
 .moreph {
     display: block;
-    background-image: url(images/morebg.gif);
+    background-image: url(../../../images/morebg.gif);
     background-position: top left;
     background-repeat: no-repeat;
     width: 92px;
@@ -533,7 +518,7 @@ body {
 }
 
 .comments {
-    background-image: url(images/bulb.jpg);
+    background-image: url(../../../images/bulb.jpg);
     background-position: top left;
     background-repeat: no-repeat;
     padding: 0 0 5px 29px;
@@ -571,7 +556,7 @@ body {
 .price {
     position: absolute;
     top: 28px;
-    right: 0px;
+    right: 0;
     color: #E27C0E;
     font-size: 12px;
     font-weight: bold
@@ -591,10 +576,10 @@ body {
 }
 
 #about button {
-    background-image: url(images/add.gif);
+    background-image: url(../../../images/add.gif);
     background-position: top left;
     background-repeat: no-repeat;
-    border: 0px;
+    border: 0;
     float: left;
     font-weight: bold;
     width: 104px;
@@ -654,7 +639,7 @@ body {
 }
 
 #simplemodal-container a.modalCloseImg {
-    background: url(images/x.png) no-repeat;
+    background: url(../../../images/x.png) no-repeat;
     width: 25px;
     height: 29px;
     display: inline;
@@ -736,10 +721,8 @@ a {
 }
 
 input, select, textarea {
-    border: 1px;
-    border-color: gray;
-    border-style: solid;
-    font-family: Verdana;
+    border: 1px solid gray;
+    font-family: Verdana, sans-serif;
     font-size: 10px;
 }
 
@@ -849,7 +832,7 @@ a.slidesjs-next,
 a.slidesjs-previous,
 a.slidesjs-play,
 a.slidesjs-stop {
-    background-image: url(images/btns-next-prev.png);
+    background-image: url(../../../images/btns-next-prev.png);
     background-repeat: no-repeat;
     display:block;
     width:12px;
@@ -911,7 +894,7 @@ a:hover.slidesjs-stop {
     width: 13px;
     height: 0;
     padding-top: 13px;
-    background: url(images/pagination.png) 0 0;
+    background: url(../../../images/pagination.png) 0 0;
     float: left;
     overflow: hidden;
 }
@@ -974,8 +957,7 @@ a:hover.slidesjs-stop {
     -webkit-border-top-right-radius: 0;
     -moz-border-radius: 5px;
     -moz-border-radius-topright: 0;
-    border-radius: 5px;
-    border-top-right-radius: 0;
+    border-radius: 5px 0 5px 5px;
     background-color: #ffffff;
     cursor: pointer;
 

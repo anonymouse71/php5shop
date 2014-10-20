@@ -1,6 +1,6 @@
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td		{
-    padding:0px 0px 0px 0px;
-    margin:0px 0px 0px 0px;
+    padding:0 0 0 0;
+    margin:0 0 0 0;
 }
 
 html	{
@@ -12,7 +12,7 @@ body 	{
 }
 
 table 	{
-    border:0px;
+    border:0;
     width:100%;
     border-collapse:collapse;
 }
@@ -47,27 +47,27 @@ h4		{
 }
 
 p		{
-    padding:0px 0px 10px 0px;
+    padding:0 0 10px 0;
 }
 
 textarea .inputbox {
     width:300px;
     height:100px;
-    margin:0px 0px 5px 0px;
+    margin:0 0 5px 0;
 }
 
 select	{
     height:auto;
-    margin:0px 0px 2px 0px;
+    margin:0 0 2px 0;
     vertical-align:middle
 }
 
 ul {
     list-style:disc;
-    margin:0px 0px 0px 15px;
+    margin:0 0 0 15px;
 }
 ol {
-    margin:0px 0px 0px 15px;
+    margin:0 0 0 15px;
 }
 
 .width	{
@@ -93,7 +93,7 @@ body, input, label {
 }
 
 .comments {
-    background-image: url(images/bulb.jpg);
+    background-image: url(../../../images/bulb.jpg);
     background-position: top left;
     background-repeat: no-repeat;
     padding: 0 0 5px 29px;
@@ -171,7 +171,7 @@ body, input, label {
 }
 
 #simplemodal-container a.modalCloseImg {
-    background: url(images/x.png) no-repeat;
+    background: url(../../../images/x.png) no-repeat;
     width: 25px;
     height: 29px;
     display: inline;
@@ -252,7 +252,7 @@ body, input, label {
 
 select#sortset{
     width: 300px;
-    margin-left: 0px;
+    margin-left: 0;
     position: relative;
     top: 150px;
     left: 640px;
@@ -341,14 +341,14 @@ select#sortset{
 
 #cat-header {
     font-size: 120%;
-    font-family: Tahoma;
+    font-family: Tahoma, serif;
     color: #323232;
     line-height: 25px;
 }
 
 input, select {
     color: #333;
-    margin-top: 0px;
+    margin-top: 0;
     font-size: 12px;
     line-height: normal;
     padding: 4px 5px 4px 5px;
@@ -394,28 +394,28 @@ h6 {
 }
 
 .article-decor {
-    padding: 0px 0px 12px 0px;
+    padding: 0 0 12px 0;
 }
 
 .article_separator {
     display: block;
     line-height: 1px;
-    padding: 0px 0px 0px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
     height: 1px;
     font-size: 1px;
 }
 
 .column_separator {
-    padding: 0px 0px 0px 12px !important;
+    padding: 0 0 0 12px !important;
 }
 
 .article_column {
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
 }
 
 .contentpane {
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
 }
 
 .contentpane img {
@@ -428,28 +428,28 @@ h6 {
 }
 
 .contentpaneopen h3 img {
-    margin: 0px 3px 0px 0px !important;
+    margin: 0 3px 0 0 !important;
     float: left;
 }
 
 .contentpaneopen ul,
 .article-indent ul {
     list-style: none;
-    margin: 0px 0px 0px 15px;
+    margin: 0 0 0 15px;
 }
 
 .contentpaneopen ul li,
 .article-indent ul li {
-    padding: 0px 0px 6px 10px;
-    background: url(images/default2/listMarker.gif) no-repeat 0 8px;
+    padding: 0 0 6px 10px;
+    background: url(../img/listMarker.gif) no-repeat 0 8px;
 }
 
 .contentdescription img {
-    margin: 0px 20px 0px 0px;
+    margin: 0 20px 0 0;
 }
 
 .contentpaneopen img {
-    margin: 0px 15px 0px 0px;
+    margin: 0 15px 0 0;
 }
 
 /*---------------------------content-heading---*/
@@ -464,7 +464,7 @@ table.pollstableborder {
     font: normal 13px/21px Arial, Helvetica, sans-serif;
     font-family: 'Oswald', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0px;
+    letter-spacing: 0;
 }
 
 #poll .contentpane {
@@ -475,30 +475,30 @@ table.pollstableborder {
 
 .contentpaneopen {
     padding: 0;
-    margin: 0px;
+    margin: 0;
     border-collapse: collapse;
 }
 
 .contentheading {
     background: none;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     color: #434343;
     border: none;
-    padding: 7px 0 6px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 7px 0 6px 0;
+    margin: 0 0 0 0;
 }
 
 .componentheading {
     background: none;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     color: #434343;
     border: none;
-    padding: 7px 0 6px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 7px 0 6px 0;
+    margin: 0 0 0 0;
 }
 
 .contentpane .componentheading {
@@ -506,24 +506,24 @@ table.pollstableborder {
 }
 
 .contentpaneopen p {
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
 }
 
 td.buttonheading {
-    padding: 10px 10px 0px 0px !important;
-    background: url(images/default2/title-bg1.gif) left top repeat-x;
+    padding: 10px 10px 0 0 !important;
+    background: url(../img/title-bg1.gif) left top repeat-x;
 }
 
 .buttonheading img {
     padding: 0;
-    margin: 0 0px;
+    margin: 0 0;
 }
 
 span.contentheading {
     font-weight: normal;
     display: block;
-    padding: 15px 0px 15px 0px;
-    margin: 0px 0px 15px 0px;
+    padding: 15px 0 15px 0;
+    margin: 0 0 15px 0;
 }
 
 /*---------------------------about us---*/
@@ -558,7 +558,7 @@ span.contentheading {
 .about ul li {
     color: #9a9999;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
-    background: url(images/default2/listMarker.gif) no-repeat 0 6px;
+    background: url(../img/listMarker.gif) no-repeat 0 6px;
     padding: 0 0 0 20px;
     margin-bottom: 13px;
 }
@@ -590,14 +590,14 @@ span.contentheading {
 
 .delivery ul {
     list-style-type: none;
-    margin: 0 0 0px 0;
+    margin: 0 0 0 0;
     padding: 19px 0 8px 0;
 }
 
 .delivery ul li {
     color: #9a9999;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
-    background: url(images/default2/listMarker.gif) no-repeat 0 6px;
+    background: url(../img/listMarker.gif) no-repeat 0 6px;
     padding: 0 0 0 20px;
     margin-bottom: 13px;
 }
@@ -608,7 +608,7 @@ span.contentheading {
 
 /*===== ACCORDION =====*/
 .FAQS {
-    padding: 14px 0px 0 0;
+    padding: 14px 0 0 0;
     width: 100%;
 }
 
@@ -624,7 +624,7 @@ dl#accordion {
     border: 1px solid #e5e5e5;
     border-bottom: none;
     list-style-type: none;
-    padding-left: 0px;
+    padding-left: 0;
     margin: 0;
     width: 660px;
     overflow: hidden;
@@ -633,7 +633,7 @@ dl#accordion {
 
 dl#accordion dt {
     margin: 0;
-    padding: 0px;
+    padding: 0;
     position: relative;
     display: block;
     border-bottom: 1px solid #e5e5e5;
@@ -648,11 +648,11 @@ dl#accordion dt {
 dl#accordion .bg {
     padding: 0 10px 0 38px;
     overflow: hidden;
-    margin: 0px 0 1px 0;
+    margin: 0 0 1px 0;
 }
 
 dl#accordion dt span {
-    background: url(images/default2/sub-plus.gif) 10px center no-repeat;
+    background: url(../img/sub-plus.gif) 10px center no-repeat;
     padding: 0;
     color: #505050 !important;
     font-size: 12px;
@@ -668,7 +668,7 @@ dl#accordion dt span {
 
 dl#accordion dt.active span {
     z-index: 1;
-    background: url(images/default2/sub-minus.gif) 10px center no-repeat;
+    background: url(../img/sub-minus.gif) 10px center no-repeat;
     color: #f90711 !important;
 
 }
@@ -692,25 +692,25 @@ dl#accordion dd .indent {
 
 dl#accordion dd .indent p {
     display: inline-block;
-    margin: 0px;
+    margin: 0;
     color: #9a9999;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
-    background: url(images/default2/accordionMarker.gif) left 6px no-repeat;
+    background: url(../img/accordionMarker.gif) left 6px no-repeat;
     padding-left: 20px;
 }
 
 /*-----------------------------item-info---*/
 
 .iteminfo {
-    padding: 0px 0px 6px 0px;
-    margin: 0px 0px 15px 0px;
+    padding: 0 0 6px 0;
+    margin: 0 0 15px 0;
 }
 
 .modifydate {
     border-top: 1px dotted #2b2b2b;
     font-size: 11px;
     margin: 10px 0 0 0;
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0 10px 0;
     text-decoration: none !important;
 }
 
@@ -722,8 +722,8 @@ dl#accordion dd .indent p {
 .createdate {
     line-height: 11px;
     font-size: 11px;
-    margin: 0px 0px 5px 0px;
-    padding: 0px 0px 10px 0px;
+    margin: 0 0 5px 0;
+    padding: 0 0 10px 0;
     display: block;
     border-bottom: 1px dotted #2b2b2b;
 }
@@ -733,8 +733,8 @@ div.small {
     display: block;
     font-size: 11px;
     font-weight: normal;
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 7px 0px;
+    margin: 0 0 0 0;
+    padding: 0 0 7px 0;
     white-space: nowrap;
     line-height: 11px;
 }
@@ -764,13 +764,13 @@ div.small {
 .validate,
 .modal-button,
 div.blank a {
-    background: url(images/default2/button2.png) left top no-repeat;
+    background: url(../img/button2.png) left top no-repeat;
     border: none;
     float: left;
     color: #fff;
     font: bold 12px/1.3em Arial, Helvetica, sans-serif;
-    padding: 0px 0px 1px 0px;
-    margin: 0px 11px 0px 0px;
+    padding: 0 0 1px 0;
+    margin: 0 11px 0 0;
     height: 33px;
     width: 90px;
     text-align: center;
@@ -791,7 +791,7 @@ a.button {
 .modal-button:hover,
 .readmore a:hover,
 div.blank a:hover {
-    background: url(images/default2/button2-active.png) left top no-repeat;
+    background: url(../img/button2-active.png) left top no-repeat;
     color: #FFF;
 }
 
@@ -801,12 +801,12 @@ div.blank a:hover {
     padding-left: 20px;
     margin-top: 24px;
     margin-right: -11px;
-    background: url(images/default2/no-button-bg.png) left top no-repeat;
+    background: url(../img/no-button-bg.png) left top no-repeat;
 }
 
 .nobutton .button, .contentpane .nobutton .button {
-    background: url(images/default2/nonebutton.gif) right center no-repeat;
-    padding: 0 7px 0 0px;
+    background: url(../img/nonebutton.gif) right center no-repeat;
+    padding: 0 7px 0 0;
     color: #ee0000;
     border: none !important;
     font-size: 12px;
@@ -837,7 +837,7 @@ div.blank a {
 }
 
 #editor-xtd-buttons {
-    padding: 5px 0px 5px 0px;
+    padding: 5px 0 5px 0;
     overflow: hidden;
     width: 300px;
     float: left;
@@ -848,7 +848,7 @@ div.blank a {
 }
 
 .blank {
-    margin: 5px 0px 0px 0px;
+    margin: 5px 0 0 0;
 }
 
 div.blank a {
@@ -860,8 +860,8 @@ div.blank a {
 
 div.readmore {
     overflow: hidden;
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
 div a.readon {
@@ -870,7 +870,7 @@ div a.readon {
     color: #fbba21;
     display: inline-block;
     font: bold 12px/14px Arial, Helvetica, sans-serif;
-    padding: 0 0px 0 0px;
+    padding: 0 0 0 0;
     width: auto;
     text-align: center;
 }
@@ -878,20 +878,20 @@ div a.readon {
 /*-----------------------------blog-more---*/
 
 .blog_more {
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
 }
 
 .blog_more h2 {
     font-size: 12px;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
 }
 
 .blog_more ul {
-    margin: 10px 0px 0px 15px;
+    margin: 10px 0 0 15px;
 }
 
 .blog_more ul li {
-    padding: 0px 0px 0px 0px !important;
+    padding: 0 0 0 0 !important;
 }
 
 .blog_more a {
@@ -911,8 +911,8 @@ div a.readon {
 
 a.pagenav {
     font-weight: normal;
-    padding: 0px 2px 0px 2px;
-    margin: 0px 2px 0px 0px;
+    padding: 0 2px 0 2px;
+    margin: 0 2px 0 0;
     text-decoration: none
 }
 
@@ -922,11 +922,11 @@ a.pagenav:hover {
 
 .pagination_nav {
     font-size: 12px;
-    padding: 10px 20px 0px 27px;
+    padding: 10px 20px 0 27px;
 }
 
 .pagination_nav div {
-    padding: 5px 0px 5px 0px;
+    padding: 5px 0 5px 0;
 }
 
 .pagination {
@@ -939,16 +939,16 @@ a.pagenav:hover {
 }
 
 .pagination_result {
-    padding: 5px 0px 0px 0px;
+    padding: 5px 0 0 0;
     line-height: 16px;
 }
 
 .pagination span {
-    padding: 0px 10px 0px 0px;
+    padding: 0 10px 0 0;
 }
 
 .pagination strong span {
-    padding: 0px 6px 0px 6px;
+    padding: 0 6px 0 6px;
     font-weight: normal;
 }
 
@@ -985,26 +985,26 @@ a.pagenav:hover {
 .var1 {
     background: #f9f8f5;
     padding: 5px !important;
-    margin: 10px 0px 5px 0px;
+    margin: 10px 0 5px 0;
 }
 
 .var2 {
     background: #f7f7f7;
     padding: 5px !important;
-    margin: 10px 0px 5px 0px;
+    margin: 10px 0 5px 0;
 }
 
 .results {
-    padding: 0px 20px 0px 20px;
+    padding: 0 20px 0 20px;
 }
 
 .results ol li {
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
     text-align: justify;
 }
 
 .searchintro {
-    padding: 10px 0px 10px 20px;
+    padding: 10px 0 10px 20px;
 }
 
 .searchintro b,
@@ -1013,7 +1013,7 @@ a.pagenav:hover {
 }
 
 .sectiontableheader {
-    padding: 10px 0px 10px 4px;
+    padding: 10px 0 10px 4px;
     background: none;
     color: #6f6e6e;
     font-weight: bold;
@@ -1021,7 +1021,7 @@ a.pagenav:hover {
 }
 
 span.sectiontableheader {
-    padding: 2px 0px 2px 4px;
+    padding: 2px 0 2px 4px;
 }
 
 .sectiontableheader a {
@@ -1035,7 +1035,7 @@ span.sectiontableheader {
 /*--------------------------------------archive---*/
 .archiveBlock .button {
     display: inline-block;
-    margin: 0px 0px 0px 5px;
+    margin: 0 0 0 5px;
 }
 
 ul#archive-list h4 a {
@@ -1045,23 +1045,23 @@ ul#archive-list h4 a {
 
 /*--------------------------------------poll---*/
 dl.poll {
-    padding: 0px 0px 0px 0;
+    padding: 0 0 0 0;
 }
 
 #poll h3 {
     font-size: 120%;
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
 }
 
 dl.poll dt {
     font-weight: bold;
-    padding: 7px 0px 0px 0px;
+    padding: 7px 0 0 0;
 }
 
 .poll .question {
     font: normal 13px/17px Arial, Helvetica, sans-serif;
     font-family: 'Oswald', sans-serif;
-    padding: 0px 10px 0px 0px;
+    padding: 0 10px 0 0;
 }
 
 .poll-body label {
@@ -1070,14 +1070,14 @@ dl.poll dt {
 }
 
 .poll .buttons {
-    padding: 8px 0px 6px 0px;
+    padding: 8px 0 6px 0;
     overflow: hidden;
 }
 
 .poll .button {
     border: none;
     font: bold 12px/20px Arial, Helvetica, sans-serif;
-    padding: 0px 0px 3px 0px;
+    padding: 0 0 3px 0;
     margin: 0 20px 0 1px;
     height: 33px;
     width: 90px;
@@ -1089,14 +1089,14 @@ dl.poll dt {
 
 .poll .section {
     overflow: hidden;
-    padding: 6px 0px 0px 0px;
+    padding: 6px 0 0 0;
     width: 100%;
     color: #000;
 }
 
 .poll .section2 {
     overflow: hidden;
-    padding: 6px 0px 0px 0px;
+    padding: 6px 0 0 0;
     width: 100%;
 }
 
@@ -1113,12 +1113,12 @@ dl.poll dt {
 }
 
 .poll .var {
-    margin: 0px 0px 0px 20px;
+    margin: 0 0 0 20px;
     text-align: left;
 }
 
 .display {
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
 }
 
 .display select {
@@ -1134,7 +1134,7 @@ dl.poll dt {
 
 .td_3 {
     width: 90%;
-    padding: 0px 0px 0px 10px;
+    padding: 0 0 0 10px;
 }
 
 #itema,
@@ -1149,12 +1149,12 @@ dl.poll dt {
 }
 
 .pollstableborder .question {
-    padding: 5px 0px 0px 85px;
+    padding: 5px 0 0 85px;
 }
 
 /*--------------------------------------userforms---*/
 dl.contentpane dt {
-    padding: 10px 0px 20px 0px;
+    padding: 10px 0 20px 0;
 }
 
 dl.contentpane dd {
@@ -1168,19 +1168,19 @@ dl.contentpane div {
 
 dl.contentpane .description {
     width: 110px;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     vertical-align: middle;
 }
 
 dl.contentpane .input-field {
     width: 160px;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     vertical-align: middle;
 }
 
 dl.contentpane .button-field {
     width: 140px;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     vertical-align: middle;
 }
 
@@ -1188,7 +1188,7 @@ dl.contentpane .button-field {
 .search {
     overflow: hidden;
     background: none;
-    margin: 0px 0 0 0px;
+    margin: 0 0 0 0;
     position: relative;
 }
 
@@ -1196,43 +1196,42 @@ dl.contentpane .button-field {
     font: normal 11px/14px Arial, Helvetica, sans-serif;
     text-transform: none;
     color: #686868;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     padding-right: 6px;
     float: left;
     padding-top: 2px;
 }
 
 .search .button {
-    background: url(images/default2/search-button.png) left top no-repeat;
+    background: url(../img/search-button.png) left top no-repeat;
     font: bold 12px/18px Arial, Helvetica, sans-serif;
     border: none !important;
     text-transform: none;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #fff;
     width: 56px;
     height: 22px;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
     float: none;
     padding: 2px 0 2px 1px;
     vertical-align: middle;
-    margin: 0px 0px 0 0px;
+    margin: 0 0 0 0;
 }
 
 .search .button:hover {
-    background: url(images/default2/search-button-active.png) left top no-repeat;
+    background: url(../img/search-button-active.png) left top no-repeat;
 }
 
 .search .inputbox {
-    background: url(images/default2/search-input.png) left top no-repeat;
+    background: url(../img/search-input.png) left top no-repeat;
     text-transform: none;
     border: none;
-    border-right: none;
     color: #f9f9f9;
     font: normal 12px/1.2em Arial, Helvetica, sans-serif !important;
     padding: 5px 10px 5px 6px;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
     vertical-align: middle;
     display: inline-block;
     width: 170px;
@@ -1242,7 +1241,7 @@ dl.contentpane .button-field {
 
 /* ------------------------------------- search-result --- */
 .search_result {
-    padding: 0px 20px 0px 0px;
+    padding: 0 20px 0 0;
 }
 
 .search_result h3 {
@@ -1258,12 +1257,12 @@ dl.contentpane .button-field {
 
 /* ------------------------------------- admin-form --- */
 .adminform td {
-    padding: 0px 0px 2px 0px;
+    padding: 0 0 2px 0;
 }
 
 /* ------------------------------------- system-error-messages --- */
 .error {
-    margin: 0px 0px 10px 0px;
+    margin: 0 0 10px 0;
 }
 
 #system-message dt.error,
@@ -1277,13 +1276,13 @@ dt.message {
     border-bottom: 3px solid #670606;
     color: #fff;
     margin: 0;
-    padding: 5px 0px 5px 5px;
+    padding: 5px 0 5px 5px;
 }
 
 .error dd ul li {
     background: none !important;
     color: #fff !important;
-    margin: 0px 0px 0px 20px !important;
+    margin: 0 0 0 20px !important;
 }
 
 /* --------------------------------------------------------------------------------- boxes --- */
@@ -1322,7 +1321,7 @@ dt.message {
 .module_menu h3 {
     color: #434343;
     letter-spacing: 0;
-    background: #f9f9f9 url(images/default2/title-bg1.gif) left top repeat-x;
+    background: #f9f9f9 url(../img/title-bg1.gif) left top repeat-x;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 7px 0 6px 12px;
@@ -1337,61 +1336,61 @@ dt.message {
 #vmMainPage h3 {
     background: none;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     color: #434343;
     border: none;
-    padding: 7px 0 6px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 7px 0 6px 0;
+    margin: 0 0 0 0;
 }
 
 h3.categoryName {
     background: none;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     color: #434343;
     border: none;
-    padding: 7px 0 6px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 7px 0 6px 0;
+    margin: 0 0 0 0;
 }
 
 .title {
     background: none;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     color: #434343;
     border: none;
-    padding: 7px 0 6px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 7px 0 6px 0;
+    margin: 0 0 0 0;
 }
 
 .title1 {
     background: none;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     color: #434343;
     border: none;
-    padding: 7px 0 6px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 7px 0 6px 0;
+    margin: 0 0 0 0;
 }
 
 .related h3 {
-    margin: 0px 0px 10px 0px !important;
+    margin: 0 0 10px 0 !important;
     font-size: 18px !important;
 }
 
 h5.title {
     background: none;
     font: bold 12px/21px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: uppercase;
     color: #080808;
     border: none;
-    padding: 0px 0 0px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
 
 }
 
@@ -1413,20 +1412,20 @@ th.title {
 /*-------------------content----*/
 .module ul {
     list-style: none;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
 }
 
 .module ul li {
     font: normal 12px/19px Arial, Helvetica, sans-serif;
     margin: 0 0 0 0;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     vertical-align: top;
 }
 
 .module li a {
     background: none;
-    padding: 0px 0px 0px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
 }
 
 .module li a:hover {
@@ -1455,7 +1454,7 @@ th.title {
     width: 100%;
     position: absolute;
     top: 111px;
-    left: 0px;
+    left: 0;
     z-index: 100;
 }
 
@@ -1465,7 +1464,7 @@ th.title {
 
 .ddsmoothmenu {
     background: none !important;
-    padding: 0px 0 0 0px;
+    padding: 0 0 0 0;
 }
 
 .downarrowclass {
@@ -1482,7 +1481,7 @@ th.title {
 .moduletable-categories ul.level1 {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 0px;
+    padding: 0 0 0 0;
 }
 
 .moduletable-categories ul.level1 li {
@@ -1490,7 +1489,7 @@ th.title {
     z-index: 98;
     font: bold 12px/18px Arial, Helvetica, sans-serif;
     float: left;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     border: none;
     position: relative;
     text-transform: uppercase;
@@ -1498,11 +1497,11 @@ th.title {
 
 .moduletable-categories ul.level1 li a {
     text-decoration: none;
-    margin-right: 0px;
-    padding: 9px 18px 0px 19px;
+    margin-right: 0;
+    padding: 9px 18px 0 19px;
     color: #fff;
     display: inline-block;
-    background: url(images/default2/cat-a.gif) left top repeat-x #088236;
+    background: url(../img/cat-a.gif) left top repeat-x #088236;
     border-top: 1px solid #0baa4a;
     border-left: 1px solid #0a9940;
     border-right: 1px solid #066d2c;
@@ -1527,7 +1526,7 @@ th.title {
 }
 
 .moduletable-categories ul.level1 li a.active, .moduletable-categories ul.level1 li a.selected {
-    background: url(images/default2/cat-a.active.gif) left top repeat-x #c3161c;
+    background: url(../img/cat-a.active.gif) left top repeat-x #c3161c;
     border-top: 1px solid #de212b;
     border-left: 1px solid #d21c24;
     border-right: 1px solid #a71319;
@@ -1536,8 +1535,8 @@ th.title {
 }
 
 .moduletable-categories ul.level2 li a.parent {
-    padding-right: 0px !important;
-    margin-bottom: 0px;
+    padding-right: 0 !important;
+    margin-bottom: 0;
 }
 
 .moduletable-categories ul.level2 {
@@ -1549,7 +1548,7 @@ th.title {
     margin: 0;
     position: absolute !important;
     top: 39px !important;
-    left: 0px !important;
+    left: 0 !important;
     visibility: hidden;
 }
 
@@ -1574,11 +1573,11 @@ th.title {
 .moduletable-categories ul.level2 li a {
     text-decoration: none;
     font: bold 11px/22px Arial, Helvetica, sans-serif;
-    padding: 0px 0px 0px 0px !important;
+    padding: 0 0 0 0 !important;
     margin: 0;
     color: #fefefe;
     display: block;
-    margin: 0 0 0 0px;
+    margin: 0 0 0 0;
     background: none !important;
     text-transform: uppercase;
     letter-spacing: 0;
@@ -1653,7 +1652,7 @@ th.title {
 /* ----------------- content ---- */
 .module_menu ul {
     list-style: none;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
 }
 
 .module_menu li {
@@ -1667,7 +1666,7 @@ th.title {
 }
 
 .module_menu li a {
-    background: url(images/default2/list-marker.gif) no-repeat 0 5px;
+    background: url(../img/list-marker.gif) no-repeat 0 5px;
     color: #F00;
     margin: 0;
     padding: 0 0 0 10px;
@@ -1682,7 +1681,7 @@ th.title {
 }
 
 .module_menu li.active ul {
-    margin: 1px 0px -1px 10px;
+    margin: 1px 0 -1px 10px;
 }
 
 /*------------------------userMenu---*/
@@ -1716,7 +1715,7 @@ th.title {
 
 .module_LoginForm {
     margin: 0;
-    padding: 0 0 0 0px;
+    padding: 0 0 0 0;
     border: none;
     overflow: hidden;
     text-align: left;
@@ -1754,7 +1753,7 @@ th.title {
 }
 
 #com-form-login-remember {
-    padding: 4px 0 0px 0px;
+    padding: 4px 0 0 0;
     margin: 0;
     display: inline-block;
     overflow: hidden;
@@ -1767,7 +1766,7 @@ th.title {
     display: inline-block;
     text-decoration: none;
     cursor: pointer;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 #com-form-login-remember label:hover {
@@ -1778,7 +1777,7 @@ th.title {
     /* checkbox */
     border: none;
     display: inline-block;
-    margin: 0px 3px 0px 0px;
+    margin: 0 3px 0 0;
     vertical-align: middle;
     width: 14px;
     height: 14px;
@@ -1812,18 +1811,18 @@ th.title {
     background: none;
     float: none;
     overflow: hidden;
-    padding: 0px 0px 0 0px;
-    margin: 0 0px 0px 0px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
 }
 
 .moduletable-nav ul.menu li {
     font: normal 12px/24px Arial, Helvetica, sans-serif;
     background: none;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     float: left;
-    margin: 0 0px 0 0px;
-    padding: 0px 17px 0px 0;
+    margin: 0 0 0 0;
+    padding: 0 17px 0 0;
 }
 
 .moduletable-nav ul.menu li a {
@@ -1850,7 +1849,7 @@ th.title {
 }
 
 .body-top {
-    background: url(images/default2/body-top.gif) center top repeat-x;
+    background: url(../img/body-top.gif) center top repeat-x;
     width: 100%;
     position: relative;
     z-index: 10;
@@ -1872,7 +1871,7 @@ th.title {
 
 /* --------------------------------------------------------- header --- */
 .splash {
-    background: url(images/default2/splash.jpg) center top no-repeat;
+    background: url(../img/splash.jpg) center top no-repeat;
     width: 100%;
 }
 
@@ -1891,16 +1890,16 @@ th.title {
     height: 150px;
     position: relative;
     z-index: 15;
-    margin: 0 0 0 0px;
-    padding: 0px 0 0 0;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
 #topmenu {
     border: none;
     height: 51px;
     width: auto;
-    margin: 0 0 0px 0;
-    padding: 0px 0 0 0px;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
     position: absolute;
     left: -2px;
     top: 0;
@@ -1909,11 +1908,11 @@ th.title {
 #search {
     position: absolute;
     top: 59px;
-    right: 0px;
+    right: 0;
     background: none;
     width: 244px;
     height: 27px;
-    padding: 0px 0 0 0;
+    padding: 0 0 0 0;
     margin: 0;
     overflow: hidden;
     z-index: 1;
@@ -1924,7 +1923,7 @@ th.title {
     width: 180px;
     height: 23px;
     margin: 0;
-    padding: 0px;
+    padding: 0;
     position: absolute;
     right: 100px;
     top: 2px;
@@ -1934,9 +1933,9 @@ th.title {
 
 #logo {
     position: absolute;
-    left: 0px;
+    left: 0;
     top: 48px;
-    font-size: 0px;
+    font-size: 0;
     width: 202px;
     height: 43px;
     padding: 0;
@@ -1979,9 +1978,9 @@ th.title {
 }
 
 #content {
-    padding: 12px 0px 29px 0px;
-    margin: 0px 0 0 0;
-    background: url(images/default2/content-bg.gif) left top repeat-x #fff;
+    padding: 12px 0 29px 0;
+    margin: 0 0 0 0;
+    background: url(../img/content-bg.gif) left top repeat-x #fff;
     position: relative;
     z-index: 5;
 }
@@ -1989,8 +1988,8 @@ th.title {
 #left {
     float: left;
     width: 231px;
-    margin: 0 11px 0 0px;
-    padding: 0 0 0px 0;
+    margin: 0 11px 0 0;
+    padding: 0 0 0 0;
 }
 
 .container {
@@ -2002,11 +2001,11 @@ th.title {
 #right {
     float: right;
     width: 300px;
-    margin: 0 0px 0 20px;
+    margin: 0 0 0 20px;
 }
 
 .all #right {
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 /* ------------------------------------- footer --- */
@@ -2014,12 +2013,12 @@ th.title {
     background: none;
     border-top: 1px solid #e3e3e3;
     height: 120px;
-    margin: 0px;
+    margin: 0;
     position: relative;
 }
 
 #footer .space {
-    padding: 25px 0px 0px 0px;
+    padding: 25px 0 0 0;
     font: normal 12px/27px Arial, Helvetica, sans-serif;
     color: #6d6d6d;
     background: none;
@@ -2051,7 +2050,7 @@ th.title {
 #footer ul {
     border: none;
     background: none;
-    padding: 0 0 6px 0px;
+    padding: 0 0 6px 0;
     margin: 0 0 0 0;
     list-style: none;
     position: relative;
@@ -2063,9 +2062,8 @@ th.title {
 #footer ul li {
     background: none;
     font: bold 12px/18px Arial, Helvetica, sans-serif;
-    background: none;
     display: block;
-    padding: 0px 25px 0 0;
+    padding: 0 25px 0 0;
     text-transform: none;
     letter-spacing: normal;
     margin: 0 0 0 0;
@@ -2161,7 +2159,7 @@ th.title {
 }
 
 .validate {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 #josForm {
@@ -2170,7 +2168,7 @@ th.title {
 
 .content-indent {
     padding: 0;
-    margin: 0px;
+    margin: 0;
     background: none;
     border: none;
     overflow: hidden;
@@ -2216,8 +2214,8 @@ th.title {
 }
 
 .height {
-    font-size: 0px;
-    line-height: 0px;
+    font-size: 0;
+    line-height: 0;
 }
 
 #comment {
@@ -2232,11 +2230,11 @@ th.title {
 }
 
 #searchForm .button {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .article-text-indent {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .article-text-indent h2 {
@@ -2281,10 +2279,10 @@ th.title {
     height: 319px !important;
     *height: 322px !important;
     position: absolute;
-    right: 0px;
+    right: 0;
     top: 16px;
     overflow: hidden;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .department dl {
@@ -2302,7 +2300,7 @@ th.title {
     font: bold 14px/21px Arial, Helvetica, sans-serif;
     text-transform: uppercase;
     margin: 0;
-    padding: 0px 0 18px 0;
+    padding: 0 0 18px 0;
 }
 
 .department .col-1 {
@@ -2315,7 +2313,7 @@ th.title {
 }
 
 #emailForm {
-    margin: 0px 0px 10px 0;
+    margin: 0 0 10px 0;
     padding-top: 4px;
 }
 
@@ -2358,7 +2356,7 @@ th.title {
     font: normal 13px/15px Arial, Helvetica, sans-serif;
     height: 130px;
     overflow: auto;
-    margin: 0px 0px 10px 0px;
+    margin: 0 0 10px 0;
     padding: 2px 4px;
     max-width: 370px;
     width: 370px;
@@ -2409,7 +2407,7 @@ h3 {
 }
 
 .cartButtons {
-    padding: 10px 0px 0px 0px;
+    padding: 10px 0 0 0;
 }
 
 .module-specials .product_details_container {
@@ -2417,15 +2415,15 @@ h3 {
 }
 
 .product_details_container {
-    margin: 10px 2px 0px 0;
-    padding: 0px 0px 0 0px;
+    margin: 10px 2px 0 0;
+    padding: 0 0 0 0;
     display: inline-block;
     width: auto;
 }
 
 .product_buttons {
     float: none;
-    margin: 0px 0 0 0px;
+    margin: 0 0 0 0;
     padding: 16px 0 0 2px;
     width: 100%;
     text-align: left;
@@ -2433,20 +2431,20 @@ h3 {
 
 .module_multi .product_buttons {
     float: none;
-    margin: 0px 0 0 0px;
+    margin: 0 0 0 0;
     padding: 15px 0 0 0;
     width: 100%;
     text-align: left;
 }
 
 .browseAddToCartContainer .addtocart_button {
-    background: url(images/default2/button2-active.png) left top no-repeat;
-    letter-spacing: 0px;
+    background: url(../img/button2-active.png) left top no-repeat;
+    letter-spacing: 0;
     border: none !important;
     color: #fff;
     text-transform: none;
     font: bold 12px/1.3em Arial, Helvetica, sans-serif !important;
-    padding: 0 0 0px 0;
+    padding: 0 0 0 0;
     display: inline-block !important;
     height: 33px !important;
     width: 90px !important;
@@ -2459,16 +2457,16 @@ h3 {
 }
 
 .browseAddToCartContainer .addtocart_button:hover {
-    background: url(images/default2/button2.png) left top no-repeat;
+    background: url(../img/button2.png) left top no-repeat;
     color: #fff;
 }
 
 .vmCartContainer .addtocart_button {
-    background: url(images/default2/button2-active.png) left top no-repeat;
+    background: url(../img/button2-active.png) left top no-repeat;
     border: none !important;
     color: #fff;
     text-transform: none;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     font: bold 12px/1.3em Arial, Helvetica, sans-serif !important;
     display: inline-block !important;
     position: absolute;
@@ -2479,26 +2477,26 @@ h3 {
     margin-top: 13px;
     text-align: center;
     cursor: pointer;
-    padding: 0 0 0px 0;
+    padding: 0 0 0 0;
     text-decoration: none;
     outline: none;
 }
 
 .vmCartContainer .addtocart_button:hover {
-    background: url(images/default2/button2.png) left top no-repeat;
+    background: url(../img/button2.png) left top no-repeat;
     color: #fff;
 }
 
 .addtocart_button {
-    background: url(images/default2/button2-active.png) left top no-repeat;
+    background: url(../img/button2-active.png) left top no-repeat;
     border: none !important;
     color: #fff;
     text-transform: none;
     font: bold 12px/1.3em Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     vertical-align: middle;
     display: inline-block !important;
-    padding: 0px 0px 0px 0px !important;
+    padding: 0 0 0 0 !important;
     margin: 0;
     width: 90px !important;
     height: 33px !important;
@@ -2508,14 +2506,13 @@ h3 {
 }
 
 .addtocart_button:hover {
-    background: url(images/default2/button2.png) left top no-repeat;
+    background: url(../img/button2.png) left top no-repeat;
     color: #fff;
     text-decoration: none !important;
-    color: #fff;
 }
 
 .module_multi .addtocart_button:hover {
-    background: url(images/default2/button1-active.png) left top no-repeat;
+    background: url(../img/button1-active.png) left top no-repeat;
     text-decoration: none !important;
     color: #fff;
 }
@@ -2525,36 +2522,36 @@ h3 {
 }
 
 div.back_button a {
-    background: url(images/default2/button-active.png) left top no-repeat;
+    background: url(../img/button-active.png) left top no-repeat;
     border: none !important;
     color: #fff;
     display: inline-block;
     font: normal 12px/20px Arial, Helvetica, sans-serif;
     text-decoration: none;
     text-transform: none;
-    padding: 2px 0px 0px 0px;
+    padding: 2px 0 0 0;
     text-align: center;
-    margin: 2px 0px 2px 0px;
+    margin: 2px 0 2px 0;
     height: 33px;
     width: 90px;
 }
 
 div.back_button a:hover {
-    background: url(images/default2/button.png) left top no-repeat;
+    background: url(../img/button.png) left top no-repeat;
     color: #FFF;
 
 }
 
 a.details {
-    background: url(images/default2/button3.png) left top no-repeat;
+    background: url(../img/button3.png) left top no-repeat;
     border: none !important;
     color: #fff;
     display: inline-block;
     font: bold 12px/22px Arial, Helvetica, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-decoration: none;
     text-transform: none;
-    padding: 0px 0 0px 2px;
+    padding: 0 0 0 2px;
     margin: 0;
     text-align: center;
     width: 134px !important;
@@ -2565,30 +2562,30 @@ a.details {
 a.details:hover {
     color: #fff;
     text-decoration: none;
-    background: url(images/default2/button3-active.png) left top no-repeat;
+    background: url(../img/button3-active.png) left top no-repeat;
 }
 
 .back_button {
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
 }
 
 .cbButton {
-    background: url(images/default2/button2.png) left top no-repeat;
+    background: url(../img/button2.png) left top no-repeat;
     border: none !important;
     color: #fff;
     display: inline-block;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     font: bold 12px/1.3em Arial, Helvetica, sans-serif;
     text-decoration: none;
     text-transform: none;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     margin: 2px 10px 2px 10px;
     width: 90px;
     height: 33px;
 }
 
 .cbButton:hover {
-    background: url(images/default2/button2-active.png) left top no-repeat;
+    background: url(../img/button2-active.png) left top no-repeat;
     color: #fff;
 
 }
@@ -2596,18 +2593,18 @@ a.details:hover {
 .button02,
 a.button02,
 #register_stretcher .button {
-    background: url(images/default2/button3.png) left top no-repeat;
+    background: url(../img/button3.png) left top no-repeat;
     border: none !important;
     color: #fff;
     display: inline-block;
     font: bold 12px/1.2em Arial, Helvetica, sans-serif !important;
     text-decoration: none;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     text-transform: none;
     text-align: center;
-    padding: 0px 0px 1px 0px;
+    padding: 0 0 1px 0;
     width: 134px;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
     height: 33px;
 }
 
@@ -2619,12 +2616,12 @@ a.button02 {
 }
 
 #register_stretcher .button {
-    padding: 0px 0px 2px 0px;
+    padding: 0 0 2px 0;
     height: 33px;
 }
 
 #register_stretcher .button {
-    margin: 10px 0 0 0px !important;
+    margin: 10px 0 0 0 !important;
 }
 
 #reviewform {
@@ -2633,7 +2630,7 @@ a.button02 {
 }
 
 input.button02 {
-    background: url(images/default2/button3.png) left top no-repeat;
+    background: url(../img/button3.png) left top no-repeat;
     color: #FFF;
     border: none;
     display: inline-block;
@@ -2641,22 +2638,22 @@ input.button02 {
     text-decoration: none;
     text-align: center;
     text-transform: none;
-    letter-spacing: 0px;
-    padding: 0px 0px 2px 0px;
-    margin: 2px 0px 2px 0px;
+    letter-spacing: 0;
+    padding: 0 0 2px 0;
+    margin: 2px 0 2px 0;
     width: 134px;
     height: 33px;
 }
 
 input.button02:hover {
-    background: url(images/default2/button3-active.png) left top no-repeat;
+    background: url(../img/button3-active.png) left top no-repeat;
     color: #fff;
 }
 
 .button02:hover,
 a.button02:hover,
 #register_stretcher .button:hover {
-    background: url(images/default2/button3-active.png) left top no-repeat;
+    background: url(../img/button3-active.png) left top no-repeat;
     color: #fff;
     border: none !important;
 
@@ -2664,7 +2661,7 @@ a.button02:hover,
 
 /* ---------- products layout */
 img.feed {
-    margin: 5px 5px 0px 0px;
+    margin: 5px 5px 0 0;
 }
 
 .product_layout {
@@ -2683,7 +2680,7 @@ img.feed {
 }
 
 .browseProductImage, .rightPos2.browseProductImageContainer {
-    margin: 3px 25px 0px 0px;
+    margin: 3px 25px 0 0;
     text-align: center;
     text-decoration: none;
     width: 110px;
@@ -2698,13 +2695,13 @@ img.feed {
 }
 
 .browseProductContainer {
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
 }
 
 .browseProductDescription {
-    margin: 0px 0px 0px -1px;
+    margin: 0 0 0 -1px;
     float: none;
-    padding: 0px 5px 11px 0px;
+    padding: 0 5px 11px 0;
     color: #aeadad;
     font-size: 12px;
     line-height: 17px;
@@ -2712,9 +2709,9 @@ img.feed {
 }
 
 .browseRatingContainer {
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
     float: none;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     width: 100%;
     color: #aeadad;
     font-size: 12px;
@@ -2742,7 +2739,7 @@ img.feed {
 }
 
 .productParams {
-    padding: 0px 8px 0px 0px;
+    padding: 0 8px 0 0;
 }
 
 .browseProductDetails {
@@ -2750,8 +2747,8 @@ img.feed {
 }
 
 div.buttons_heading {
-    margin: 10px 10px 0px 0px;
-    padding: 2px 0px 0px 0px;
+    margin: 10px 10px 0 0;
+    padding: 2px 0 0 0;
     float: right;
     width: 100px;
     overflow: hidden;
@@ -2772,7 +2769,7 @@ div.buttons_heading img {
 .product_navigation {
     width: 90%;
     float: left;
-    padding: 8px 0px 10px 0px;
+    padding: 8px 0 10px 0;
 }
 
 .nseparator {
@@ -2781,7 +2778,7 @@ div.buttons_heading img {
 
 .productSeparator {
     float: left;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
 }
 
 .productIndent {
@@ -2804,7 +2801,7 @@ h1.product_name,
 }
 
 .box_product_price {
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     margin-top: -8px;
     margin-left: 7px;
     border-bottom: none;
@@ -2816,7 +2813,7 @@ h1.product_name,
 }
 
 .product-options {
-    padding: 1px 0px 0px 11px;
+    padding: 1px 0 0 11px;
     margin: 0;
     border-top: none;
     border-bottom: none;
@@ -2836,7 +2833,7 @@ div.productPrice2 .productPrice {
 .vmCartContainer {
     overflow: hidden;
     background: none;
-    padding: 5px 0px 0px 0px;
+    padding: 5px 0 0 0;
     border: none;
 }
 
@@ -2846,7 +2843,7 @@ div.productPrice2 .productPrice {
 
 .top_separator {
     border-top: 1px solid #ccc;
-    padding: 10px 0px 0px 0px;
+    padding: 10px 0 0 0;
 }
 
 #five_stars,
@@ -2859,11 +2856,11 @@ div.productPrice2 .productPrice {
 }
 
 .stars {
-    margin: 2px 0px 0px 0px;
+    margin: 2px 0 0 0;
 }
 
 .categoryName {
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0 10px 0;
 }
 
 hr {
@@ -2895,16 +2892,16 @@ hr {
     overflow: hidden;
     position: relative;
     min-height: 180px;
-    padding: 15px 0px 0px 0px;
-    margin: 0px 0px 0px 10px;
+    padding: 15px 0 0 0;
+    margin: 0 0 0 10px;
 }
 
 .related .color {
-    padding: 0 10px 0 0px;
+    padding: 0 10px 0 0;
 }
 
 .related .product-options {
-    padding: 0px 0 0 19px;
+    padding: 0 0 0 19px;
     text-align: left;
 }
 
@@ -2936,7 +2933,7 @@ hr {
 }
 
 .related .box_product_price {
-    margin: 0px;
+    margin: 0;
     color: #fc9701;
     float: none;
     padding: 0 0 0 0;
@@ -2951,14 +2948,14 @@ hr {
     font-size: 12px;
     line-height: 17px;
     font-weight: bold;
-    padding: 0px;
+    padding: 0;
     margin: 0;
 }
 
 .related .box_product_price .product-Old-Price {
     color: #c94f39;
     font-weight: normal;
-    padding: 0px;
+    padding: 0;
     margin: 0;
 }
 
@@ -2971,7 +2968,7 @@ hr {
 .module_cart h3 {
     color: #434343;
     letter-spacing: 0;
-    background: #f9f9f9 url(images/default2/title-bg1.gif) left top repeat-x;
+    background: #f9f9f9 url(../img/title-bg1.gif) left top repeat-x;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 7px 0 6px 12px;
@@ -2987,8 +2984,8 @@ hr {
     display: inline-block;
     cursor: pointer;
     text-align: left;
-    padding: 0px 0 0 0px;
-    margin-top: 0px !important;
+    padding: 0;
+    margin-top: 0 !important;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
     color: #2f2232;
     text-transform: none;
@@ -2996,9 +2993,9 @@ hr {
 }
 
 .module_cart .vmCartModule {
-    margin: 0px 0 0 0px;
+    margin: 0;
     text-align: center;
-    padding: 14px 0 0px 7px;
+    padding: 14px 0 0 7px;
     background: none !important;
 }
 
@@ -3007,9 +3004,8 @@ hr {
     font: normal 12px/18px Arial, Helvetica, sans-serif;
     color: #2f2232;
     text-transform: none;
-    text-align: center;
-    letter-spacing: 0px;
-    padding: 0px 3px 0px 0px;
+    letter-spacing: 0;
+    padding: 0 3px 0 0;
     margin: 0;
     display: inline-block;
     text-decoration: none;
@@ -3027,11 +3023,11 @@ hr {
 
 .currency h3 {
     background: none;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     border: none;
     color: #fff;
     font: normal 12px/1.2em Arial, Helvetica, sans-serif;
-    padding: 3px 6px 0px 0px;
+    padding: 3px 6px 0 0;
     margin: 0;
     float: left;
     text-transform: none;
@@ -3046,7 +3042,7 @@ select#currency {
 }
 
 .jqTransformSelectWrapper {
-    background: url(images/default2/select_left.png) left top no-repeat;
+    background: url(../img/select_left.png) left top no-repeat;
     color: #f3f3f3;
     font: normal 12px/20px Arial, Helvetica, sans-serif;
     width: 140px !important;
@@ -3054,11 +3050,11 @@ select#currency {
     float: left;
     position: relative;
     padding: 1px 0 0 7px;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .jqTransformSelectWrapper .jqTransformSelectOpen {
-    background: url(images/default2/select_right.png) left top no-repeat;
+    background: url(../img/select_right.png) left top no-repeat;
     width: 22px;
     height: 23px !important;
     position: absolute;
@@ -3070,7 +3066,6 @@ select#currency {
     list-style: none !important;
     width: 123px !important;
     background: #8e0509;
-    border: none;
     position: absolute;
     top: 20px;
     left: -15px;
@@ -3107,7 +3102,7 @@ select#currency {
     border: none !important;
     display: block;
     font: bold 12px/18px Arial, Helvetica, sans-serif;
-    background: url(images/default2/button.png) left top no-repeat;
+    background: url(../img/button.png) left top no-repeat;
     width: 58px;
     height: 23px;
     padding: 0 0 2px 0;
@@ -3118,7 +3113,7 @@ select#currency {
 }
 
 .currency .button:hover {
-    background: url(images/default2/button-active.png) left top no-repeat;
+    background: url(../img/button-active.png) left top no-repeat;
     color: #fff !important;
     text-decoration: none;
 }
@@ -3154,12 +3149,12 @@ select#currency {
 
 .vader .ui-tabs .ui-tabs-panel {
     /* tabs indent */
-    padding: 23px 0px 30px 0px;
+    padding: 23px 0 30px 0;
 }
 
 .shop_info {
-    margin: 10px 0px 10px 0px;
-    padding: 14px 0px 15px 50px;
+    margin: 10px 0 10px 0;
+    padding: 14px 0 15px 50px;
     color: #000;
 }
 
@@ -3175,26 +3170,26 @@ select#currency {
     border-color: #ccc;
     border-radius: 5px;
     -moz-border-radius: 5px;
-    box-shadow: 0px 0px 20px #777;
-    -moz-box-shadow: 0px 0px 20px #777;
-    -webkit-box-shadow: 0px 0px 20px #777;
+    box-shadow: 0 0 20px #777;
+    -moz-box-shadow: 0 0 20px #777;
+    -webkit-box-shadow: 0 0 20px #777;
     z-index: 999;
 }
 
 .shop_warning {
-    padding: 15px 0px 15px 50px;
+    padding: 15px 0 15px 50px;
 }
 
 div.pathway {
-    margin: 0px 0px 0px 0px !important;
-    padding: 20px 0px 20px 60px;
+    margin: 0 !important;
+    padding: 20px 0 20px 60px;
     background: #fff;
     overflow: hidden;
     border: 1px solid #e8e8e8;
 }
 
 div.pathway2 {
-    margin: 0px 0px 0px 0px !important;
+    margin: 0 0 0 0 !important;
     padding: 20px 20px 20px 20px;
     background: #fff;
     overflow: hidden;
@@ -3206,7 +3201,7 @@ div.pathway span a {
 }
 
 .filfset-bg {
-    margin: 0px 0px 0px 0px !important;
+    margin: 0 0 0 0 !important;
     padding: 20px 20px 10px 20px;
     background: #fff;
     overflow: hidden;
@@ -3225,8 +3220,8 @@ legend.sectiontableheader, legend span.sectiontableheader {
     text-align: center;
     border: 1px solid #f2f2f2;
     color: #282828;
-    padding: 0px 0px 0px 0px;
-    margin: 0px 0 21px 10px;
+    padding: 0 0 0 0;
+    margin: 0 0 21px 10px;
     font: bold 12px/21px Arial, Helvetica, sans-serif;
     display: block;
     width: 150px;
@@ -3239,7 +3234,7 @@ legend span.sectiontableheader {
 
 .continue_link {
     line-height: 18px;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
     color: #fff !important;
     font: normal 12px/19px Arial, Helvetica, sans-serif;
     text-decoration: none;
@@ -3248,7 +3243,7 @@ legend span.sectiontableheader {
     height: 18px;
     width: 140px;
     text-align: center;
-    padding: 4px 0px 5px 0px;
+    padding: 4px 0 5px 0;
     float: left;
     margin: 0;
     margin-right: 3px;
@@ -3268,7 +3263,7 @@ legend span.sectiontableheader {
 }
 
 .checkout_link {
-    padding: 0px 30px 0px 0px;
+    padding: 0 30px 0 0;
     background-position: right 4px;
     color: #fff !important;
     font: bold 12px/19px Arial, Helvetica, sans-serif;
@@ -3278,7 +3273,7 @@ legend span.sectiontableheader {
     height: 18px;
     width: 77px;
     text-align: center;
-    padding: 4px 0px 5px 0px;
+    padding: 4px 0 5px 0;
     float: left;
     margin: 0;
     border-radius: 4px;
@@ -3294,7 +3289,7 @@ legend span.sectiontableheader {
 
 span.arrow {
     display: none;
-    background: url(images/default2/continue_link-marker1.gif) left top no-repeat;
+    background: url(../img/continue_link-marker1.gif) left top no-repeat;
     width: 8px;
     height: 5px;
     position: absolute;
@@ -3323,13 +3318,13 @@ span.arrow {
 
 .rght .indent,
 .lft .indent {
-    padding: 0px 0px 0px 15px;
+    padding: 0 0 0 15px;
     text-align: left;
 }
 
 .rght2 .indent,
 .lft2 .indent {
-    padding: 0px 0px 0px 8px;
+    padding: 0 0 0 8px;
     text-align: left;
 }
 
@@ -3376,14 +3371,14 @@ span.arrow {
 
 .product_sect span.cat_name {
     width: auto;
-    background: #fff url(images/default2/_product_linkmarker.png) right center no-repeat;
+    background: #fff url(../img/_product_linkmarker.png) right center no-repeat;
     display: block;
-    padding: 0px 25px 0px 9px;
+    padding: 0 25px 0 9px;
     cursor: pointer;
 }
 
 #vmMainPage {
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     overflow: hidden;
 }
 
@@ -3416,7 +3411,7 @@ span.arrow {
 }
 
 .product_image_container a {
-    font: normal 0px/0px Arial, Helvetica, sans-serif;
+    font: normal 0/0px Arial, Helvetica, sans-serif;
 }
 
 .imageRight {
@@ -3430,32 +3425,32 @@ span.arrow {
 .quantity {
     width: auto;
     float: none;
-    padding: 7px 0px 0px 0px;
-    *padding: 5px 0px 0px 0px;
+    padding: 7px 0 0 0;
+    *padding: 5px 0 0 0;
 }
 
 .featured .quantity {
-    padding: 0px 0px 10px 0px;
+    padding: 0 0 10px 0;
 
 }
 
 .last .featuredIndent {
-    padding: 0px 1px 0px 1px;
+    padding: 0 1px 0 1px;
 }
 
 .hor-listing-separator {
-    font-size: 0px;
-    line-height: 0px;
+    font-size: 0;
+    line-height: 0;
     display: none;
 }
 
 .extra-table {
-    margin: 0px 0 0 -6px;
+    margin: 0 0 0 -6px;
     width: 100%;
 }
 
 .col-product {
-    margin: 0px 0px 10px 10px;
+    margin: 0 0 10px 10px;
     float: left;
     width: 196px;
 }
@@ -3486,25 +3481,25 @@ span.arrow {
 }
 
 .quantity_box_button_up {
-    background: url(images/default2/arrowUp.png) no-repeat 0 0;
+    background: url(../img/arrowUp.png) no-repeat 0 0;
     margin: 0 0 0 -2px;
 }
 
 .quantity_box_button_up:hover {
-    background: url(images/default2/arrowUp-active.png) no-repeat 0 0;
+    background: url(../img/arrowUp-active.png) no-repeat 0 0;
 }
 
 .quantity_box_button_down {
-    background: url(images/default2/arrowDown.png) no-repeat 0 0;
+    background: url(../img/arrowDown.png) no-repeat 0 0;
     margin: 0 0 0 -2px;
 }
 
 .quantity_box_button_down:hover {
-    background: url(images/default2/arrowDown-active.png) no-repeat 0 0;
+    background: url(../img/arrowDown-active.png) no-repeat 0 0;
 }
 
 .char-counter {
-    margin: 0px 0 0 313px;
+    margin: 0 0 0 313px;
     position: absolute;
 }
 
@@ -3537,7 +3532,7 @@ span.arrow {
 }
 
 .rightPosition .rightPos .browseProductImage {
-    margin: 0px 0px 0px 15px;
+    margin: 0 0 0 15px;
 }
 
 .rightPosition .alignRight a.product_details,
@@ -3547,7 +3542,7 @@ span.arrow {
 }
 
 .rightPosition .alignRight .quantity {
-    margin: 0px 0px 0px 10px;
+    margin: 0 0 0 10px;
 }
 
 .rightPosition .alignRight {
@@ -3605,7 +3600,7 @@ form.orderby_form {
 }
 
 .listing-separator div {
-    width: 0px;
+    width: 0;
     font-size: 0;
     line-height: 0;
 }
@@ -3629,7 +3624,6 @@ form.orderby_form {
 }
 
 .vmAttribChildDetail {
-    text-align: left;
     width: 10%;
     float: left;
     text-align: right;
@@ -3663,7 +3657,7 @@ form.orderby_form {
 }
 
 .browse_1 .browseProductImageContainer {
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
     padding: 5px 0 8px 10px;
     float: left;
     width: 118px;
@@ -3706,13 +3700,13 @@ form.orderby_form {
     position: absolute;
     bottom: 2px;
     right: 1%;
-    background: url(images/default2/DetailsContainer-bg.gif) left top no-repeat;
+    background: url(../img/DetailsContainer-bg.gif) left top no-repeat;
     padding-left: 22px;
     display: none;
 }
 
 .floatElement a.product_details {
-    background: url(images/default2/product_details.gif) right center no-repeat;
+    background: url(../img/product_details.gif) right center no-repeat;
     border: none;
     color: #6c6c6c;
     display: inline-block;
@@ -3720,7 +3714,7 @@ form.orderby_form {
     text-decoration: underline;
     text-transform: none;
     vertical-align: middle;
-    padding: 0px 8px 0 0;
+    padding: 0 8px 0 0;
     margin: -2px 0 0 0;
     text-align: left;
 }
@@ -3741,7 +3735,7 @@ form.orderby_form {
 .floatElementR .browsePriceContainer {
     float: none;
     width: 100%;
-    padding: 0px 0px 0px 2px;
+    padding: 0 0 0 2px;
     overflow: hidden;
 }
 
@@ -3750,8 +3744,8 @@ form.orderby_form {
     text-decoration: line-through;
     color: #cc1a21;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
-    padding: 1px 0px 0px 10px;
-    *padding: 0 0px 0px 10px;
+    padding: 1px 0 0 10px;
+    *padding: 0 0 0 10px;
 }
 
 .floatElementR .productPrice {
@@ -3764,7 +3758,7 @@ form.orderby_form {
 .floatElementR .addtocart_form {
     padding-top: 3px;
     display: inline-block;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .floatElementR .addtocart_form label {
@@ -3779,10 +3773,10 @@ form.orderby_form {
     color: #bebeba;
     line-height: 17px;
     vertical-align: top;
-    padding: 0px 0px 0px 5px;
+    padding: 0 0 0 5px;
     height: 17px;
     width: 34px;
-    margin: 0px 0px 0px 2px;
+    margin: 0 0 0 2px;
     *margin: -1px 0 0 2px;
 }
 
@@ -3803,7 +3797,7 @@ form.orderby_form {
     width: auto;
     padding-left: 10px;
     *padding-left: 8px;
-    padding-right: 0px;
+    padding-right: 0;
     padding-bottom: 20px;
     box-shadow: 0 0 25px #fcfcfc inset;
     -moz-box-shadow: 0 0 25px #fcfcfc inset;
@@ -3848,7 +3842,7 @@ form.orderby_form {
 .featuredIndent2 .productPrice {
     color: #4c2f53;
     font: bold 12px/17px Arial, Helvetica, sans-serif;
-    padding: 0px 0px 0px 18px;
+    padding: 0 0 0 18px;
     display: inline-block;
 }
 
@@ -3856,7 +3850,7 @@ form.orderby_form {
     color: #c94f39;
     display: inline-block;
     font: normal 12px/17px Arial, Helvetica, sans-serif;
-    padding: 0px 0px 0px 4px;
+    padding: 0 0 0 4px;
 }
 
 .productTop {
@@ -3868,8 +3862,8 @@ form.orderby_form {
 .featuredIndent2 {
     border: none;
     background: none;
-    margin: 10px 0px 0px 0px;
-    padding: 5px 0px 0 0px;
+    margin: 10px 0 0 0;
+    padding: 5px 0 0 0;
     min-height: 180px;
     position: relative;
     border: none;
@@ -3933,7 +3927,7 @@ ul.vmRecentDetail li {
     float: none;
     color: #505050;
     margin: 0;
-    padding: 0px 0px 17px 0px;
+    padding: 0 0 17px 0;
     font: normal 18px/20px Arial, Helvetica, sans-serif;
     border-bottom: 1px solid #e5e5e5;
 
@@ -3952,29 +3946,29 @@ ul.vmRecentDetail li {
 .Product-border .productPrice {
     color: #525151;
     font: normal 20px/17px Arial, Helvetica, sans-serif;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     margin: 0;
 }
 
 .Product-border .product-Old-Price {
     color: #cc1a21;
     display: inline-block;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
     font-size: 12px;
 }
 
 .Product-border .browsePriceContainer {
     float: left;
     width: auto;
-    padding: 25px 0px 0px 0px;
+    padding: 25px 0 0 0;
     overflow: hidden;
 }
 
 .Product-border .vmCartContainer1 {
     float: right;
     background: none;
-    padding: 14px 0px 0px 0px;
+    padding: 14px 0 0 0;
     border: none;
 }
 
@@ -3999,7 +3993,7 @@ ul.vmRecentDetail li {
 }
 
 .vmRecentDetail li {
-    background: url(images/default2/vmRecentDetail-marker.png) left 10px no-repeat;
+    background: url(../img/vmRecentDetail-marker.png) left 10px no-repeat;
     padding-left: 22px;
 }
 
@@ -4016,8 +4010,8 @@ ul.vmRecentDetail li {
 }
 
 span.previous_page {
-    background: url(images/default2/previous_page.gif) left top repeat-x;
-    margin: 0px;
+    background: url(../img/previous_page.gif) left top repeat-x;
+    margin: 0;
     width: 96px;
     height: 23px;
     border: 1px solid #e5e5e5;
@@ -4031,7 +4025,7 @@ span.previous_page:hover {
 }
 
 span.next_page {
-    background: url(images/default2/previous_page.gif) left top repeat-x;
+    background: url(../img/previous_page.gif) left top repeat-x;
     margin: 0;
     width: 96px;
     height: 23px;
@@ -4086,9 +4080,9 @@ a.next_page {
 }
 
 .basket .sectiontableheader td span {
-    background: url(images/default2/sectiontableheader_th.gif) right top repeat-y;
+    background: url(../img/sectiontableheader_th.gif) right top repeat-y;
     display: block;
-    padding: 7px 0px 9px 10px;
+    padding: 7px 0 9px 10px;
 }
 
 .basket .sectiontableheader td.first {
@@ -4160,7 +4154,7 @@ a.next_page {
 
 .basket .sectiontableentry1.png td {
     padding: 0 0 0 0;
-    background: url(images/default2/sectiontableheader_tr.gif) right bottom repeat-x;
+    background: url(../img/sectiontableheader_tr.gif) right bottom repeat-x;
 }
 
 .basket .sectiontableentry1.png td.second {
@@ -4176,9 +4170,9 @@ a.next_page {
 }
 
 .basket .sectiontableentry1.png td span {
-    background: url(images/default2/sectiontableheader_th.gif) right top repeat-y;
+    background: url(../img/sectiontableheader_th.gif) right top repeat-y;
     display: block;
-    padding: 7px 0px 10px 10px;
+    padding: 7px 0 10px 10px;
 }
 
 .basket .sectiontableentry1.png td.four span {
@@ -4264,7 +4258,7 @@ a.next_page {
 
 .basket .sectiontableentry2.png td {
     padding: 0 0 0 0;
-    background: url(images/default2/sectiontableheader_tr.gif) right bottom repeat-x;
+    background: url(../img/sectiontableheader_tr.gif) right bottom repeat-x;
 }
 
 .basket .sectiontableentry2.png td.second {
@@ -4280,9 +4274,9 @@ a.next_page {
 }
 
 .basket .sectiontableentry2.png td span {
-    background: url(images/default2/sectiontableheader_th.gif) right top repeat-y;
+    background: url(../img/sectiontableheader_th.gif) right top repeat-y;
     display: block;
-    padding: 7px 0px 10px 10px;
+    padding: 7px 0 10px 10px;
 }
 
 .basket .sectiontableentry2.png td span a {
@@ -4355,9 +4349,9 @@ a.next_page {
 }
 
 .basket .sectiontableentry1.aft td span {
-    background: url(images/default2/sectiontableheader_th.gif) right top repeat-y;
+    background: url(../img/sectiontableheader_th.gif) right top repeat-y;
     display: block;
-    padding: 7px 10px 9px 0px;
+    padding: 7px 10px 9px 0;
 }
 
 .basket .sectiontableentry1.aft td.last span {
@@ -4367,16 +4361,16 @@ a.next_page {
 }
 
 .basket .sectiontableentry1.aft1 td span {
-    background: url(images/default2/sectiontableheader_th.gif) right top repeat-y;
+    background: url(../img/sectiontableheader_th.gif) right top repeat-y;
     display: block;
-    padding: 7px 10px 9px 0px;
+    padding: 7px 10px 9px 0;
 }
 
 .basket .sectiontableentry1.aft1 strong {
     display: block;
     background: #047938 !important;
     font: bold 12px/21px Arial, Helvetica, sans-serif;
-    padding: 8px 0px 10px 12px;
+    padding: 8px 0 10px 12px;
     color: #FFF;
     margin: 0 -1px -1px -1px;
 }
@@ -4404,7 +4398,7 @@ a.next_page {
 
 #coupon_code {
     float: left;
-    margin: 0px 8px 0px 0px;
+    margin: 0 8px 0 0;
     padding: 5px 5px 5px 5px;
     vertical-align: top;
     font: normal 15px/15px Arial, Helvetica, sans-serif;
@@ -4479,7 +4473,7 @@ a.next_page {
     border: none;
     padding-bottom: 2px;
     margin: 0;
-    letter-spacing: 0px;
+    letter-spacing: 0;
 }
 
 #login_stretcher a {
@@ -4560,7 +4554,7 @@ form fieldset div strong {
     border: 1px solid #e5e5e5;
     margin-top: 4px;
     padding: 15px 20px 0 20px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     background: #fff;
 }
 
@@ -4575,8 +4569,8 @@ form fieldset div strong {
     float: right;
     color: #fff;
     font: bold 12px/24px Arial, Helvetica, sans-serif;
-    padding: 0px 0px 0px 1px;
-    margin: 0px 11px 0px 0px;
+    padding: 0 0 0 1px;
+    margin: 0 11px 0 0;
     height: 25px;
     width: 108px;
     text-align: center;
@@ -4660,13 +4654,13 @@ form fieldset div strong {
 
 .ship-adress1 .add_new a {
     display: inline-block;
-    background: url(images/default2/nonebutton.gif) right 7px no-repeat;
+    background: url(../img/nonebutton.gif) right 7px no-repeat;
     padding-right: 8px;
     color: #fc2020;
 }
 
 .button.color {
-    background: url(images/default2/button2-active.png) left top no-repeat;
+    background: url(../img/button2-active.png) left top no-repeat;
     border: none;
     height: 33px;
     color: #FFF;
@@ -4674,7 +4668,7 @@ form fieldset div strong {
 }
 
 a.button.color {
-    background: url(images/default2/button2-active.png) left top no-repeat;
+    background: url(../img/button2-active.png) left top no-repeat;
     border: none;
     height: 22px;
     padding-top: 10px;
@@ -4685,7 +4679,7 @@ a.button.color {
 }
 
 .button.color:hover {
-    background: url(images/default2/button2.png) left top no-repeat;
+    background: url(../img/button2.png) left top no-repeat;
     color: #fff;
 }
 
@@ -4697,12 +4691,12 @@ a.button.color {
 
 .paypal_ex {
     background: none;
-    padding: 20px 0px 0px 0px;
+    padding: 20px 0 0 0;
 }
 
 .paypal_ex fieldset {
-    padding: 0 0px 10px 20px;
-    margin-left: 0px;
+    padding: 0 0 10px 20px;
+    margin-left: 0;
 }
 
 .paypal_ex fieldset legend {
@@ -4715,7 +4709,7 @@ a.button.color {
 
 .payment-bg {
     background: none;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
 }
 
 .payment {
@@ -4839,7 +4833,7 @@ a.button.color {
 }
 
 .module_best .boxIndent {
-    padding: 0 0px 0 0px;
+    padding: 0 0 0 0;
     margin: 0;
     margin-bottom: 0;
     overflow: hidden;
@@ -4851,7 +4845,7 @@ a.button.color {
 .module_best h3 {
     color: #09903c;
     letter-spacing: 0;
-    background: #f9f9f9 url(images/default2/title-bg1.gif) left top repeat-x;
+    background: #f9f9f9 url(../img/title-bg1.gif) left top repeat-x;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 7px 0 6px 12px;
@@ -4922,7 +4916,7 @@ a.button.color {
 .module_best2 h3 {
     color: #09903c;
     letter-spacing: 0;
-    background: #f9f9f9 url(images/default2/title-bg1.gif) left top repeat-x;
+    background: #f9f9f9 url(../img/title-bg1.gif) left top repeat-x;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 7px 0 6px 12px;
@@ -4948,7 +4942,7 @@ a.button.color {
 }
 
 .module-specials .boxIndent {
-    padding: 0 0px 0 0px;
+    padding: 0 0 0 0;
     margin: 0;
     margin-bottom: -3px;
     overflow: hidden;
@@ -4960,7 +4954,7 @@ a.button.color {
 .module-specials h3 {
     color: #f90711;
     letter-spacing: 0;
-    background: #f9f9f9 url(images/default2/title-bg1.gif) left top repeat-x;
+    background: #f9f9f9 url(../img/title-bg1.gif) left top repeat-x;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 7px 0 6px 12px;
@@ -4973,7 +4967,7 @@ a.button.color {
 }
 
 .module-specials .featuredIndent {
-    background: url(images/default2/specials-divider.gif) left bottom repeat-x;
+    background: url(../img/specials-divider.gif) left bottom repeat-x;
     border: none;
     text-align: left;
     overflow: hidden;
@@ -4984,7 +4978,7 @@ a.button.color {
 }
 
 .module-specials div.productDescription {
-    padding: 12px 0px 0px 1px;
+    padding: 12px 0 0 1px;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
     color: #827e72;
     min-height: 103px;
@@ -4992,8 +4986,8 @@ a.button.color {
 }
 
 .module-specials div.product_name {
-    padding: 2px 0px 0px 0px;
-    margin: 0px 0px 0 0px;
+    padding: 2px 0 0 0;
+    margin: 0 0 0 0;
     text-align: left;
     min-height: 40px;
     border-bottom: none;
@@ -5012,7 +5006,7 @@ a.button.color {
 }
 
 .module-specials .product-options {
-    padding: 1px 0px 0px 0px;
+    padding: 1px 0 0 0;
     margin: 0;
     border-top: none;
     position: relative;
@@ -5026,7 +5020,7 @@ a.button.color {
     display: none;
     position: absolute;
     top: 7px;
-    left: 0px;
+    left: 0;
 }
 
 .module-specials .productPrice {
@@ -5035,7 +5029,7 @@ a.button.color {
     white-space: nowrap;
     display: inline-block;
     padding: 0 5px 0 0;
-    margin: 0px;
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: -1px;
 }
@@ -5044,15 +5038,14 @@ a.button.color {
     text-decoration: line-through;
     color: #a1a1a1;
     font: normal 12px/18px Arial, Helvetica, sans-serif;
-    padding: 0px 0 0px 0px;
+    padding: 0 0 0 0;
     margin: 0;
     display: inline;
 }
 
 .module-specials .box_product_price {
-    padding: 10px 0px 0px 0px;
+    padding: 10px 0 0 0;
     margin: 0;
-    margin-top: 0;
     border-bottom: none;
     position: relative;
     float: none;
@@ -5086,19 +5079,17 @@ a.button.color {
 }
 
 .module-specials .discount {
-    font-size: 17px;
     z-index: 10;
     position: relative;
     top: -206px;
     left: 53px;
     *left: 43px;
     display: none;
-    font-weight: bold;
     background: none;
     width: 57px;
     height: 41px;
-    padding: 8px 0px 0px 0px;
-    *margin: 0px 0px 0px 35px;
+    padding: 8px 0 0 0;
+    *margin: 0 0 0 35px;
     color: #FFF;
     font-size: 18px;
     font-weight: normal;
@@ -5119,7 +5110,7 @@ a.button.color {
 }
 
 .module-new .boxIndent {
-    padding: 0 0px 0 0px;
+    padding: 0 0 0 0;
     margin: 0;
     margin-bottom: -2px;
     overflow: hidden;
@@ -5131,7 +5122,7 @@ a.button.color {
 .module-new h3 {
     color: #434343;
     letter-spacing: 0;
-    background: #f9f9f9 url(images/default2/title-bg1.gif) left top repeat-x;
+    background: #f9f9f9 url(../img/title-bg1.gif) left top repeat-x;
     font: bold 17px/24px Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 7px 0 6px 12px;
@@ -5148,7 +5139,7 @@ a.button.color {
 }
 
 .module-new tr.first {
-    background: url(images/default2/tr.first.gif) left bottom repeat-x;
+    background: url(../img/tr.first.gif) left bottom repeat-x;
 }
 
 .module-new .vLine {
@@ -5176,7 +5167,7 @@ a.button.color {
 }
 
 .module-new div.productDescription {
-    padding: 7px 0px 0px 3px;
+    padding: 7px 0 0 3px;
     font: normal 12px/16px Arial, Helvetica, sans-serif;
     color: #827e72;
     min-height: 36px;
@@ -5185,8 +5176,8 @@ a.button.color {
 }
 
 .module-new div.product_name {
-    padding: 17px 0px 0px 0px;
-    margin: 0 0px 0 0px;
+    padding: 17px 0 0 0;
+    margin: 0 0 0 0;
     text-align: left;
     min-height: 37px;
     border-bottom: none;
@@ -5205,7 +5196,7 @@ a.button.color {
 }
 
 .module-new .product-options {
-    padding: 1px 0px 0px 0px;
+    padding: 1px 0 0 0;
     margin: 0;
     border-top: none;
     position: relative;
@@ -5220,7 +5211,7 @@ a.button.color {
     display: none;
     position: absolute;
     top: 7px;
-    left: 0px;
+    left: 0;
 }
 
 .module-new .productPrice {
@@ -5229,8 +5220,8 @@ a.button.color {
     white-space: nowrap;
     display: inline-block;
     letter-spacing: -1px;
-    padding: 0 0px 0 0;
-    margin: 0px;
+    padding: 0 0 0 0;
+    margin: 0;
     text-transform: uppercase;
 }
 
@@ -5238,13 +5229,13 @@ a.button.color {
     text-decoration: line-through;
     color: #555555;
     font: normal 17px/18px Arial, Helvetica, sans-serif;
-    padding: 0px 0 0px 0px;
+    padding: 0 0 0 0;
     margin: 0;
     display: none;
 }
 
 .module-new .box_product_price {
-    padding: 14px 0px 0px 0px;
+    padding: 14px 0 0 0;
     margin: 10px;
 
     border-bottom: none;
@@ -5260,7 +5251,7 @@ a.button.color {
 
 .module-new .product_image_container {
     text-align: center;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     margin: 0;
     background: none;
     border: none;
@@ -5290,7 +5281,7 @@ a.slidesjs-next,
 a.slidesjs-previous,
 a.slidesjs-play,
 a.slidesjs-stop {
-    background-image: url(images/btns-next-prev.png);
+    background-image: url(../../../images/btns-next-prev.png);
     background-repeat: no-repeat;
     display: block;
     width: 12px;
@@ -5352,7 +5343,7 @@ a:hover.slidesjs-stop {
     width: 13px;
     height: 0;
     padding-top: 13px;
-    background: url(images/pagination.png) 0 0;
+    background: url(../../../images/pagination.png) 0 0;
     float: left;
     overflow: hidden;
 }
@@ -5389,8 +5380,7 @@ a:hover.slidesjs-stop {
     -webkit-border-top-right-radius: 0;
     -moz-border-radius: 50px;
     -moz-border-radius-topright: 0;
-    border-radius: 50px;
-    border-top-right-radius: 0;
+    border-radius: 50px 0 50px 50px;
     margin-top: -14px;
 }
 

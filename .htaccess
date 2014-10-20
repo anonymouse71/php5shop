@@ -21,6 +21,7 @@ RewriteBase /
 # Разрешает доступ к статическим файлам, без перенаправления на точку входа в приложение
 RewriteRule ^images/(.*) images/$1
 RewriteRule ^js/(.*) js/$1
+RewriteRule ^themes_public/(.*) themes_public/$1
 
 # Protect application and system files from being viewed
 RewriteRule ^(application|modules|system) - [F,L]

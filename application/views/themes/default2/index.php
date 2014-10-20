@@ -7,7 +7,7 @@
  * logo                                 - блок для logo
  * keywords                             - meta keywords для поисковых систем
  * description                          - meta description для поисковых систем
- * css                                  - стили
+ * head                                 - дополнительные вставки кода в head
  * topBlock1                            - верхний виджет 1 (выбор валюты)
  * topBlock2                            - верхний виджет 2 (корзина)
  * topBlock3                            - верхний виджет 3 (дополнительный) - сортировка в категории
@@ -46,13 +46,12 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 
     <link href='http://fonts.googleapis.com/css?family=Oswald&v1' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="template2.css" type="text/css"/>
+    <link rel="stylesheet" href="themes_public/default2/css/template2.css" type="text/css"/>
 
     <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="js/jquery-migrate-1.2.1.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/jquery.simplemodal.js"></script>
-    <?php echo $css; ?>
+    <?php echo $head; ?>
     <?php if (isset($lastNews)): ?>
         <script type="text/javascript" src="js/jquery.slides.min.js"></script>
     <?php endif; ?>
@@ -160,11 +159,14 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                                         <?php
                                         $else_theme = $themes[0];
                                         //по нажатию на кнопку выбираем следующую за текущей тему
-                                        foreach($themes as $tpl)
-                                            if($tpl != $theme):
+                                        $found = false;
+                                        foreach ($themes as $tpl)
+                                            if ($found)
+                                            {
                                                 $else_theme = $tpl;
                                                 break;
-                                            endif;
+                                            } elseif ($tpl == $theme)
+                                                $found = true;
                                         ?>
                                         <input type="hidden" name="theme" value="<?php echo $else_theme ?>">
                                     </form>

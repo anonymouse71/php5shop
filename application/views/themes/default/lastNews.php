@@ -14,7 +14,7 @@
 
         <?php endforeach;?>
     </div>
-    <img src="images/bot_bg.gif" alt="" width="218" height="10"><br>
+    <img src="themes_public/default1/img/bot_bg.gif" alt="" width="218" height="10"><br>
 <?php if (count($data) > 1): ?>
     <script>
         $(function () {
