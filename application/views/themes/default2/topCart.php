@@ -7,7 +7,7 @@
 <div class="topblock2"
      onclick="document.location.href = '<?php echo url::base();?>order/cart'"
      style="cursor: pointer;float: right;z-index: 120;">
-    <img src="images/default2/cart-43-24.png" alt="корзина" class="shopping" height="24" width="24">
+    <img src="themes_public/default2/img/cart-43-24.png" alt="корзина" class="shopping" height="24" width="24">
    <span>В корзине </span><span id="CartItems" style="font-weight: bold;"><?php echo $items;?></span>
 </div>
 
