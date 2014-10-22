@@ -6,7 +6,7 @@
     <table border="0" <?php if(!isset($adm)):?>width="350px"<?php endif;?>>
         <tr>
             <td><span>Имя (ФИО):</span> </td>
-            <td><input class="line" <?php if(!isset($adm)):?>disabled="1"<?php endif;?> type="text" name="username" value="<?php echo htmlspecialchars($user->username);?>"></td>
+            <td><input class="line" <?php if(!isset($adm)):?>readonly="readonly"<?php endif;?> type="text" name="username" value="<?php echo htmlspecialchars($user->username);?>"></td>
         </tr>
 
         <tr>
