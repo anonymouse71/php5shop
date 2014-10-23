@@ -33,7 +33,8 @@
  */
 abstract class Controller_Site extends Controller_Template
 {
-    public $theme = 'default2'; //тема по умолчанию
+    public $theme = 'default2'; //тема по умолчанию для настольных компьютеров и ноутбуков
+    public $theme_mobile = 'mobile1'; //тема по умолчанию для мобильных устройств
     public static $cache; //объект модуля кэширования
     protected $themes; // массив всех тем, которые есть в каталоге views/themes
     protected $currency = DEFAULT_CURRENCY; //валюта
@@ -44,10 +45,20 @@ abstract class Controller_Site extends Controller_Template
     protected $apis; //массив данных для интеграции с сторонними сервисами
     protected $catId = 0; // текущая категория в каталоге товаров, если это страница категории
 
+    /**
+     * @param Kohana_Request $request
+     */
     public function __construct(Kohana_Request $request)
     {
         $this->themes = array_slice(scandir(APPPATH . 'views/themes'), 2);
-        $session_theme = Cookie::get('theme', $this->theme);
+        $session_theme = Cookie::get('theme', FALSE);
+        if (FALSE === $session_theme)
+        {
+            $session_theme = Model::factory('Mobile')->isMobile() ?
+                $this->theme_mobile : $this->theme;
+            Cookie::set('theme', $session_theme, Date::YEAR);
+        }
+
         if (in_array($session_theme, $this->themes))
             $this->theme = $session_theme;
         elseif($this->theme != $session_theme)
