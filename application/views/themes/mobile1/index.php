@@ -172,7 +172,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
                             <form action="" method="post" class="field centered" style="float: right">
                                 <div class="medium primary btn">
-                                    <input type="submit" value="Переключить на другой дизайн" id="change_design_button" class="switch">
+                                    <input type="submit" value="Переключить на другой дизайн" id="change_design_button" >
                                 </div>
                                 <?php
                                 $else_theme = $themes[0];
