@@ -133,17 +133,21 @@ abstract class Kohana_Database {
 	 */
 	abstract public function set_charset($charset);
 
-	/**
-	 * Perform an SQL query of the given type.
-	 *
-	 * @param   integer  Database::SELECT, Database::INSERT, etc
-	 * @param   string   SQL query
-	 * @param   string   result object class, TRUE for stdClass, FALSE for assoc array
-	 * @return  object   Database_Result for SELECT queries
-	 * @return  array    list (insert id, row count) for INSERT queries
-	 * @return  integer  number of affected rows for all other queries
-	 */
-	abstract public function query($type, $sql, $as_object);
+    /**
+     * Perform an SQL query of the given type.
+     *
+     * @param $type
+     * @param $sql
+     * @param $as_object
+     * @param array $params
+     * @internal param Database $integer ::SELECT, Database::INSERT, etc
+     * @internal param SQL $string query
+     * @internal param result $string object class, TRUE for stdClass, FALSE for assoc array
+     * @return  object   Database_Result for SELECT queries
+     * @return object list (insert id, row count) for INSERT queries
+     * @return object number of affected rows for all other queries
+     */
+	abstract public function query($type, $sql, $as_object = FALSE, array $params = NULL);
 
 	/**
 	 * Count the number of records in a table.
@@ -406,13 +410,7 @@ abstract class Kohana_Database {
 
 		if (strpos($value, '"') !== FALSE)
 		{
-			// Quote the column in FUNC("ident") identifiers
-            if (version_compare(PHP_VERSION, '5.5.0', '>='))
-            {
-                $that = $this;
-                return preg_replace_callback('/"(.+?)"/', function ($matches) use($that) { return $that->quote_identifier($matches[1]); }, $value);
-            }
-			return preg_replace('/"(.+?)"/e', '$this->quote_identifier("$1")', $value);
+			return preg_replace_callback('/"(.+?)"/', array($this, 'quote_identifier_parsed'), $value);
 		}
 		elseif (strpos($value, '.') !== FALSE)
 		{
@@ -437,6 +435,11 @@ abstract class Kohana_Database {
 			return $this->_identifier.$value.$this->_identifier;
 		}
 	}
+
+    protected function quote_identifier_parsed($matches)
+    {
+        return $this->quote_identifier($matches[1]);
+    }
 
 	/**
 	 * Sanitize a string by escaping characters that could cause an SQL
