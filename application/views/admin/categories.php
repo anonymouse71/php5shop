@@ -144,6 +144,9 @@ a {text-decoration: none;color: #000;}
         $(this).html("<span style='color:red;'>Произошла ошибка! проверьте подключение к Internet</span> и обновите страницу.");
     });
 
+    $('#ansver').data('selected1', 0);
+    $('#ansver').data('selected2', 0);
+
     $('.category-item').click(function () {
         $('#editD').hide();
         var id = $(this).parent().parent().parent().attr('id');
@@ -152,7 +155,7 @@ a {text-decoration: none;color: #000;}
         if (id == 'cat1') {
             $('#cat1').find('.category-item').css('color', 'black');
             $(this).css('color', 'green');
-            $('#ansver').data('selected1', this.href);
+            $('#ansver').data('selected1', catid);
             $('#infocatid').css('color', 'green');
 
             $('#pathnew').val(path);
@@ -161,7 +164,7 @@ a {text-decoration: none;color: #000;}
         else {
             $('#cat2').find('.category-item').css('color', 'black');
             $(this).css('color', 'blue');
-            $('#ansver').data('selected2', this.href);
+            $('#ansver').data('selected2', catid);
             $('#infocatid').css('color', 'blue');
         }
 
@@ -176,12 +179,12 @@ a {text-decoration: none;color: #000;}
 
     $('#updatebutton').click(function () {
         var post = {
-            id: $('#ansver').data('selected1').split('#')[1],
+            id: $('#ansver').data('selected1'),
             val: $('#inputnew').val(),
             path: $('#pathnew').val()
         };
         if ($('#ansver').data('selected2')) {
-            post['parentId'] = $('#ansver').data('selected2').split('#')[1];
+            post['parentId'] = $('#ansver').data('selected2');
         }
         $.post('ajax/categ/2', post, function () {
             reloadcats();
@@ -189,22 +192,19 @@ a {text-decoration: none;color: #000;}
 
     });
     $('#createnew').click(function () {
-        if (!$('#ansver').data('selected1'))
-            $('#ansver').html('Вы должны выбрать категорию 1, которая будет родительской для новой категории');
-        else
-            $.post('ajax/categ/1', {
-                id: $('#ansver').data('selected1').split('#')[1],
-                val: $('#catnewname').val(),
-                path: $('#catnewpath').val()
-            }, function () {
-                reloadcats();
-            });
+        $.post('ajax/categ/1', {
+            id: $('#ansver').data('selected1'),
+            val: $('#catnewname').val(),
+            path: $('#catnewpath').val()
+        }, function () {
+            reloadcats();
+        });
     });
     $('#delcats').click(function () {
         if (!$('#ansver').data('selected1'))
             $('#ansver').html('Вы должны выбрать категорию');
         else
-            $.post('ajax/categ/3', {id: $('#ansver').data('selected1').split('#')[1]}, function (data) {
+            $.post('ajax/categ/3', {id: $('#ansver').data('selected1')}, function (data) {
                 reloadcats();
             });
     });
