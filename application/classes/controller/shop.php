@@ -77,7 +77,7 @@ class Controller_Shop extends Controller_Site
                 $description->id = $product['id'];
             if (strlen($this->apis['vkcomments']))
             {
-                $this->template->css .= View::factory('vk')->set('apiId', $this->apis['vkcomments']);
+                $this->template->head .= View::factory('vk')->set('apiId', $this->apis['vkcomments']);
                 $description->set('vk_on', TRUE);
             }
             else
