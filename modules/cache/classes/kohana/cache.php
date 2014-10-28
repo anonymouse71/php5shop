@@ -111,27 +111,43 @@ abstract class Kohana_Cache {
 		if ($group === NULL)
 		{
 			// Use the default setting
-			//$group = Cache::$default;
+			$group = Cache::$default;
                     
-                    /**
-                     * Определяем способ кэширования (драйвер модуля)
-                     * Возможные варианты: memcache, memcachetag, apc, sqlite, eaccelerator, xcache, file
-                     * Используется sqlite если возможно, иначе - file
-                     */
-                    if (function_exists('sqlite_open'))
+            /**
+             * Определяем способ кэширования (драйвер модуля)
+             * Возможные варианты: memcache, memcachetag, apc, sqlite, eaccelerator, xcache, file
+             * Используется sqlite если возможно, иначе - file
+             */
+            $test_file = APPPATH . 'cache/testSqlite';
+            if (file_exists($test_file))
+            {
+                if (file_get_contents($test_file) == '1')
+                    $group = 'sqlite';
+            }
+            else
+            {
+                if (class_exists('PDO'))
+                {
+                    $group = 'sqlite';
+                    $config = Kohana::config('cache');
+                    if (!$config->offsetExists($group))
                     {
-                        try
-                        {
-                            sqlite_open(APPPATH . 'cache/testSqlite');
-                            $group = 'sqlite';
-                        } catch (ErrorException $exc)
-                        {
-                            //sqlite_open() [function.sqlite-open]: unable to open database
-                        }
+                        throw new Kohana_Cache_Exception('Failed to load Kohana Cache group: :group', array(':group' => $group));
                     }
-                    
-                    if ($group == NULL)
+                    $config = $config->get($group);
+                    try
+                    {
+                        Cache::$instances[$group] = new Cache_Sqlite($config);
+                        file_put_contents($test_file, '1');
+                    } catch (Kohana_Cache_Exception $err)
+                    {
                         $group = Cache::$default;
+                        file_put_contents($test_file, '0');
+                    }
+                }
+                else
+                    file_put_contents($test_file, '0');
+            }
 		}
 
 		if (isset(Cache::$instances[$group]))
@@ -140,18 +156,18 @@ abstract class Kohana_Cache {
 			return Cache::$instances[$group];
 		}
 
-		$config = Kohana::config('cache');
+        $config = Kohana::config('cache');
 
-		if ( ! $config->offsetExists($group))
-		{
-			throw new Kohana_Cache_Exception('Failed to load Kohana Cache group: :group', array(':group' => $group));
-		}
+        if (!$config->offsetExists($group))
+        {
+            throw new Kohana_Cache_Exception('Failed to load Kohana Cache group: :group', array(':group' => $group));
+        }
 
-		$config = $config->get($group);
+        $config = $config->get($group);
 
-		// Create a new cache type instance
-		$cache_class = 'Cache_'.ucfirst($config['driver']);
-		Cache::$instances[$group] = new $cache_class($config);
+        // Create a new cache type instance
+        $cache_class = 'Cache_' . ucfirst($config['driver']);
+        Cache::$instances[$group] = new $cache_class($config);
 
 		// Return the instance
 		return Cache::$instances[$group];
