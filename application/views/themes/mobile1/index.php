@@ -98,7 +98,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                             </li>
                         <?php endif;
                         if ($menu[2]): ?>
-                            <li><a href="blog">Новости</a></li>
+                            <li><a href="blog#breadcrumbs">Новости</a></li>
                         <?php endif;
                         foreach ($special_pages as $page_uri => $page_label): ?>
                             <li><a href="<?php echo htmlspecialchars($page_uri); ?>"><?php
@@ -108,10 +108,10 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                             <li><a href="admin/">Панель управления</a></li>
                         <?php endif;
                         if ($menu[4]): ?>
-                            <li><a href="shop/user">Личный кабинет</a></li>
+                            <li><a href="shop/user#breadcrumbs">Личный кабинет</a></li>
                         <?php endif;
                         if ($menu[5]): ?>
-                            <li><a href="order/cart">Корзина</a></li>
+                            <li><a href="order/cart#breadcrumbs">Корзина</a></li>
                         <?php endif;
                         if ($menu[6] && !$menu[3]): ?>
                             <li><a href="rss.xml">RSS</a></li>
