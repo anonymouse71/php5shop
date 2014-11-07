@@ -15,6 +15,7 @@
  * menu[]                               - верхнее меню
  * banner1                              - большой баннер в центре страницы
  * about                                - блок для приветствия посетителя
+ * about2                               - блок под блоком товаров
  * stuff                                - блок товаров
  * cats                                 - категории товаров
  * banner2                              - баннер под левым блоком
@@ -167,6 +168,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                 echo 'itemscope itemtype="http://schema.org/Product"'; ?>>
                 <?php echo @$stuff; ?>
             </div>
+            <?php echo $about2; ?>
         </div>
     </div>
     <div id="left" class="column">

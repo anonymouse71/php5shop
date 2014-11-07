@@ -170,8 +170,10 @@ class Controller_Shop extends Controller_Site
                     $this->categoriesObject->categories['names'][$this->catId] . //название категории
                     ' - Страница ' . $page . ''; //и страницу
 
-            $this->template->about = Model_Descr_cat::get($this->catId); //описание категории
-
+            $cat_description = explode('<hr />', str_replace('<hr>', '<hr />', Model_Descr_cat::get($this->catId)));
+            $this->template->about = array_shift($cat_description); //описание категории
+            if (count($cat_description))
+                $this->template->about2 = join('<hr />', $cat_description);
         }
         else //категория не указана
         {

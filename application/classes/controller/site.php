@@ -137,6 +137,7 @@ abstract class Controller_Site extends Controller_Template
 
         $tpl->logo = $htmlBlocks['logo']; //логотип
         $tpl->about = $htmlBlocks['about']; //HTML код с описанием магазина
+        $tpl->about2 = '';//блок под основным содержимым страницы перед footer
         $tpl->lastNews = ''; //блок с последней записью из блога
         $tpl->topBlock2 = new View(TPL . 'topCart'); //корзина
         $tpl->topBlock2->items = 0; //количество товаров в корзине
