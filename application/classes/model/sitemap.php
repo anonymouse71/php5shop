@@ -20,7 +20,17 @@ class Model_Sitemap
 {
     public function update()
     {
-        file_put_contents($_SERVER['DOCUMENT_ROOT'] . url::base() . 'sitemap.xml', $this->get());
+        $map_xml = $this->get();
+        try
+        {
+            file_put_contents($_SERVER['DOCUMENT_ROOT'] . url::base() . 'sitemap.xml', $map_xml);
+        }
+        catch (ErrorException $denied)
+        {
+            Kohana_Log::instance()->add('SitemapError', $denied->getMessage());
+            return;
+        }
+
         $this->pingIt();
     }
 
