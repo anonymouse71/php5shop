@@ -46,7 +46,7 @@ a {text-decoration: none;color: #000;}
 <p>&nbsp;</p>
 <div id="whattodo" style="display: none;">
     <?php if ($countCats > 0): ?>
-        <p>
+        <p class="editable">
             Чтобы установить новое название
             <input type="text" id="inputnew" placeholder="новое название" maxlength="50">
 
@@ -73,23 +73,26 @@ a {text-decoration: none;color: #000;}
         и нажминте <input type="button" id="createnew" value="эту кнопку">
     </p>
     <?php if ($countCats > 0): ?>
-        <p>
+        <p class="editable">
             <br>
             Есть еще кнопка <input id="delcats" type="button"
                                    value="Удалить категорию 1 с подкатегориями и товарами в них">
         </p>
-    <?php endif; ?>
 
 
-    <form action="" method="post">
+
+    <form action="" method="post" class="editable">
         <input type="submit" value="Редактировать описание">
         <span style="color:green;">категории 1</span>
         <input type="hidden" id="ed" name="ed" value="">
     </form>
     <br>
-    <button id="b_meta">Редактировать title и meta</button>
-    для <span style="color:green;">категории 1</span>
+    <p class="editable">
+        <button id="b_meta">Редактировать title и meta</button>
+        для <span style="color:green;">категории 1</span>
+    </p>
 
+    <?php endif; ?>
 </div>
 
 
@@ -149,13 +152,19 @@ a {text-decoration: none;color: #000;}
 
     $('.category-item').click(function () {
         $('#editD').hide();
-        var id = $(this).parent().parent().parent().attr('id');
-        var catid = this.href.split('#')[1];
-        var path = pathDict[catid];
+        var id, catId = this.href.split('#')[1];
+        if (catId == '0') {
+            id = $(this).parent().parent().attr('id');
+            $(".editable").hide();
+        } else {
+            id = $(this).parent().parent().parent().attr('id');
+            $(".editable").show();
+        }
+        var path = pathDict[catId];
         if (id == 'cat1') {
             $('#cat1').find('.category-item').css('color', 'black');
             $(this).css('color', 'green');
-            $('#ansver').data('selected1', catid);
+            $('#ansver').data('selected1', catId);
             $('#infocatid').css('color', 'green');
 
             $('#pathnew').val(path);
@@ -164,12 +173,12 @@ a {text-decoration: none;color: #000;}
         else {
             $('#cat2').find('.category-item').css('color', 'black');
             $(this).css('color', 'blue');
-            $('#ansver').data('selected2', catid);
+            $('#ansver').data('selected2', catId);
             $('#infocatid').css('color', 'blue');
         }
 
-        $('#infocatid').html(catid);
-        $('#ed').attr('value', catid);
+        $('#infocatid').html(catId);
+        $('#ed').attr('value', catId);
         $('#whattodo').show(500);
         $('#infoid').show();
         $("#b_meta").unbind('click').click(function () {

@@ -265,8 +265,8 @@ class Categories
             ->where('id', '=', $id)
             ->execute()
         ) return array();
-        else
-            return array('' => 'Ошибка сохранения.');
+        else // затронуто 0 строк
+            return array('' => 'Изменений не произошло.');
     }
 
     /**
