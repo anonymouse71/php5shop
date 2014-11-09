@@ -87,7 +87,7 @@ ol {
 * html .clearfix { height: 1%;}
 .clearfix {display: block; overflow:hidden}
 
-body, input, label {
+body, input, label, textarea {
     color: #827e72;
     font: normal 12px/17px Arial, Helvetica, sans-serif;
 }
@@ -144,7 +144,6 @@ body, input, label {
 /* Overlay */
 #simplemodal-overlay {
     background-color: #000;
-    cursor: wait;
 }
 
 /* Container */
@@ -5431,4 +5430,10 @@ table#my_orders tr th {
 {
     position: relative;
     top: -10px;
+}
+#helpCart a{
+    text-decoration: none;
+}
+#helpCart a span{
+    text-decoration: underline;
 }

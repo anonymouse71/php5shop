@@ -22,7 +22,7 @@
             <td>
                 <?php if($field->type < 5): ?><input class="line" type="text" name="f<?php echo $field->id;?>" value="<?php echo $val['f' . $field->id];?>">
                 <?php elseif($field->type == 5):?><input class="line" type="checkbox" name="f<?php echo $field->id;?>" <?php echo (isset($val['f' . $field->id]) && !$val['f' . $field->id])? '' : 'checked="1"';?>>
-                <?php elseif($field->type == 6):?><textarea class="line" cols="18" rows="2" name="f<?php echo $field->id;?>"><?php echo nl2br(htmlspecialchars($val['f' . $field->id]));?></textarea>
+                <?php elseif($field->type == 6):?><textarea class="line" cols="18" rows="4" name="f<?php echo $field->id;?>"><?php echo nl2br(htmlspecialchars($val['f' . $field->id]));?></textarea>
                 <?php endif;?>
             </td>
         </tr>
@@ -30,7 +30,7 @@
         <?php endif;?>
         <tr>
             <td><span>Адрес доставки:</span> </td>
-            <td><textarea class="line" cols="18" rows="2" name="address"><?php if(isset($val['address'])) echo nl2br(htmlspecialchars($val['address']));?></textarea></td>
+            <td><textarea class="line" cols="25" rows="5" name="address"><?php if(isset($val['address'])) echo nl2br(htmlspecialchars($val['address']));?></textarea></td>
         </tr>
 
     </table>

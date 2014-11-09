@@ -1,7 +1,22 @@
 <div id="helpCart" style="display: none">
     <!-- Подсказка чтобы помочь пользователю найти корзину -->
-    <img src="images/arrow-right-down.jpg" alt="" title="Товар в корзине, нажмите на нее" style="float: left" />
-    <br>Нажмите на корзину <br>чтобы перейти к <br>оформлению заказа.
+    <div style="font-size: 20px">
+        Для оформления заказа перейдите по ссылке:<br><br>
+
+    <a href="<?php echo url::base();?>order/cart"><img
+            width="24" height="24" src="/themes_public/default2/img/Cart.png"
+            alt="Cart icon" title="Товар в корзине"
+            />&nbsp;&nbsp;<span>Корзина</span></a>
+    </div>
+
+    <div style="font-size: 16px">
+        <br><br>
+        Если желаете посмотреть другие товары, просто закройте это окно.
+        <br><br>
+        Вы сможете попасть в корзину по ссылке из верхнего меню.
+    </div>
+
+
 </div>
 
 <div class="topblock2"
@@ -12,14 +27,14 @@
 </div>
 
 <script type="text/javascript">
-$(".imgcart").click(function () {
+    $(document).ready(function () {
+        $(".imgcart").click(function () {
 
-    if($(this).attr('src') == "images/x.png")
-        return;
+            if ($(this).attr('src') == "images/x.png")
+                return;
 
-    /* scroll up to the top of page */
-    $("#toTop").trigger('click');
-    /* show help message */
-    $("#helpCart").slideDown();
-});
+            /* show help message */
+            $("#helpCart").modal();
+        });
+    });
 </script>

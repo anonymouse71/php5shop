@@ -28,7 +28,7 @@
             <td>
                 <?php if($field->type < 5): ?><input class="line" type="text" name="f<?php echo $field->id;?>" value="<?php if(isset($fieldVals[$field->id]))echo htmlspecialchars( $fieldVals[$field->id] );?>">
                 <?php elseif($field->type == 5):?><input class="line" type="checkbox" name="f<?php echo $field->id;?>" <?php if(isset($fieldVals[$field->id]) && $fieldVals[$field->id])echo 'checked="1"';?>>
-                <?php elseif($field->type == 6):?><textarea class="line" cols="18" rows="2" name="f<?php echo $field->id;?>"><?php if(isset($fieldVals[$field->id]))echo htmlspecialchars( $fieldVals[$field->id] );?></textarea>
+                <?php elseif($field->type == 6):?><textarea class="line" cols="18" rows="4" name="f<?php echo $field->id;?>"><?php if(isset($fieldVals[$field->id]))echo htmlspecialchars( $fieldVals[$field->id] );?></textarea>
                 <?php endif;?>
             </td>
         </tr>

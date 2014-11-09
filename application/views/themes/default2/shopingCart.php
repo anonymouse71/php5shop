@@ -24,7 +24,7 @@
 
 <h3 id="sumOrd">Сумма заказа: <?php echo $sum;?></h3>
 <br><br>
-<a href="order" class="ordhd"><strong>Перейти к оформлению заказа</strong></a>
+<a href="order" class="ordhd"><strong>Оформить заказ</strong></a>
 <?php endif;?>
 
 <script type="text/javascript">

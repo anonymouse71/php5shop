@@ -10,6 +10,11 @@
             <?php endforeach; ?>
             <input type="submit" value="Оплатить" />
         </form>
+    <?php elseif($register):
+    // от пользователя больше не требуется никаких действий ?>
+        <br><br>
+        <a href="<?php echo url::base();?>shop/user#my_orders"
+           style="font-size: 16px;">Перейти к истории заказов</a>
     <?php endif;
 
 elseif (!$stop): /* регистрация не обязательна */
