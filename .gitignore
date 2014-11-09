@@ -1,4 +1,7 @@
-sitemap.xml
-rss.xml
 .install.php
 .idea/
+images/products/small/*.jpg
+images/products/*.jpg
+application/cache/kohana-cache.sql3
+application/cache/testSqlite
+application/cache/*/*.txt
