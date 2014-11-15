@@ -38,6 +38,12 @@ class Controller_Admin extends Controller_Template
         $this->template->head = '';
         $this->template->body = '';
 
+        $this->template->active_orders_count = ORM::factory('order')
+            ->where('status', 'NOT IN', array(4, 5, 6))
+            ->count_all();
+        $this->template->comments_count = ORM::factory('comment')->count_all();
+
+
         if (isset($_POST) && count($_POST))
             if (!isset($_SERVER['HTTP_REFERER'])
                 || strpos($_SERVER['HTTP_REFERER'], 'ttp://' . $_SERVER['HTTP_HOST']) !== 1
@@ -959,6 +965,68 @@ class Controller_Admin extends Controller_Template
         $this->template->body = View::factory('admin/meta', array(
             'meta' => $meta,
             'error' => $errorStr,
+            'pagination' => new Pagination(array(
+                'uri_segment' => 'page',
+                'total_items' => $countAll,
+                'items_per_page' => $perPage,
+            ))
+        ));
+    }
+
+    public function action_comments()
+    {
+        if (isset($_POST['delete']))
+        {
+            $delete_list = array();
+            foreach ($_POST as $k => $v)
+                if (preg_match('#delete([0-9]+)#', $k, $found))
+                    $delete_list[] = $found[1];
+            if (count($delete_list))
+                ORM::factory('comment')->where('id', 'IN', $delete_list)
+                    ->delete_all();
+
+            $this->request->redirect($_SERVER['REQUEST_URI']);
+        }
+
+        $perPage = 10;
+        $page = isset($_GET['page']) ? abs((int)$_GET['page']) : 1;
+        if (!$page)
+            $page = 1;
+        $countAll = $this->template->comments_count;
+        $data = ORM::factory('comment')
+            ->limit($perPage)->offset(($page - 1) * $perPage)
+            ->order_by('id', 'desc')
+            ->find_all()
+            ->as_array();
+
+        foreach($data as $item)
+        {
+            if ($item->is_product)
+            {
+                $prod = ORM::factory('product', $item->object);
+                if ($prod->id && $prod->name )
+                    $title = '<a href="' . url::base() . 'shop/product' . $item->object
+                        . '">Товар ' . htmlspecialchars('"' . $prod->name . '"')
+                        . '</a>';
+                else
+                    $title = 'Товар (id ' . $item->object . ')';
+            }
+            else
+            {
+                $blog_item = ORM::factory('blogpost', $item->object);
+                if ($blog_item->id && $blog_item->title )
+                    $title = '<a href="' . url::base() . 'blog/' . $item->object
+                        . '">Новость ' . htmlspecialchars('"' . $blog_item->title . '"')
+                        . '</a>';
+                else
+                    $title = 'Новость (id ' . $item->object . ')';
+                $item->rate = '';
+            }
+            $item->object = $title;
+        }
+
+        $this->template->body = View::factory('admin/comments', array(
+            'data' => $data,
             'pagination' => new Pagination(array(
                 'uri_segment' => 'page',
                 'total_items' => $countAll,

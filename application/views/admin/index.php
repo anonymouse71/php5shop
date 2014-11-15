@@ -16,7 +16,8 @@
 <body>
 <nav class="navbar navbar-default" role="navigation">
     <ul class="nav navbar-nav">
-        <li><a href="<?php echo $path; ?>"><b>Активные заказы</b></a></li>
+        <li><a href="<?php echo $path; ?>"><b>Активные заказы
+                    (<?php echo $active_orders_count ?>)</b></a></li>
         <li><a href="<?php echo $path; ?>user"><b>Клиенты</b></a></li>
         <li><a href="<?php echo $path; ?>groups"><b>Группы</b></a></li>
         <li><a href="<?php echo $path; ?>config"><b>Настройки</b></a></li>
@@ -25,6 +26,7 @@
         <li><a href="<?php echo $path; ?>products"><b>Товары</b></a></li>
         <li><a href="<?php echo $path; ?>blog"><b>Блог</b></a></li>
         <li><a href="<?php echo $path; ?>meta"><b>SEO</b></a></li>
+        <li><a href="<?php echo $path; ?>comments"><b>Комментарии (<?php echo $comments_count ?>)</b></a></li>
         <li><a href=""><b>Перейти к магазину</b></a></li>
     </ul>
 </nav>
