@@ -6,7 +6,8 @@ php_value zlib.output_compression off
 
 AddDefaultCharset UTF-8
 
-Options -Indexes
+# You can use this option if allowed
+#Options -Indexes
 
 RewriteEngine On
 
