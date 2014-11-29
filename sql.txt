@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_products` (
   `cat` int(10) unsigned DEFAULT NULL,
   `name` varchar(200) NOT NULL,
   `price` float unsigned DEFAULT '0',
-  `whs` TINYINT(4) NOT NULL DEFAULT '1',
+  `whs` INT(12) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
