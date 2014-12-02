@@ -203,6 +203,8 @@ class Model_Product extends ORM
                 foreach ($page['cells'] as $cell)
                 {
                     $productId = isset($cell[1]) ? $cell[1] : 0; //номер товара
+                    if ($productId == 'ID')
+                        continue;
                     $catId = isset($cell[2]) ? $cell[2] : 0; //номер категории
                     $prodName = isset($cell[3]) ? $cell[3] : ''; //название
                     $prodDescr = isset($cell[4]) ? $cell[4] : ''; //полное описание
@@ -213,6 +215,10 @@ class Model_Product extends ORM
 
                     $imgs = isset($cell[6]) ? $cell[6] : ''; //изображения
                     $availability = isset($cell[7]) ? $cell[7] : 1; //наличие на складе (кол-во)
+
+                    $title = isset($cell[8]) ? $cell[8] : '';
+                    $metaDescription = isset($cell[9]) ? $cell[9] : '';
+                    $metaKeywords = isset($cell[10]) ? $cell[10] : '';
 
                     if (!$catId) // категория не указана
                     { //товар будет удален
@@ -242,6 +248,26 @@ class Model_Product extends ORM
                             ->save();
 
                         $id = $productId ? $productId : $product->__get('id');
+                        if ($title || $metaDescription || $metaKeywords)
+                        {
+                            // сохраняем meta
+
+                            $url = '/shop/product' . $id;
+                            $meta = ORM::factory('meta')->where('path', '=', $url)->find();
+                            if (!$meta->id)
+                            {
+                                $meta = ORM::factory('meta');
+                                $meta->path = $url;
+                            }
+
+                            if ($title)
+                                $meta->title = $title;
+                            if ($metaDescription)
+                                $meta->description = $metaDescription;
+                            if ($metaKeywords)
+                                $meta->keywords = $metaKeywords;
+                            $meta->save();
+                        }
 
                         if ($imgs) //обработка изображения
                         {
