@@ -144,4 +144,21 @@ class Model_Config
         else
             return '';
     }
+
+    /**
+     * Генерация ключа для программы загрузки xls в магазин
+     * @return string
+     */
+    public static function get_key()
+    {
+        $dbConfig = Kohana::$config->load('database')->get('default');
+        $k = md5($_SERVER['HTTP_HOST']
+                . $dbConfig['connection']['password']
+                . filemtime(DOCROOT . 'index.php')
+            ) . md5($dbConfig['connection']['username']
+                . $_SERVER['HTTP_HOST']
+                . filemtime(DOCROOT . 'index.php')
+            ) . md5(APPPATH);
+        return $k;
+    }
 }

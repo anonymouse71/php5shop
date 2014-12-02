@@ -444,6 +444,11 @@ class Controller_Admin extends Controller_Template
 
         $this->template->body = new View('admin/table/products');
         $info = new View('admin/info');
+
+        if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'Linux'))
+            $uploadProgramUrl = 'https://bitbucket.org/onikitgit/php5shop-uploader-py/get/master.zip';
+        else
+            $uploadProgramUrl = 'https://bitbucket.org/onikitgit/php5shop-uploader-win32/get/master.zip';
         $info->info = 'Вы можите добавлять продукты используя электронные таблицы xls (Microsoft Office Excel или OpenOffice) <br>
             Размещайте столбцы таблиц в такой последовательности: <br> 
             id_товара, id_категории, название_товара, подробное_описание, цена, URL_фотографий_через_пробел, количество_на_складе.<br>  
@@ -452,7 +457,10 @@ class Controller_Admin extends Controller_Template
             и определяет адрес страницы товара. Если его оставить пустым, то он будет заполнятся по порядку.<br>
             Количество на складе - по умолчанию 1.<br>
             Пример xls файла можете скачать по <a href="' . url::base() . 'example.xls">этой ссылке</a>, а
-            узнать id любой категории - по <a href="' . $this->template->path . 'categories">этой</a>';
+            узнать id любой категории - по <a href="' . $this->template->path . 'categories">этой</a><br>
+            Чтобы загружать xls файл без использования браузера скачайте
+            <a href="' . $uploadProgramUrl . '">специальную программу</a>
+            и <a href="' . $this->template->path . 'key">ключ доступа</a> для этого сайта.';
         $this->template->body->currency = Model_Config::get1Currency();
         $categories = new Categories();
         $this->template->body->select = $categories->select($cat);
@@ -1033,6 +1041,18 @@ class Controller_Admin extends Controller_Template
                 'items_per_page' => $perPage,
             ))
         ));
+    }
+
+    /**
+     * Скачивание ключа для программы импорта xls прайса
+     */
+    public function action_key()
+    {
+        header('Content-type: text/plain');
+        header('Content-Disposition: attachment; filename='
+            . $_SERVER['HTTP_HOST'] . '.key.txt');
+
+        die(Model_Config::get_key() . "\r\nhttp://" . $_SERVER['HTTP_HOST'] . url::base());
     }
 
 }//end Controller_Admin

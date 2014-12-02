@@ -703,7 +703,18 @@ class Controller_Ajax extends Controller
      */
     public function action_products($action = null)
     {
-        if (!Auth::instance()->logged_in('admin') || !isset($_POST)) //пользователь не авторизован как admin или зашел на страницу напрямую
+        if (isset($_POST['key']) && $_POST['key'] && !is_array($_POST['key']))
+        {
+            // запрос отправлен другой программой, которая знает ключ
+            // проверяем его
+            if ($_POST['key'] !== Model_Config::get_key())
+            {
+                header("HTTP/1.0 401 Unauthorized");
+                header("Status: 401 Unauthorized");
+                die('You need to download a new key!');
+            }
+        }
+        elseif (!Auth::instance()->logged_in('admin') || !isset($_POST)) //пользователь не авторизован как admin или зашел на страницу напрямую
             die('Авторизуйтесь');
 
         Cache::instance()->delete('LastProd');
