@@ -32,9 +32,9 @@ elseif (isset($array)): ?>
     <tr>
         <td><a href="javascript:void(0);" class="actOrder"><?php echo $item['id'];?></a></td>
         <td><?php echo (isset($item['user_id']) && isset($item['username'])) ?
-            '<a href="' . url::base() . 'admin/user/' . $item['user_id'] . '">' . $item['username'] . '</a>'
-            :
-            'Не зарег.';
+                '<a href="' . url::base() . 'admin/user/' . $item['user_id'] . '">' . $item['username'] . '</a>'
+                :
+                $item['username'];
             ?></td>
         <td><?php echo $item['phone'];?></td>
         <td>

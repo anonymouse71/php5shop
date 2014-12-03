@@ -95,6 +95,8 @@ class Controller_Admin extends Controller_Template
                         $this->template->body->array[$k]['user_id'] = $item->user;
                         $this->template->body->array[$k]['username'] = htmlspecialchars($item->username);
                     }
+                    else
+                        $this->template->body->array[$k]['username'] = htmlspecialchars($item->username);
 
                     $this->template->body->array[$k]['address'] = nl2br(htmlspecialchars($item->address));
 
