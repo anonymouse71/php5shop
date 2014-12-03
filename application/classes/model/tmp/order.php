@@ -37,16 +37,13 @@ class Model_Tmp_Order extends ORM
      */
     public function new_id()
     {
-        if(Session::instance()->get('sid'))
-            $sid = Session::instance()->get('sid');
-        else
-        {
-            $sid = session_id();
-            Session::instance()->set('sid',$sid);
-        }
-        $isset = ORM::factory('tmp_order')->where('session','=',$sid)->find_all()->as_array();
-        
-        if(isset($isset[0]))
+        $sid = Session::instance()->get('sid', session_id());
+        Session::instance()->set('sid', $sid);
+
+        $isset = ORM::factory('tmp_order')->where('session', '=', $sid)
+            ->order_by('id', 'desc')
+            ->find_all()->as_array(null, 'id');
+        if (isset($isset[0]))
             return $isset[0];
         
         $tmp_order = ORM::factory('tmp_order');
@@ -58,7 +55,7 @@ class Model_Tmp_Order extends ORM
         foreach(ORM::factory('tmp_order')->where('time','<', (time() - 60*60*24*2))->find_all() as $tmp)
             $tmp->delete(); //заказы не подтвержденные за 48 часов - удаляются
         
-        return $tmp_order;
+        return $tmp_order->id;
     }
 
     public function clean()

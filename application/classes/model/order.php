@@ -112,35 +112,36 @@ class Model_Order extends ORM
 
         Cache::instance()->delete('LastProd'); //в кэше были кол-ва whs, которые потеряли актуальность - удаляем этот кэш
 
-        $message = 'В магазине на ' . $_SERVER['HTTP_HOST'] .
-            ' поступил новый заказ (id' .
-            $id . ') от пользователя с номером телефона ' .
-            $phone . ".\r\n";
-        if ($uid)
-            $message .= 'Клиент зарегистрирован с id ' . $uid . ".\r\n";
-        $message .= 'Заказано ' . count($products) . ' товаров.';
-
-        if (count($noWhs))
-        {
-            $message .= 'В заказе есть товары, которые уже закончились в наличии ('
-                . count($noWhs) . ').';
-            $message2user .= '<br><br>Внимание! В заказе есть товары, закончились в наличии на момент заказа:<br><ul>';
-            foreach ($noWhs as $product)
-                $message2user .= '<li>' . htmlspecialchars($prodArray[$product]->name)
-                    . (
-                    ($prodArray[$product]->whs > 0)
-                        ?
-                        (' - есть только ' . $prodArray[$product]->whs . ' ед.')
-                        :
-                        ' - нет в наличии'
-                    )
-                    . '</li>';
-            $message2user .= '</ul>';
-        }
-        $message .= "\r\n\r\n Способ оплаты: " . ORM::factory('pay_type', $way)->__get('name');
 
         if (isset($to['jabber']))
         {
+            $message = 'В магазине на ' . $_SERVER['HTTP_HOST'] .
+                ' поступил новый заказ (id' .
+                $id . ') от пользователя с номером телефона ' .
+                $phone . ".\r\n";
+            if ($uid)
+                $message .= 'Клиент зарегистрирован с id ' . $uid . ".\r\n";
+            $message .= 'Заказано ' . count($products) . ' товаров.';
+
+            if (count($noWhs))
+            {
+                $message .= 'В заказе есть товары, которые уже закончились в наличии ('
+                    . count($noWhs) . ').';
+                $message2user .= '<br><br>Внимание! В заказе есть товары, закончились в наличии на момент заказа:<br><ul>';
+                foreach ($noWhs as $product)
+                    $message2user .= '<li>' . htmlspecialchars($prodArray[$product]->name)
+                        . (
+                        ($prodArray[$product]->whs > 0)
+                            ?
+                            (' - есть только ' . $prodArray[$product]->whs . ' ед.')
+                            :
+                            ' - нет в наличии'
+                        )
+                        . '</li>';
+                $message2user .= '</ul>';
+            }
+            $message .= "\r\n\r\n Способ оплаты: " . ORM::factory('pay_type', $way)->__get('name');
+
             $conn = new XMPPHP_XMPP('jabber.ru', 5222, 'php5shop@jabber.ru', 'password', 'xmpphp');
             try
             {
@@ -164,7 +165,8 @@ class Model_Order extends ORM
             $mail->AddAddress($to['email']);
             $mail->Subject = 'Новый заказ (id' . $id . ')';
             $mail->AltBody = 'Заказ на ' . count($products) . ' товаров';
-            $mail->MsgHTML('<body>' . $message . '</body>');
+            $mail->MsgHTML(View::factory('EMAILnewOrder',
+                array('id' => $id, 'info' => Model_Order::orderInfo($id))));
             $mail->WordWrap = 80;
             $mail->Send();
         }
@@ -236,5 +238,120 @@ class Model_Order extends ORM
             DB::update('products')->set(array('whs' => DB::expr('whs + ' . $item['count'])))
                 ->where('id', '=', $item['product'])->limit(1)->execute();
 
+    }
+
+    /**
+     * Возвращает информацию о заказе
+     * @param $id
+     * @return string
+     */
+    public static function orderInfo($id)
+    {
+        $str = '';
+        $products = ORM::factory('ordproduct')->where('id', '=', $id)->find_all();
+        $sumAll = 0;
+        $curr = Session::instance()->get('currency');
+        if (!$curr)
+            $curr = DEFAULT_CURRENCY;
+        $currency = Model::factory('Config')->getCurrency($curr);
+
+        $str .= 'Заказ номер ' . ((int)$id) . ' содержит:<ul class="list-group">';
+        foreach ($products as $p)
+        {
+            $str .= '<li class="list-group-item">';
+            $product = ORM::factory('product', $p->product);
+            if (!$p->whs)
+                $str .= '<s>';
+            if ($product->name)
+            {
+                $pr = $product->price * $currency;
+                if ($pr < round($pr, 2))
+                    $pr = round($pr, 2);
+                $sum = $p->count * $pr;
+                $sumAll += $sum;
+                $str .= $product->id . '  ' . $product->name . ' (' . $p->count . ' ед.) по цене ' . round($pr, 2) . ' ' . $curr;
+
+                if (!$p->whs)
+                {
+                    $str .= '</s> Продукт есть в заказе, но нет в наличии!';
+                    $sumAll -= $sum;
+                }
+                $str .= '</li>';
+            } else
+                $str .= '(Продукт удален)</s></li>';
+        }
+        $str .= '</ul>';
+        $order = ORM::factory('order', $id);
+        if ($order->user)
+        {
+            $pct = Model::factory('Group')->get_pct($order->user);
+            if ($pct != 1)
+            {
+                $sumAll *= $pct;
+                $str .= '<div>Скидка ' . round((1 - $pct) * 100, 2) . '%</div><br>';
+            }
+        }
+        $str .= '<div>Итого к оплате: ' . round($sumAll, 2) . ' ' . $curr . '</div>';
+        if ($order->pay_type == 4)
+            $str .= '<div>Выбрана оплата через interkassa. Оплачено: ' .
+                round($order->paid * $currency, 2) . ' ' . $curr . '</div>';
+        else
+        {
+            $str .= '<div>Выбран способ оплаты: ';
+            $pType = ORM::factory('pay_type', $order->pay_type);
+            if ($pType->id)
+                $str .= htmlspecialchars($pType->name);
+            else
+                $str .= '[удален]';
+            $str .= '</div>';
+        }
+
+        $status = ORM::factory('state_order', $order->status);
+        if ($status)
+            $str .= '<div>Статус заказа: ' . $status->name . '</div>';
+
+        $phone = $order->phone ? '<div>Телефон: ' . $order->phone . '</div>' : '';
+
+        if ($order->user)
+        {
+            $user = ORM::factory('user', $order->user);
+            if ($user)
+            {
+                $str .= '<div>Email: ' . htmlspecialchars($user->email) . '</div>';
+                $str .= '<div>Имя: ' . htmlspecialchars($user->username) . '</div>';
+                $str .= $phone . '<div>Телефон в профиле: ' . htmlspecialchars($user->phone) . '</div>';
+                $phone = '';
+                if ($user->last_login)
+                    $str .= '<div>Последний вход: ' . date('Y-m-d H:i', $user->last_login) . '</div>';
+                if ($user->identity)
+                    $str .= '<div>Профиль в соц.сети: <a href="' . htmlspecialchars($user->identity) . '">'
+                        . $user->identity . '</a></div>';
+
+                if (ORM::factory('field')->count_all())
+                {
+                    $fields = ORM::factory('field')->find_all();
+                    $fieldORM = ORM::factory('field_value');
+                    foreach ($fields as $field)
+                    {
+                        $val = $fieldORM->get($field->id, $user->id);
+                        if ($val)
+                            $str .= '<div>' . htmlspecialchars($field->name) . ': ' .
+                                htmlspecialchars($val) . '</div>';
+                    }
+                }
+            }
+        }
+        else
+            $str .= '<div>ФИО: ' . htmlspecialchars($order->username) . '</div>';
+
+        if ($phone)
+            $str .= $phone;
+
+        if ($order->address)
+            $str .= '<div>Адрес: ' . htmlspecialchars($order->address) . '</div>';
+        if ($order->contacts)
+            $str .= '<div>Контакты: ' . htmlspecialchars($order->contacts) . '</div>';
+
+        return $str;
     }
 }
