@@ -183,6 +183,32 @@ class Controller_Admin extends Controller_Template
      */
     public function action_user($id = null)
     {
+        if (isset($_POST['username'], $_POST['email'], $_POST['phone']))
+        {
+            // advanced search by AJAX
+            $users_q = ORM::factory('user');
+
+            if ($_POST['username'] !== '')
+                $users_q->where('username', 'LIKE', "%{$_POST['username']}%");
+            if ($_POST['email'] !== '')
+                $users_q->where('email', 'LIKE', "%{$_POST['email']}%");
+            if ($_POST['phone'] !== '')
+                $users_q->where('phone', 'LIKE', "%{$_POST['phone']}%");
+            $users_q_count = clone $users_q;
+            $count_users = $users_q_count->count_all();
+            $users = array();
+            if ($count_users)
+            {
+                $message = 'Найдено: ' . $count_users . '. ';
+                if ($count_users > 20)
+                    $message .= 'Показаны первые 20. Уточните Ваш запрос.';
+                foreach ($users_q->limit(20)->find_all() as $u)
+                    $users[] = array('id' => $u->id, 'username' => htmlspecialchars($u->username));
+            } else
+                $message = 'Никого не нашли, попробуйте изменить запрос и еще раз нажать на кнопку &quot;Искать&quot;';
+            die(json_encode(array('message' => $message, 'users' => $users)));
+        }
+
         $user = ORM::factory('user', $id);
         if ($id && $user->id)
         {
@@ -272,22 +298,17 @@ class Controller_Admin extends Controller_Template
 
             $admins = ORM::factory('Roles_user')->where('role_id', '=', 2)->count_all();
 
-            $orders0 = ORM::factory('order')->where('status', '=', 5)->find_all(); //все заказы со статусом 5 (выполнено)
-            $arrayUsers = array();
-            foreach ($orders0 as $ord)
-                if ($ord->user)
-                    $arrayUsers[$ord->user] = 0; //массив с пользователями в ключах (без повторов)
-            foreach ($arrayUsers as $usr => $null)
-                foreach ($orders0 as $ord)
-                    if ($ord->user == $usr)
-                        $arrayUsers[$usr]++; //в значения массива записываются количества покупок пользователей
-            arsort($arrayUsers);
-
-            $arrayUsers = array_keys($arrayUsers);
-            $arrayUsers = array_slice($arrayUsers, 0, 10);
+            $arrayUsers = DB::select('user')->from('orders')
+                ->where('status', '=', 5)
+                ->group_by('user')
+                ->order_by(DB::expr('COUNT(`id`)'), 'DESC')
+                ->execute()
+                ->as_array(null, 'user');
             $last->bestUsers = array();
-            foreach ($arrayUsers as $usr)
-                $last->bestUsers[] = ORM::factory('user', $usr);
+            if (count($arrayUsers))
+                $last->bestUsers = ORM::factory('user')
+                    ->where('id', "IN", $arrayUsers)
+                    ->find_all()->as_array();
 
             $info->info = 'Клиентов: ' . ($clients - $admins);
             $info->info .= '<br>Администраторов: ' . $admins;
@@ -812,9 +833,9 @@ class Controller_Admin extends Controller_Template
         ) //удаление комментария
             ORM::factory('comment', $id)->delete();
         else
-            die($this->request->redirect(url::base()));
+            $this->request->redirect(url::base());
 
-        die($this->request->redirect($referer));
+        $this->request->redirect($referer);
     }
 
     public function action_images($id = 0)

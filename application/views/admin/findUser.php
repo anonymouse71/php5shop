@@ -69,10 +69,71 @@
 <hr><br><b>Поиск пользоватей:</b><br>
 <p>
     id <input id="searchById" size="5" type="text" class="form-control" style="display: inline-block; width: auto;">
-    <input type="button" value="Найти" class="btn btn-sm btn-default"
+    <input type="button" value="Найти по id" class="btn btn-sm btn-default"
            onclick="document.location.href = '<?php echo url::base() ?>admin/user/' + $('#searchById').val()">
 </p>
+<p><button id="advanced_search" class="btn">Расширенный поиск</button></p>
 <br>
+
+<div class="modal fade" id="advanced_search_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Поиск пользователей</h4>
+            </div>
+            <div class="modal-body">
+                <table border="0" width="350px">
+                    <tr>
+                        <td><span>ФИО содержит:</span></td>
+                        <td><input class="line" type="text" id="username_contains"></td>
+                    </tr>
+                    <tr>
+                        <td><span>Email содержит:</span> </td>
+                        <td><input class="line" type="text" id="email_contains"></td>
+                    </tr>
+                    <tr>
+                        <td><span>Телефон содержит:</span></td>
+                        <td><input class="line" type="text" id="phone_contains"></td>
+                    </tr>
+                </table>
+                <div id="search_results"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="button_search_user">Искать</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть окно</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#advanced_search').click(function () {
+        $('#advanced_search_modal').modal({});
+        $('#advanced_search_modal input[type=text]').css('width', '100%')
+    });
+    $('#button_search_user').click(function () {
+        $.post(document.location.href, {
+            username: $('#username_contains').val(),
+            email: $('#email_contains').val(),
+            phone: $('#phone_contains').val()
+        }, function(data){
+            var search_results = '';
+            if (data.length == 0){
+                search_results = '<h' + '4>По данному запросу пользователей не найдено.</' + 'h4>';
+            }else{
+                search_results += '<' + 'p>' + data.message + '</' + 'p><' + 'ul>';
+                $(data.users).each(function(i, user){
+                    search_results += '<' + 'li><'
+                    + 'a href="<?php echo url::base() ?>admin/user/'
+                    + user.id + '">' + user.username + '</' + 'a></' + 'li>';
+                });
+                search_results += '</' + 'ul>';
+            }
+            $("#search_results").html(search_results);
+        }, 'json');
+    });
+
+</script>
 <div class="users">
     Последние 10 зарегистрированных:<br>
     <ul>
