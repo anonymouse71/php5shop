@@ -42,7 +42,7 @@
                 var myP = $(this).parent().children();
                 var idv = $(this).parent().attr('class');
                 $(myP[0]).attr('disabled', 1);
-                $.post('<?php echo url::base();?>ajax/fields', { id: idv.split('q')[1], name: $(myP[0]).val(), type: $(myP[1]).val(), empty: $(myP[2]).attr('checked') }, function (data) {
+                $.post('<?php echo url::base();?>ajax/fields', { id: idv.split('q')[1], name: $(myP[0]).val(), type: $(myP[1]).val(), empty: $(myP[2]).prop('checked') }, function (data) {
                     $('input').removeAttr('disabled');
                 });
             });
