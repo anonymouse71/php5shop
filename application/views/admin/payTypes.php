@@ -11,13 +11,13 @@
         /* включение и выключение типов оплаты */
         $(".activate").click(function () {
             var parentdiv = $(this).parent();
-            var iddiv = $(parentdiv).attr('id').split('t')[1];
-            var chlds = $(parentdiv).children();
+            var chlds = $(parentdiv).children(),
+                post_data = {
+                    id: $(parentdiv).attr('id').split('t')[1],
+                    checked: $(this).prop('checked')?'1':'0'
+                };
             $(chlds[2]).toggle();
-            if ($(this).attr('checked') == true)
-                $.post("<?php echo $path;?>paytypes/", { id: iddiv, checked: 1 });
-            else
-                $.post("<?php echo $path;?>paytypes/", { id: iddiv, checked: 0 });
+            $.post("<?php echo $path;?>paytypes/", post_data);
         });
     </script>
 <?php if (isset($type4edit)): ?>
