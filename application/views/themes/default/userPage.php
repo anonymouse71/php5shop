@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');?>
 
-<h2>Страница редактирования профиля <?php if(isset($adm))echo '(id'.$user->id.')';?></h2>
+<h2>Страница редактирования профиля
+    <?php if (isset($adm))
+        echo '(id' . $user->id . ') ' . $user->profile . '';?></h2>
 <br>
 <form action="" method="post" id="userForm">
     <table border="0" <?php if(!isset($adm)):?>width="350px"<?php endif;?>>
