@@ -96,7 +96,7 @@ function imgzoom(i){
     $(img).attr('src',"<?php echo url::base();?>images/loading.gif");
     $(img).attr('src',"<?php echo url::base();?>images/products/" + i + ".jpg");
     $('.simplemodal-data').attr('align','center');
-    $('#simplemodal-container').css({'width':'507px','height':'507px','top':'150px','left':'20%','position':'fixed'});
+    $('#simplemodal-container').css({'width':'516px', 'height': '516px','top':'150px','left':'20%','position':'fixed'});
 }
 
 $('.nextphoto').click(function(){
