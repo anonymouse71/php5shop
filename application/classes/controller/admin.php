@@ -719,14 +719,9 @@ class Controller_Admin extends Controller_Template
 
     public function action_description($id = null)
     {
-        $product = ORM::factory('product', $id)->__get('name');
-        if (!$product)
+        $product = ORM::factory('product', $id);
+        if (!$product->id)
             die(Request::factory('error/404')->execute());
-
-        $this->template->body = new View('admin/description');
-        $this->template->body->productname = $product;
-        $this->template->body->link = url::base() . 'shop/product' . (string)(int)$id;
-        $this->template->head = new View('admin/ckeditorHeader');
 
         if (isset($_POST['editor']))
         {
@@ -740,7 +735,21 @@ class Controller_Admin extends Controller_Template
             $model->__set('text', $_POST['editor']);
             $model->save();
 
+            if (isset($_POST['whs'], $_POST['price'])
+                && ($_POST['whs'] != $product->whs || $_POST['price'] != $product->price)
+            )
+            {
+                Cache::instance()->delete('LastProd');
+                $product->whs = $_POST['whs'];
+                $product->price = $_POST['price'];
+                $product->save();
+            }
         }
+
+        $this->template->body = View::factory('admin/description', $product->as_array());
+        $this->template->body->link = url::base() . 'shop/product' . (string)(int)$id;
+        $this->template->head = new View('admin/ckeditorHeader');
+
         $this->template->body->html = htmlspecialchars(ORM::factory('description', $id)->__get('text'));
     }
 
