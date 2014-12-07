@@ -162,11 +162,14 @@ class Model_Product extends ORM
             unlink($imagePath1);
         if (file_exists($imagePath2))
             unlink($imagePath2);
-        $n = 1;
-        while (file_exists($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '-' . $n . '.jpg') && $n < 100)
+        foreach (array('images/products/', 'images/products/small/') as $dir)
         {
-            unlink($_SERVER['DOCUMENT_ROOT'] . url::base() . 'images/products/' . $id . '-' . $n . '.jpg');
-            $n++;
+            $n = 1;
+            while (file_exists($_SERVER['DOCUMENT_ROOT'] . url::base() . $dir . $id . '-' . $n . '.jpg') && $n < 100)
+            {
+                unlink($_SERVER['DOCUMENT_ROOT'] . url::base() . $dir . $id . '-' . $n . '.jpg');
+                $n++;
+            }
         }
         DB::delete('user_views')->where('product_id', '=', $id)->execute();
         ORM::factory('rating_user')->where('product', '=', $id)->delete_all();
@@ -223,7 +226,7 @@ class Model_Product extends ORM
                     if (!$catId) // категория не указана
                     { //товар будет удален
                         if ($productId)
-                            Model_Product::deleteProduct($productId);
+                            self::deleteProduct($productId);
                     }
                     elseif ($prodName && $prodPrice)
                     { //добавление через ORM
