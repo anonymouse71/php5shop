@@ -94,13 +94,9 @@ class Model_SaveImage extends ORM
         imagecopy($img, $mask, 0, 0, 0, 0, $this->ImgSize, $this->ImgSize);
         imagejpeg($img, $bigImg, 95);
 
-//        if((string)$id == (string)(int)$id)                                     //маленькие изображения сохраняем только для главной фотографии
-//        {
         $image->resize($this->ImgSizeSmall, $this->ImgSizeSmall);
         $image->save($smallImg);
         @chmod($smallImg, 0666);
-//        }
-
         @chmod($bigImg, 0666);
         return TRUE;
 

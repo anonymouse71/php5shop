@@ -34,22 +34,20 @@ class Controller_Save extends Controller{
         ignore_user_abort(TRUE);
         $obj = ORM::factory('saveImage');
         $img = $obj->find();
-        if($img->id && $img->url)
+        if ($img->id && $img->url)
         {
-            if($img->n)
-                $obj->gd($img->url, ($img->id) . '-' . ($img->n));
+            if ($img->n)
+                $obj->gd($img->url, $img->id . '-' . $img->n);
             else
                 $obj->gd($img->url, $img->id);
 
-            ORM::factory('saveImage')->where('n','=',$img->n)
-                    ->and_where('id','=',$img->id)
-                    ->limit(1)
-                    ->delete_all();
+            DB::delete('saveimages')
+                ->where('n', '=', $img->n)
+                ->and_where('id', '=', $img->id)
+                ->execute();
         }
-        
-        sleep(1); //чтобы не забанили на хостинге за нагрузку на сервер
 
-        if(ORM::factory('saveImage')->count_all() > 0)
+        if (ORM::factory('saveImage')->count_all() > 0)
             $obj->init();
     }
 }
