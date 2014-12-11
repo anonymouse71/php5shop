@@ -18,33 +18,62 @@
 
 class Model_Send_email extends ORM
 {
-    public function send($title,$code,$time=NULL)
+    public $absolute_path; // site URL where php5shop installed
+
+    public function __construct($id = NULL)
+    {
+        parent::__construct($id);
+
+        $this->absolute_path = 'http://' . $_SERVER['HTTP_HOST'] . url::base();
+    }
+
+    /**
+     * Creates email newsletter
+     * @param string $subject
+     * @param string $email_html
+     * @param int $time
+     */
+    public function send($subject, $email_html, $time = 0)
     {
         $text = ORM::factory('send_text');
-        $text->__set('title', $title);
-        $text->__set('text', $code);
+        $text->title = $subject;
+        $text->text = $this->replace_relative_links($email_html);
         $text->save();
-        $id = Model_LastInsert::id();
+        $text->reload();
 
-        if($time)
-            $users = ORM::factory('user')->where('last_login','<',$time)->find_all();
-        else
-            $users = ORM::factory('user')->find_all();
+        $users = DB::select('email')->distinct(TRUE)->from('users')
+            ->where('email', '!=', '');
 
-        
+        if ($time < 0)
+            $users->and_where('last_login', '<', $time);
 
-        foreach ($users as $user)
-        {            
+        foreach ($users->execute()->as_array(NULL, 'email') as $email)
+        {
             $send = ORM::factory('send_email');
-            $send->to = $user->email;
-            $send->id = $id;
-            $send->save();            
+            $send->to = $email;
+            $send->id = $text->id;
+            $send->save();
         }
-        
-        $curl = curl_init('http://' . $_SERVER['HTTP_HOST'] . url::base() . 'send/emails');
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+
+        $curl = curl_init($this->absolute_path . 'send/emails');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_TIMEOUT, 1);
         curl_exec($curl);
         curl_close($curl);
+    }
+
+    /**
+     * Replaces relative a[href] and img[src] to absolute
+     * @param string $html
+     * @return string
+     */
+    protected function replace_relative_links($html)
+    {
+        $url = $this->absolute_path;
+        if (mb_substr($url, -1, 1, 'UTF-8') == '/')
+            $url = mb_substr($url, 0, mb_strlen($url, 'UTF-8') - 1, 'UTF-8');
+        $html = preg_replace('/<a([^>]+)href="(\/[^"]+)"/i', '<a$1href="' . $url . '$2"', $html);
+        $html = preg_replace('/<img([^>]+)src="(\/[^"]+)"/i', '<img$1src="' . $url . '$2"', $html);
+        return $html;
     }
 }
