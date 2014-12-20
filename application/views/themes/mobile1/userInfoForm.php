@@ -15,22 +15,33 @@
             <td><span>Телефон:</span></td>
             <td><input class="line" type="text" name="phone" value="<?php if(isset($val['phone'])) echo htmlspecialchars($val['phone']);?>"></td>
         </tr>
-        <?php if(isset($fields) && is_array($fields)):?>
-        <?php foreach($fields as $field):?>
-        <tr>
-            <td><span><?php echo $field->name;?>:</span></td>
-            <td>
-                <?php if($field->type < 5): ?><input class="line" type="text" name="f<?php echo $field->id;?>" value="<?php echo $val['f' . $field->id];?>">
-                <?php elseif($field->type == 5):?><input class="line" type="checkbox" name="f<?php echo $field->id;?>" <?php echo (isset($val['f' . $field->id]) && !$val['f' . $field->id])? '' : 'checked="1"';?>>
-                <?php elseif($field->type == 6):?><textarea class="line" cols="18" rows="4" name="f<?php echo $field->id;?>"><?php echo nl2br(htmlspecialchars($val['f' . $field->id]));?></textarea>
-                <?php endif;?>
-            </td>
-        </tr>
-        <?php endforeach;?>
-        <?php endif;?>
+        <?php if (isset($fields) && is_array($fields)): ?>
+            <?php foreach ($fields as $field): ?>
+                <?php if ($field->type == 5): ?>
+                    <tr>
+                        <td colspan="2"><label for="f<?php echo $field->id; ?>"><span><?php echo $field->name; ?></span></label>
+                            <input class="line" type="checkbox" id="f<?php echo $field->id; ?>"
+                                   name="f<?php echo $field->id; ?>" <?php echo (isset($val['f' . $field->id]) && !$val['f' . $field->id]) ? '' : 'checked="1"'; ?>>
+                        </td>
+                    </tr>
+                <?php else: ?>
+                    <tr>
+                        <td><span><?php echo $field->name; ?>:</span></td>
+                        <td>
+                            <?php if ($field->type < 5): ?>
+                                <input class="line" type="text" name="f<?php echo $field->id; ?>" value="<?php echo $val['f' . $field->id]; ?>">
+                            <?php elseif ($field->type == 6): ?>
+                                <textarea class="line" cols="18" rows="4" name="f<?php echo $field->id; ?>"><?php echo nl2br(htmlspecialchars($val['f' . $field->id])); ?></textarea>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+
+            <?php endforeach; ?>
+        <?php endif; ?>
         <tr>
             <td><span>Адрес доставки:</span> </td>
-            <td><textarea class="line" cols="18" rows="5" name="address"><?php if(isset($val['address'])) echo nl2br(htmlspecialchars($val['address']));?></textarea></td>
+            <td><textarea class="line" cols="25" rows="5" name="address"><?php if(isset($val['address'])) echo nl2br(htmlspecialchars($val['address']));?></textarea></td>
         </tr>
 
     </table>

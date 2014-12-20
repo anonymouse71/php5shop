@@ -47,6 +47,13 @@ class Model_Send_email extends ORM
         if ($time < 0)
             $users->and_where('last_login', '<', $time);
 
+        // отправка только тем пользователям, которые согласились получать рассылку
+        if (ORM::factory('field')->where('id', '=', 1)->count_all())
+            $users->join('field_values', 'left')
+                ->on('uid', '=', 'users.id')
+                ->on('field', '=', DB::expr('1'))
+                ->and_where('value', '=', 'on');
+
         foreach ($users->execute()->as_array(NULL, 'email') as $email)
         {
             $send = ORM::factory('send_email');

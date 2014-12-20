@@ -425,6 +425,10 @@ CREATE TABLE IF NOT EXISTS `p5shp_fields` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+INSERT INTO `p5shp_fields` (`id`, `name`, `type`, `empty`) VALUES
+(1, 'Я согласен получать информации об акциях на Email', 5, 1);
+
 --
 -- Структура таблицы `field_values`
 --

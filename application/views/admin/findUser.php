@@ -48,6 +48,9 @@
             });
             $('.removeIt').click(function () {
                 var idv = $(this).parent().attr('class');
+                if (idv == 'q1' && !confirm("Это поле задействовано в рассылке Email. Вы уверены что хотите безвозвратно удалить его?")) {
+                    return false;
+                }
                 $(this).parent().hide();
                 $.post('<?php echo url::base();?>ajax/fields', { id: idv.split('q')[1] }, function (data) {
                 });
