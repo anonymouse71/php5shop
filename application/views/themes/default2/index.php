@@ -63,7 +63,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
 </head>
 
-<body>
 <body id="body" class="first">
 <div class="body-top">
     <div class="splash">
@@ -217,7 +216,7 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 </div>
 
 
-</div>
+
 <script type="text/javascript">
     var add = "images/active/";
     var path = document.location.pathname;
