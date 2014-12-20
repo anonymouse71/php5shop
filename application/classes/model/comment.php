@@ -35,7 +35,7 @@ class Model_Comment extends ORM
      */
 
 
-    private static function save_comment($id, $is_product = 1)
+    private static function save_comment($id, $is_product = 1, $use_captcha = TRUE)
     {
         if (isset($_POST['yourName']) && isset($_POST['comText']))
         {
@@ -50,8 +50,8 @@ class Model_Comment extends ORM
             if (mb_strlen($_POST['comText'], 'utf-8') < 3)
                 return 'Слишком короткое сообщение!';
 
-            if (isset($_POST['captcha']) && Captcha::valid($_POST['captcha'])) //если проверочное изображение введено верно,
-            {
+            if (!$use_captcha || isset($_POST['captcha']) && Captcha::valid($_POST['captcha']))
+            {    //если проверочное изображение введено верно, либо отключено в настройках
                 $obj = ORM::factory('comment');
                 $obj->__set('object', $id);
                 $obj->__set('user', $user->__get('id'));
@@ -68,11 +68,11 @@ class Model_Comment extends ORM
         }
     }
 
-    public static function form($id, $is_product = 1)
+    public static function form($id, $is_product = 1, $use_captcha = TRUE)
     {
         $form = new View('commentForm');
-        $form->captcha = Captcha::instance();
-        $form->errors = self::save_comment($id, $is_product);
+        $form->captcha = $use_captcha ? Captcha::instance() : '';
+        $form->errors = self::save_comment($id, $is_product, $use_captcha);
         $form->auth = Auth::instance()->logged_in();
 
         return

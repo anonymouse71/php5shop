@@ -42,7 +42,7 @@ class Controller_Page extends Controller_Site
             //добавляем комментарии
             if ($this->boolConfigs['comments'])
             {
-                $this->template->about .= Model_Comment::form($id, FALSE);
+                $this->template->about .= Model_Comment::form($id, FALSE, $this->boolConfigs['showCaptch']);
             }
 
         }

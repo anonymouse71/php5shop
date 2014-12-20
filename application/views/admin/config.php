@@ -54,6 +54,10 @@
                         <td><span>Комментирование включено</span></td>
                         <td><input type="checkbox" name="comments" <?php if($bool['comments'])echo 'checked="1"';?>></td>
                     </tr>
+                    <tr>
+                        <td><span>Комментирование защищено капчей</span></td>
+                        <td><input type="checkbox" name="showCaptch" <?php if($bool['showCaptch'])echo 'checked="1"';?>></td>
+                    </tr>
 
                     <tr>
                         <td>&nbsp;</td>

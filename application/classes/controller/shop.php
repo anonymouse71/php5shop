@@ -92,7 +92,7 @@ class Controller_Shop extends Controller_Site
             $rating->disable = !$this->user;
 
             if ($this->boolConfigs['comments'])
-                $this->template->stuff->set('comments', Model_Comment::form($product['id'], TRUE));
+                $this->template->stuff->set('comments', Model_Comment::form($product['id'], TRUE, $this->boolConfigs['showCaptch']));
             else
                 $this->template->stuff->set('comments', '');
 

@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_categories` (
 
 CREATE TABLE IF NOT EXISTS `p5shp_configBool` (
   `name` varchar(10) NOT NULL,
-  `value` BOOL DEFAULT NULL,
+  `value` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -61,7 +61,9 @@ REPLACE INTO `p5shp_configBool` (`name`, `value`) VALUES
 ('ShowBlog', 1),
 ('regOrder', 0),
 ('theme_ch', 0),
-('timeFooter', 1) ;
+('showCaptch', 1),
+('timeFooter', 1)
+;
 
 -- --------------------------------------------------------
 
@@ -193,7 +195,7 @@ REPLACE INTO `p5shp_mails` (`id`, `value`) VALUES
 
 CREATE TABLE IF NOT EXISTS `p5shp_menuitems` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
-  `item` BOOL DEFAULT '1',
+  `item` TINYINT(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
@@ -419,7 +421,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_fields` (
   `id` int(2) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   `type` int(1) unsigned NOT NULL,
-  `empty` BOOL DEFAULT NULL,
+  `empty` TINYINT(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -594,7 +596,7 @@ CREATE TABLE IF NOT EXISTS `p5shp_comments` (
 `user` INT NOT NULL ,
 `text` TEXT NOT NULL ,
 `rate` TINYINT(1) NOT NULL ,
-`is_product` BOOL NOT NULL ,
+`is_product` TINYINT(1) NOT NULL ,
 `username` VARCHAR( 100 ) NOT NULL ,
 PRIMARY KEY ( `id` )
 ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT = 'Комментарии к товарам и новостям';

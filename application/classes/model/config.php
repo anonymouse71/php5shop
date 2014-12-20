@@ -29,9 +29,19 @@ class Model_Config
      */
     public function getBool()
     {
-        return DB::select()->from('configBool')
+        $table = 'configBool';
+        $data = DB::select()->from($table)
             ->execute()
             ->as_array('name', 'value');
+
+        $migrations = array('showCaptch');
+        foreach ($migrations as $m)
+            if (!in_array($m, array_keys($data)))
+            {
+                $data[$m] = 0;
+                DB::insert($table, array('name', 'value'))->values(array($m, 0))->execute();
+            }
+        return $data;
     }
 
     /**

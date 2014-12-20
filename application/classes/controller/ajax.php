@@ -237,7 +237,7 @@ class Controller_Ajax extends Controller
         //установка bool настроек
         $boolConfigs = array(
             'currency', 'LastNews', 'ordJabb', 'ordMail', 'theme_ch',
-            'ShowBlog', 'timeFooter', 'poll', 'regOrder', 'comments'
+            'ShowBlog', 'timeFooter', 'poll', 'regOrder', 'comments', 'showCaptch'
         );
         $boolConfigsSave = array();
         foreach($boolConfigs as $key)
