@@ -40,4 +40,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     // Upload image url
     config.filebrowserUploadUrl = '/ajax/upload_img';
+
+	// disable Advanced Content Filter
+	config.allowedContent = true;
 };
