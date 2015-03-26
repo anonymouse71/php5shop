@@ -136,7 +136,7 @@
         CKEDITOR.instances.editor1.setData( $(this).next().text() );
         $("#editForm h4").text('Редактирование страницы '
             + $(this).parent().parent().find('.go2page:first').attr('href'));
-        $("#new_page").hide();
+        $("#new_page").remove();
         $("#page_edit_txt_submit").val("Сохранить содержимое страницы").click(function(){
             $("#editForm").submit();
         });
