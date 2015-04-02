@@ -5,15 +5,23 @@
     <table border="0" width="350px">
         <tr>
             <td><span>Ваше ФИО:</span> </td>
-            <td><input class="line" type="text" name="username" value="<?php if(isset($val['username'])) echo htmlspecialchars($val['username']);?>"></td>
+            <td><input class="line" type="text" name="username" value="<?php
+                       if(isset($val['username']))
+                           echo htmlspecialchars($val['username']);?>"
+                       autocomplete="name"></td>
         </tr>
         <tr>
             <td><span>Email:</span> </td>
-            <td><input class="line" type="text" name="email" value="<?php if(isset($val['email'])) echo htmlspecialchars($val['email']);?>"></td>
+            <td><input class="line" type="text" name="email" autocomplete="email"
+                       value="<?php if(isset($val['email']))
+                           echo htmlspecialchars($val['email']);?>"></td>
         </tr>
         <tr>
             <td><span>Телефон:</span></td>
-            <td><input class="line" type="text" name="phone" value="<?php if(isset($val['phone'])) echo htmlspecialchars($val['phone']);?>"></td>
+            <td><input class="line" type="text" name="phone" autocomplete="tel"
+                       value="<?php
+                       if(isset($val['phone']))
+                           echo htmlspecialchars($val['phone']);?>"></td>
         </tr>
         <?php if (isset($fields) && is_array($fields)): ?>
             <?php foreach ($fields as $field): ?>

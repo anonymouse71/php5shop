@@ -6,20 +6,26 @@
     <table border="0" <?php if(!isset($adm)):?>width="350px"<?php endif;?>>
         <tr>
             <td><span>Имя (ФИО):</span> </td>
-            <td><input class="line" <?php if(!isset($adm)):?>readonly="readonly"<?php endif;?> type="text" name="username" value="<?php echo htmlspecialchars($user->username);?>"></td>
+            <td><input class="line" <?php if(!isset($adm)):?>readonly="readonly"<?php endif;?>
+                       type="text" name="username"
+                       value="<?php echo htmlspecialchars($user->username);?>"
+                       autocomplete="name"></td>
         </tr>
 
         <tr>
             <td><span>Email:</span> </td>
-            <td><input class="line" type="text" name="email" value="<?php echo htmlspecialchars($user->email);?>"></td>
+            <td><input class="line" type="text" name="email" autocomplete="email"
+                       value="<?php echo htmlspecialchars($user->email);?>"></td>
         </tr>
-        <?php if(isset($pct)):?><tr>
+        <?php if (isset($pct)):?><tr>
             <td><span>Скидка:</span> </td>
-            <td><input class="line" disabled="1" type="text" name="pct" value="<?php echo $pct;?>"></td>
+            <td><input class="line" disabled="disabled" type="text"
+                       name="pct" value="<?php echo $pct;?>"></td>
         </tr><?php endif;?>
         <tr>
             <td><span>Телефон:</span></td>
-            <td><input class="line" type="text" name="phone" value="<?php echo htmlspecialchars($user->phone);?>"></td>
+            <td><input class="line" type="text" name="phone" autocomplete="tel"
+                       value="<?php echo htmlspecialchars($user->phone);?>"></td>
         </tr>
         <?php if (isset($fields) && is_object($fields)): ?>
             <?php foreach ($fields as $field): ?>
