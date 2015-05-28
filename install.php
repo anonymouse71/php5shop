@@ -21,18 +21,46 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
     //если установлен чекбокс "Создать в базе структуру таблиц"
     if (isset($_POST['importSQL']) && file_exists('sql.txt'))
     {
-        $dbh = mysql_connect($_POST['hostname'], $_POST['username'], $_POST['password']) or die('Не могу соединиться с MySQL.');
-        mysql_select_db($_POST['database']) or die('Не могу подключиться к базе ' . htmlspecialchars($_POST['database']));
-        mysql_query("SET NAMES 'utf8';");
-        $sql = explode(";\n", preg_replace('|(--[^\n]*\n)|', '', file_get_contents('sql.txt')));
-        foreach ($sql as $key => $val)
-            if ($val && !mysql_query($val) && 'Query was empty' !== mysql_error())
-                die(mysql_error() . '<br>' . $val);
-        mysql_close($dbh);
-        @rename('install.php', 'install.php_1');
-        header('Location: ' . $_SERVER['REQUEST_URI']);
-        exit;
+	    $sql = explode(";\n", preg_replace('|(--[^\n]*\n)|', '', file_get_contents('sql.txt')));
+		$first_q = "SET NAMES 'utf8';";
+	    if (function_exists('mysqli_connect'))
+		{
+			$dbh = mysqli_connect($_POST['hostname'], $_POST['username'], $_POST['password']) or die('Не могу соединиться с MySQL.');
+			mysqli_select_db($dbh, $_POST['database']) or die('Не могу подключиться к базе ' . htmlspecialchars($_POST['database']));
+			mysqli_query($dbh, $first_q);
+			foreach ($sql as $key => $val)
+				if ($val && !mysqli_query($dbh, $val)
+				    && 'Query was empty' !== mysqli_error($dbh))
+				{
+					mysqli_close($dbh);
+					die(mysqli_error($dbh) . '<br>' . $val);
+				}
+			mysqli_close($dbh);
+			$file = file_get_contents('modules/database/config/database.php');
+			$file = replaseIt($file, 'type', 'mysqli');
+			file_put_contents('modules/database/config/database.php', $file);
+		}
+	    elseif(function_exists('mysql_connect'))
+	    {
+		    $dbh = mysql_connect($_POST['hostname'], $_POST['username'], $_POST['password']) or die('Не могу соединиться с MySQL.');
+		    mysql_select_db($_POST['database']) or die('Не могу подключиться к базе ' . htmlspecialchars($_POST['database']));
+		    mysql_query($first_q);
+		    foreach ($sql as $key => $val)
+			    if ($val && !mysql_query($val) && 'Query was empty' !== mysql_error())
+			    {
+				    mysql_close($dbh);
+				    die(mysql_error() . '<br>' . $val);
+			    }
+		    mysql_close($dbh);
+	    }
+	    else
+		    die('Not found mysqli or mysql PHP extension');
+
+
     }
+	@rename('install.php', 'install.php_1');
+	header('Location: ' . $_SERVER['REQUEST_URI']);
+	exit;
 }
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
