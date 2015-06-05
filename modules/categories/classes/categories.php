@@ -13,7 +13,7 @@
  *
  * @author phpdreamer
  * @created 16.08.2010
- * @modified 07.10.2014
+ * @modified 05.06.2015
  */
 class Categories
 {
@@ -65,30 +65,45 @@ class Categories
      * Возвращает HTML элемент "select", содержащий все категории с полными путями
      * Причем выбрана категория $id
      * @param int $id
-     * @param string $delimiter - разделитель
      * @return string
      */
-    public function select($id, $delimiter = '->')
+    public function select($id)
     {
-        $cats[0] = '';
-        if (!isset($this->categories['names']))
-            return "";
-        foreach ($this->categories['names'] as $CatId => $name)
-        {
-            $string = $this->categories['names'][$CatId];
-            $cid = $CatId;
-            while ($parent = $this->categories['parents'][$cid])
-            {
-                $string = $this->categories['names'][$parent] . $delimiter . $string;
-                $cid = $parent;
-            }
-            $cats[$CatId] = $string;
-        }
+	    $this->children = array();
+	    $this->build_select(0, $id);
         return View::factory($this->viewSelect)
-            ->set('cats', $cats)
+            ->set('cats', $this->children)
             ->set('selected', $id)
             ->render();
     }
+
+	/**
+	 * Рекурсивная функция для построения select меню.
+	 * Принимает id категории
+	 *
+	 * @param int    $id
+	 */
+	protected function build_select($id = 0)
+	{
+		if (!is_array($this->categories))
+			return;
+		if ($id)
+		{
+			$string = htmlspecialchars($this->categories['names'][$id]);
+			$cid = $id;
+			while ($parent = $this->categories['parents'][$cid])
+			{
+				$string = "&nbsp;&nbsp;" . $string;
+				$cid = $parent;
+			}
+			$this->children[] = array('id' => $id, 'label' => $string);
+		}
+		else // первый пункт - ничего не выбрано
+			$this->children[] = array('id' => 0, 'label' => '');
+		foreach ($this->categories['parents'] as $PerentId => $PerentParentId)
+			if ($PerentParentId == $id)
+				$this->build_select($PerentId);
+	}
 
     /**
      * Возвращает уровень вложенности категории по id
