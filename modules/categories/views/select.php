@@ -6,7 +6,7 @@
 	    $id = $cat['id'];
 	    $item = $cat['label'];
 	    ?>
-    <option id="<?php echo $id;?>"<?php
+    <option value="<?php echo $id;?>"<?php
     if($id == $selected) echo ' selected="selected"';?>><?php
 	    echo $item;?></option>
         <?php
