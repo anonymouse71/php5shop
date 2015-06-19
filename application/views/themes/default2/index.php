@@ -32,6 +32,7 @@
  * theme                                - выбранный шаблон дизайна
  * special_pages                        - ссылки на дополнительные страницы
  */
+$main_page = $_SERVER['REQUEST_URI'] === '/';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +59,7 @@
     <?php endif; ?>
 <!--
 php5shop - CMS интернет-магазина
-Copyright (C) 2010-2014 phpdreamer, php5shop.com
+Copyright (C) 2010-2016 phpdreamer, php5shop.com
 -->
 
 </head>
@@ -203,9 +204,14 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
                         <div class="footerText">
 
                             <?php echo $banner4; ?>
-                            <div style="text-align: right;font-size: x-small;">
-                                Разработка: <a href="http://phpdreamer.ru/" target="_blank">phpdreamer.ru</a>.
-                            </div>
+	                        <div style="text-align: right;font-size: x-small;">
+		                        Разработка:
+		                        <?php
+		                        if ($main_page):?>
+		                        <a href="http://phpdreamer.ru/" target="_blank"><?php
+			                        endif ?>phpdreamer.ru<?php
+			                        if ($main_page):?></a>.<?php endif ?>
+	                        </div>
 
                         </div>
                     </div>

@@ -32,6 +32,7 @@
  * theme                                - выбранный шаблон дизайна
  * special_pages                        - ссылки на дополнительные страницы
  */
+$main_page = $_SERVER['REQUEST_URI'] === '/';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -59,18 +60,11 @@
     <script src="themes_public/mobile1/js/ui/gumby.toggleswitch.js"></script>
     <script src="themes_public/mobile1/js/gumby.init.js"></script>
 
-
-
     <?php echo $head; ?>
-    <!--
-    <?php if (isset($lastNews)): ?>
-        <script type="text/javascript" src="js/jquery.slides.min.js"></script>
-    <?php endif; ?>
-    -->
 
 <!--
 php5shop - CMS интернет-магазина
-Copyright (C) 2010-2014 phpdreamer, php5shop.com
+Copyright (C) 2010-2016 phpdreamer, php5shop.com
 -->
 
 </head>
@@ -214,9 +208,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 
                                 <?php echo $topBlock3; ?>
 
-                                <?php //if (isset($lastNews))
-                                    //echo $lastNews;?>
-
                             </div>
                         </div>
                     </div>
@@ -236,10 +227,15 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
         <?php echo $banner2; ?>
         <div class="main">
             <div id="footer">
-                    <?php echo $banner4; ?>
-                    <div style="text-align: right;font-size: x-small;">
-                        Разработка: <a href="http://phpdreamer.ru/" target="_blank">phpdreamer.ru</a>.
-                    </div>
+                <?php echo $banner4; ?>
+	            <div style="text-align: right;font-size: x-small;">
+		            Разработка:
+		            <?php
+		            if ($main_page):?>
+		            <a href="http://phpdreamer.ru/" target="_blank"><?php
+			            endif ?>phpdreamer.ru<?php
+			            if ($main_page):?></a>.<?php endif ?>
+	            </div>
             </div>
         </div>
     </div>

@@ -32,6 +32,7 @@
  * theme                                - выбранный шаблон дизайна
  * special_pages                        - ссылки на дополнительные страницы
  */
+$main_page = $_SERVER['REQUEST_URI'] === '/';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +56,7 @@
     <?php endif; ?>
 <!--
 php5shop - CMS интернет-магазина
-Copyright (C) 2010-2014 phpdreamer, php5shop.com
+Copyright (C) 2010-2016 phpdreamer, php5shop.com
 -->
 
 </head>
@@ -63,7 +64,6 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 <body>
 <div id="header">
     <a href="" class="float"><?php echo $logo; ?></a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div style="position:absolute;top:1px;left:1px;height:0px;width:0px;overflow:hidden"><h1><a href="http://phpdreamer.ru/" target="_blank">http://phpdreamer.ru/</a></h1> <h1><a href="http://php5shop.com">free php shop CMS</a></h1></div>
     <?php echo $loginForm; ?>
 
     <div class="blocks" style="float: right; ">
@@ -227,7 +227,12 @@ Copyright (C) 2010-2014 phpdreamer, php5shop.com
 <div id="footer">
     <?php echo $banner4; ?>
     <div style="font-size: x-small;">
-        Разработка: <a href="http://phpdreamer.ru/" target="_blank">phpdreamer.ru</a>.
+        Разработка:
+	    <?php
+	    if ($main_page):?>
+	        <a href="http://phpdreamer.ru/" target="_blank"><?php
+        endif ?>phpdreamer.ru<?php
+		if ($main_page):?></a>.<?php endif ?>
     </div>
 </div>
 <!-- кнопка "Вверх" -->
