@@ -24,6 +24,9 @@ RewriteRule ^images/(.*) images/$1
 RewriteRule ^js/(.*) js/$1
 RewriteRule ^themes_public/(.*) themes_public/$1
 
+# путь к favicon
+RewriteRule ^favicon\.ico images/favicon.gif
+
 # Protect application and system files from being viewed
 RewriteRule ^(application|modules|system) - [F,L]
 
