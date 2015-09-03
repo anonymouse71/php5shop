@@ -54,7 +54,7 @@ setlocale(LC_ALL, 'ru_RU.utf-8');
 /**
  * Версия php5shop
  */
-define('VERSION', '1.7.3');
+define('VERSION', '1.7.31');
 
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
@@ -261,6 +261,9 @@ Route::set('files', '(<file>)', array('file' => '.+'))
         'action' => '404',
     )
 );
+
+if (false !== ini_set('session.save_handler', 'files'))
+    ini_set('session.save_path', APPPATH . 'sessions');
 
 $request = Request::instance();
 try

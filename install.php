@@ -128,8 +128,16 @@ if (isset($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['da
 			<?php else: $failed = TRUE ?>
 				<td class="fail"><code><?php echo APPPATH.'cache' ?></code> - каталог не доступен для записи. Установите права 777</td>
 			<?php endif ?>
-		</tr>   
-                <tr>
+		</tr>
+		<tr>
+			<th>Каталог sessions</th>
+			<?php if (is_dir(APPPATH) AND is_dir(APPPATH.'sessions') AND (is_writable(APPPATH.'sessions') OR @chmod(APPPATH.'sessions',0777)) ): ?>
+				<td class="pass"><?php echo APPPATH.'sessions' ?></td>
+			<?php else: $failed = TRUE ?>
+				<td class="fail"><code><?php echo APPPATH.'sessions' ?></code> - каталог не доступен для записи. Установите права 777</td>
+			<?php endif ?>
+		</tr>
+		<tr>
 			<th>Каталог для кэширования запросов к mySQL</th>
 			<?php @mkdir(APPPATH . 'cache/.kohana_cache', 0777);
                               if (is_dir(APPPATH) AND is_dir(APPPATH.'cache/.kohana_cache') AND (is_writable(APPPATH.'cache/.kohana_cache')OR @chmod(APPPATH.'cache/.kohana_cache',0777))): ?>
