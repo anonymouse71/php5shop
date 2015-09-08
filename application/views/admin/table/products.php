@@ -43,13 +43,7 @@ endif;?>
 <script type="text/javascript">
 
     $('#changeGlobalCat').click(function () {
-        val = $('select').val();
-        chldr = $('select').children();
-        for (var k in chldr)
-            if ($(chldr[k]).val() == val) {
-                document.location.href = 'http://<?php echo $_SERVER['HTTP_HOST'].url::base();?>admin/products/' + $(chldr[k]).attr('id');
-                break;
-            }
+        document.location.href = 'admin/products/' + $(this).prev().val();
     });
     $('#addit').click(function () {
         $(this).attr('disabled', 1);
