@@ -263,7 +263,10 @@ Route::set('files', '(<file>)', array('file' => '.+'))
 );
 
 if (false !== ini_set('session.save_handler', 'files'))
+{
     ini_set('session.save_path', APPPATH . 'sessions');
+    ini_set('session.cookie_lifetime', Cookie::$expiration);
+}
 
 $request = Request::instance();
 try
