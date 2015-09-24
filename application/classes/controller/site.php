@@ -269,7 +269,8 @@ abstract class Controller_Site extends Controller_Template
     {
         parent::after();
 
-        Session::instance()->set('lastPage', $_SERVER['REQUEST_URI']);
+        if ($this->request->status === 200)
+            Session::instance()->set('lastPage', $_SERVER['REQUEST_URI']);
 
         if (!is_object($this->template))
             return;
